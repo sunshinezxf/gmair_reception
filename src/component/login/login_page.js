@@ -1,6 +1,6 @@
 import React from 'react'
 
-import gmair_blue from '../../logo/gmair_blue.png'
+import gmair_blue from '../../material/logo/gmair_blue.png'
 
 import 'antd-mobile/dist/antd-mobile.css'
 

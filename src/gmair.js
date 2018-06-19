@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import LoginPage from './component/login/login_page'
 
-class App extends Component {
+class Gmair extends Component {
     render() {
         return (
             <LoginPage></LoginPage>
@@ -10,4 +10,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default Gmair;
