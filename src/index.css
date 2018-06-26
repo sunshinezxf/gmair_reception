@@ -30,32 +30,32 @@ body {
     color: #FFFFFF;
 }
 
-.gmair_login_area {
+.gmair_login_area, .gmair_register_area {
     width: 85%;
     margin: 13rem 7.5% 3.5rem 7.5%;
 }
 
-.gmair_login_area ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+.gmair_login_area, .gmair_register_area ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color:    #FFFFFF !important;
 }
-.gmair_login_area :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+.gmair_login_area, .gmair_register_area :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
     color:    #FFFFFF !important;
 }
-.gmair_login_area ::-moz-placeholder { /* Mozilla Firefox 19+ */
+.gmair_login_area, .gmair_register_area ::-moz-placeholder { /* Mozilla Firefox 19+ */
     color:    #FFFFFF !important;
 }
-.gmair_login_area :-ms-input-placeholder { /* Internet Explorer 10-11 */
+.gmair_login_area, .gmair_register_area :-ms-input-placeholder { /* Internet Explorer 10-11 */
     color:    #FFFFFF !important;
 }
-.gmair_login_area ::-ms-input-placeholder { /* Microsoft Edge */
-    color:    #FFFFFF !important;
-}
-
-.gmair_login_area ::placeholder { /* Most modern browsers support this now. */
+.gmair_login_area, .gmair_register_area ::-ms-input-placeholder { /* Microsoft Edge */
     color:    #FFFFFF !important;
 }
 
-.gmair_login_btn {
+.gmair_login_area, .gmair_register_area ::placeholder { /* Most modern browsers support this now. */
+    color:    #FFFFFF !important;
+}
+
+.gmair_login_btn, .gmair_register_btn {
     width: 85%;
     margin: 0 7.5% 0 7.5%;
     text-align: center;
