@@ -4,13 +4,9 @@ import register from './register.png'
 
 import Slogan from '../slogan/slogan'
 
-import {Button} from 'react-bootstrap'
+import Footer from '../footer/footer'
 
-import {FormGroup} from 'react-bootstrap'
-
-import {FormControl} from 'react-bootstrap'
-
-import {InputGroup} from 'react-bootstrap'
+import {Button, FormGroup, FormControl, InputGroup} from 'react-bootstrap'
 
 import gmair_white from '../../material/logo/gmair_white.png'
 
@@ -53,7 +49,7 @@ const register_btn = {
     textAlign: `center`
 }
 
-class Register extends React.Component{
+class RegisterPage extends React.Component{
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -126,8 +122,8 @@ class Register extends React.Component{
                     <FormGroup>
                         <InputGroup>
                             <InputGroup.Addon style={white_icon}><span className="glyphicon glyphicon-lock"></span></InputGroup.Addon>
-                            <FormControl type="password" placeholder = '请输入动态密码' style={transparent_input} value={this.state.password} onChange={this.read_password}></FormControl>
-                            <InputGroup.Addon style={password_btn}>获取动态密码</InputGroup.Addon>
+                            <FormControl type="password" placeholder = '请输入动态验证码' style={transparent_input} value={this.state.password} onChange={this.read_password}></FormControl>
+                            <InputGroup.Addon><Button style={password_btn}>获取验证码</Button></InputGroup.Addon>
                         </InputGroup>
                     </FormGroup>
                     <FormGroup>
@@ -140,8 +136,9 @@ class Register extends React.Component{
                 <div className="gmair_register_btn">
                     <Button block style={register_btn}>注&nbsp;册</Button>
                 </div>
+                <Footer name="已有账号，请点击登录" link="/login"/>
             </div>
         )
     }
 }
-export default Register
+export default RegisterPage

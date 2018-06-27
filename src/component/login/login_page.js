@@ -1,14 +1,10 @@
 import React from 'react'
 
-import {Button} from 'react-bootstrap'
-
-import {FormGroup} from 'react-bootstrap'
-
-import {FormControl} from 'react-bootstrap'
-
-import {InputGroup} from 'react-bootstrap'
+import {Button, FormGroup, FormControl, InputGroup} from 'react-bootstrap'
 
 import Slogan from '../slogan/slogan'
+
+import Footer from '../footer/footer'
 
 import login from './login.png'
 
@@ -111,6 +107,7 @@ class LoginPage extends React.Component {
                 <div className="gmair_login_btn">
                     <Button block style={login_btn} onClick={this.login} disabled={!this.state.ready2login}>登&nbsp;录</Button>
                 </div>
+                <Footer name="尚无账号，请点击注册" link="/register"/>
             </div>
         )
     }

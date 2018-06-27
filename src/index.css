@@ -17,12 +17,12 @@ body {
 .gmair_logo {
     text-align: center;
     width: 100%;
-    padding: 10rem 0 2rem 0;
+    padding: 6.5rem 0 1.5rem 0;
 }
 
 .gmair_logo_slogan {
     text-align: center;
-    margin: 4.5rem 0 5.5rem 0;
+    margin: 3rem 0 3rem 0;
     letter-spacing: 0.55rem;
     font-family: FZLanTingKanHei-R-GBK;
     font-size: 1.7rem;
@@ -32,26 +32,26 @@ body {
 
 .gmair_login_area, .gmair_register_area {
     width: 85%;
-    margin: 13rem 7.5% 3.5rem 7.5%;
+    margin: 7rem 7.5% 3.5rem 7.5%;
 }
 
-.gmair_login_area, .gmair_register_area ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+.gmair_login_area ::-webkit-input-placeholder , .gmair_register_area ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color:    #FFFFFF !important;
 }
-.gmair_login_area, .gmair_register_area :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+.gmair_login_area :-moz-placeholder, .gmair_register_area :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
     color:    #FFFFFF !important;
 }
-.gmair_login_area, .gmair_register_area ::-moz-placeholder { /* Mozilla Firefox 19+ */
+.gmair_login_area ::-moz-placeholder, .gmair_register_area ::-moz-placeholder { /* Mozilla Firefox 19+ */
     color:    #FFFFFF !important;
 }
-.gmair_login_area, .gmair_register_area :-ms-input-placeholder { /* Internet Explorer 10-11 */
+.gmair_login_area :-ms-input-placeholder, .gmair_register_area :-ms-input-placeholder { /* Internet Explorer 10-11 */
     color:    #FFFFFF !important;
 }
-.gmair_login_area, .gmair_register_area ::-ms-input-placeholder { /* Microsoft Edge */
+.gmair_login_area ::-ms-input-placeholder, .gmair_register_area ::-ms-input-placeholder { /* Microsoft Edge */
     color:    #FFFFFF !important;
 }
 
-.gmair_login_area, .gmair_register_area ::placeholder { /* Most modern browsers support this now. */
+.gmair_login_area ::placeholder, .gmair_register_area ::placeholder { /* Most modern browsers support this now. */
     color:    #FFFFFF !important;
 }
 

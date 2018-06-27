@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 
-import LoginPage from './component/login/login_page'
+import Page from './component/page/page'
+
+import {BrowserRouter} from 'react-router-dom'
+
 
 class Gmair extends Component {
     render() {
         return (
-            <LoginPage></LoginPage>
+            <BrowserRouter>
+                <Page></Page>
+            </BrowserRouter>
         );
     }
 }
