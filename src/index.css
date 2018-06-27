@@ -60,3 +60,9 @@ body {
     margin: 0 7.5% 0 7.5%;
     text-align: center;
 }
+
+.input-group-addon {
+    padding: unset;
+    background-color: transparent;
+    border: unset;
+}

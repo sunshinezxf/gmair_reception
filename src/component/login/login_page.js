@@ -14,6 +14,10 @@ import login from './login.png'
 
 import gmair_white from '../../material/logo/gmair_white.png'
 
+import {consumerservice} from '../service/consumer.service.js'
+
+import {util} from '../service/util.js'
+
 const gmair_login_page = {
     backgroundImage: `url(${login})`,
     width: `100%`,
@@ -42,8 +46,7 @@ const transparent_input = {
 }
 
 const password_btn = {
-    color: `#00AEEF`,
-    opacity: `0.75`
+    color: `#00AEEF`
 }
 
 const login_btn = {
@@ -58,11 +61,25 @@ class LoginPage extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.read_mobile = this.read_mobile.bind(this);
+        this.read_code = this.read_code.bind(this);
+        this.send_code = this.send_code.bind(this);
+        this.validate_mobile = this.validate_mobile.bind(this);
+        this.validate_code = this.validate_code.bind(this);
+        this.login = this.login.bind(this);
+
         this.state = {
             showtext: false,
+            verification_text: '获取验证码',
             mobile: '',
-            password: ''
+            password: '',
+            expected_password: '',
+            ready2send: false,
+            ready2login: false
         };
+    }
+
+    componentWillMount() {
+        let is_wechat = util.is_weixin();
     }
 
     render() {
@@ -75,20 +92,24 @@ class LoginPage extends React.Component {
                 <div className="gmair_login_area">
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span className="glyphicon glyphicon-phone"></span></InputGroup.Addon>
-                            <FormControl type="tel" placeholder = '请输入手机号码' style={transparent_input} value={this.state.mobile} onChange={this.read_mobile}></FormControl>
+                            <InputGroup.Addon style={white_icon}><span
+                                className="glyphicon glyphicon-phone"></span></InputGroup.Addon>
+                            <FormControl type="tel" placeholder='请输入手机号码' style={transparent_input}
+                                         value={this.state.mobile} onChange={this.read_mobile}></FormControl>
                         </InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span className="glyphicon glyphicon-lock"></span></InputGroup.Addon>
-                            <FormControl type="password" placeholder = '请输入密码' style={transparent_input}></FormControl>
-                            <InputGroup.Addon style={password_btn}>获取验证码</InputGroup.Addon>
+                            <InputGroup.Addon style={white_icon}><span
+                                className="glyphicon glyphicon-lock"></span></InputGroup.Addon>
+                            <FormControl type="password" placeholder='请输入动态验证码' style={transparent_input} value={this.state.password} onChange={this.read_code}></FormControl>
+                            <InputGroup.Addon><Button disabled={!this.state.ready2send} onClick={this.send_code}
+                                                      style={password_btn}>{this.state.verification_text}</Button></InputGroup.Addon>
                         </InputGroup>
                     </FormGroup>
                 </div>
                 <div className="gmair_login_btn">
-                    <Button block style={login_btn}>登&nbsp;录</Button>
+                    <Button block style={login_btn} onClick={this.login} disabled={!this.state.ready2login}>登&nbsp;录</Button>
                 </div>
             </div>
         )
@@ -98,11 +119,52 @@ class LoginPage extends React.Component {
         this.setState({mobile: e.target.value}, this.validate_mobile);
     }
 
+    read_code = (e) => {
+        this.setState({password: e.target.value}, this.validate_code);
+    }
+
     validate_mobile = () => {
         var pattern = /^((\+?86)|(\+86\+86))?1\d{10}$/;
         if (pattern.test(this.state.mobile) === true) {
-            console.log("mobile number received.");
+            this.setState({ready2send: true});
+        } else {
+            this.setState({ready2send: false});
         }
+    }
+
+    validate_code = () => {
+        let expected_code = this.state.expected_password;
+        let code = this.state.password;
+        if (code === expected_code) {
+            this.setState({ready2login: true});
+        } else {
+            this.setState({ready2login: false});
+        }
+    }
+
+    send_code = () => {
+        consumerservice.request_code(this.state.mobile).then(response => {
+            this.setState({ready2send: false});
+            if (response.responseCode !== undefined && response.responseCode === 'RESPONSE_OK') {
+                this.setState({expected_password: response.data.serial});
+                let interval = 60;
+                let verification_interval = setInterval(() => {
+                    interval = interval - 1;
+                    this.setState({verification_text: interval + 's后重发'});
+                    if (interval < 0) {
+                        this.setState({verification_text: '获取验证码', ready2send: true});
+                        clearInterval(verification_interval);
+                    }
+                }, 1000);
+            }
+        });
+    }
+
+    login = () => {
+
+        consumerservice.login(this.state.mobile, this.state.password).then(response => {
+            console.log(response);
+        });
     }
 }
 
