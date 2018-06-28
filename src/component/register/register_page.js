@@ -10,6 +10,10 @@ import {Button, FormGroup, FormControl, InputGroup} from 'react-bootstrap'
 
 import gmair_white from '../../material/logo/gmair_white.png'
 
+import {consumerservice} from "../service/consumer.service";
+
+import {locationservice} from "../service/location.service";
+
 const gmair_register_page = {
     backgroundImage: `url(${register})`,
     width: `100%`,
@@ -56,8 +60,13 @@ class RegisterPage extends React.Component{
             username: '',
             mobile: '',
             password: '',
+            expected_password: '',
+            address_province: '',
+            address_city: '',
             address: '',
-            filled: false
+            filled: false,
+            ready2send: false,
+            ready2reg: false
         }
 
         this.read_username = this.read_username.bind(this);
@@ -71,7 +80,7 @@ class RegisterPage extends React.Component{
     validate_mobile = () => {
         var pattern = /^((\+?86)|(\+86\+86))?1\d{10}$/;
         if (pattern.test(this.state.mobile) === true) {
-            console.log("mobile number received.");
+            this.setState({ready2send: true});
         }
     }
 
@@ -123,7 +132,7 @@ class RegisterPage extends React.Component{
                         <InputGroup>
                             <InputGroup.Addon style={white_icon}><span className="glyphicon glyphicon-lock"></span></InputGroup.Addon>
                             <FormControl type="password" placeholder = '请输入动态验证码' style={transparent_input} value={this.state.password} onChange={this.read_password}></FormControl>
-                            <InputGroup.Addon><Button style={password_btn}>获取验证码</Button></InputGroup.Addon>
+                            <InputGroup.Addon><Button style={password_btn} disabled={!this.state.ready2send}>获取验证码</Button></InputGroup.Addon>
                         </InputGroup>
                     </FormGroup>
                     <FormGroup>
@@ -134,11 +143,20 @@ class RegisterPage extends React.Component{
                     </FormGroup>
                 </div>
                 <div className="gmair_register_btn">
-                    <Button block style={register_btn}>注&nbsp;册</Button>
+                    <Button block style={register_btn} disabled={!this.state.ready2reg}>注&nbsp;册</Button>
                 </div>
                 <Footer name="已有账号，请点击登录" link="/login"/>
             </div>
         )
+    }
+
+    componentDidMount() {
+        locationservice.tell_location().then(response => {
+            if(response.responseCode !== undefined && response.responseCode === 'RESPONSE_OK') {
+                let address = response.data;
+                this.setState({address_province: address.province, address_city: address.city, address: address.province + address.city});
+            }
+        });
     }
 }
 export default RegisterPage

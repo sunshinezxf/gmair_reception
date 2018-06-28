@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const consumer_url = 'https://microservice.gmair.net'
+const consumer_url = 'https://microservice.gmair.net';
 
 function request_code(mobile) {
     let request_code_url = consumer_url + '/auth/consumer/request';
