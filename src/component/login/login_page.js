@@ -74,8 +74,20 @@ class LoginPage extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         let is_wechat = util.is_weixin();
+    }
+
+    componentWillUnmount() {
+        this.setState({
+            showtext: false,
+            verification_text: '获取验证码',
+            mobile: '',
+            password: '',
+            expected_password: '',
+            ready2send: false,
+            ready2login: false
+        });
     }
 
     render() {
@@ -98,14 +110,16 @@ class LoginPage extends React.Component {
                         <InputGroup>
                             <InputGroup.Addon style={white_icon}><span
                                 className="glyphicon glyphicon-lock"></span></InputGroup.Addon>
-                            <FormControl type="password" placeholder='请输入动态验证码' style={transparent_input} value={this.state.password} onChange={this.read_code}></FormControl>
+                            <FormControl type="password" placeholder='请输入动态验证码' style={transparent_input}
+                                         value={this.state.password} onChange={this.read_code}></FormControl>
                             <InputGroup.Addon><Button disabled={!this.state.ready2send} onClick={this.send_code}
                                                       style={password_btn}>{this.state.verification_text}</Button></InputGroup.Addon>
                         </InputGroup>
                     </FormGroup>
                 </div>
                 <div className="gmair_login_btn">
-                    <Button block style={login_btn} onClick={this.login} disabled={!this.state.ready2login}>登&nbsp;录</Button>
+                    <Button block style={login_btn} onClick={this.login}
+                            disabled={!this.state.ready2login}>登&nbsp;录</Button>
                 </div>
                 <Footer name="尚无账号，请点击注册" link="/register"/>
             </div>
@@ -140,7 +154,7 @@ class LoginPage extends React.Component {
     }
 
     send_code = () => {
-        consumerservice.request_code(this.state.mobile).then(response => {
+        consumerservice.request_login_code(this.state.mobile).then(response => {
             this.setState({ready2send: false});
             if (response.responseCode !== undefined && response.responseCode === 'RESPONSE_OK') {
                 this.setState({expected_password: response.data.serial});
@@ -158,7 +172,7 @@ class LoginPage extends React.Component {
     }
 
     login = () => {
-
+        this.setState({ready2send: false, ready2login: false});
         consumerservice.login(this.state.mobile, this.state.password).then(response => {
             console.log(response);
         });
