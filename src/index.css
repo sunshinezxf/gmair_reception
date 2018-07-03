@@ -70,3 +70,7 @@ body {
 .btn-default:focus, .btn-default:hover {
     background-position: unset;
 }
+
+.gmair_machine_item_pm2_5 {
+    font-family: '60sSTRIPE';
+}

@@ -66,12 +66,11 @@ class NetworkConfig extends React.Component {
 
     begin_config = () => {
         window.wx.invoke('configWXDeviceWiFi', {}, function (response) {
+            if (response.err_msg === 'configWXDeviceWiFi:ok') {
 
-            if (response === 'configWXDeviceWiFi:ok') {
+            } else if (response.err_msg === 'configWXDeviceWiFi:fail') {
 
-            } else if (response === 'configWXDeviceWiFi:fail') {
-
-            } else if (response === 'configWXDeviceWiFi:cancel') {
+            } else if (response.err_msg === 'configWXDeviceWiFi:cancel') {
 
             }
         })
@@ -90,7 +89,7 @@ class NetworkConfig extends React.Component {
                         timestamp: result.timestamp, // 必填，生成签名的时间戳
                         nonceStr: result.nonceStr, // 必填，生成签名的随机串
                         signature: result.signature,// 必填，签名
-                        jsApiList: ['configWXDeviceWiFi', 'hideAllNonBaseMenuItem'] // 必填，需要使用的JS接口列表
+                        jsApiList: ['configWXDeviceWiFi', 'getWXDeviceInfos', 'hideAllNonBaseMenuItem', 'openWXDeviceLib'] // 必填，需要使用的JS接口列表
                     });
                     window.wx.ready(() => {
                         window.wx.hideAllNonBaseMenuItem();
