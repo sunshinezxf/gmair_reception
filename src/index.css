@@ -74,3 +74,9 @@ body {
 .gmair_machine_item_pm2_5 {
     font-family: '60sSTRIPE';
 }
+
+.btn-info {
+    background-color: #00AEEF !important;
+    opacity: 0.95;
+
+}
