@@ -87,7 +87,6 @@ class DeviceInit extends React.Component {
                 this.props.history.push('/login');
                 return;
             }
-
         })
     }
 

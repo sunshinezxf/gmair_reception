@@ -89,7 +89,7 @@ class RegisterPage extends React.Component{
 
     init_config = () => {
         let url = window.location.href;
-        if (util.is_weixin() || true) {
+        if (util.is_weixin()) {
             wechatservice.configuration(url).then(response => {
                 if (response.responseCode === 'RESPONSE_OK') {
                     let result = response.data;
