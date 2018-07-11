@@ -123,8 +123,7 @@ const gmair_icon_inactive = {
 }
 
 const gmair_icon_active = {
-    color: `#00A2E9`,
-    opacity: `0.85`
+    color: `#00A2E9`
 }
 
 class MachinePower extends React.Component {
@@ -150,8 +149,6 @@ class MachinePower extends React.Component {
                 </div>
             )
         }
-
-
     }
 }
 
