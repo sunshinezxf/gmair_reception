@@ -76,7 +76,7 @@ class DeviceInit extends React.Component {
         if(access_token === undefined || access_token === null || access_token === '') {
             this.props.history.push('/login');
         }
-        var qrcode = this.props.match.params.qrcode;
+        let qrcode = this.props.match.params.qrcode;
         machine_service.check_exist(qrcode).then(response => {
             if(response.responseCode === 'RESPONSE_ERROR') {
                 this.props.history.push('/login');

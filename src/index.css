@@ -35,24 +35,28 @@ body {
     margin: 7rem 7.5% 3.5rem 7.5%;
 }
 
-.gmair_login_area ::-webkit-input-placeholder , .gmair_register_area ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:    #FFFFFF !important;
+.gmair_login_area ::-webkit-input-placeholder, .gmair_register_area ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #FFFFFF !important;
 }
+
 .gmair_login_area :-moz-placeholder, .gmair_register_area :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:    #FFFFFF !important;
+    color: #FFFFFF !important;
 }
+
 .gmair_login_area ::-moz-placeholder, .gmair_register_area ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color:    #FFFFFF !important;
+    color: #FFFFFF !important;
 }
+
 .gmair_login_area :-ms-input-placeholder, .gmair_register_area :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color:    #FFFFFF !important;
+    color: #FFFFFF !important;
 }
+
 .gmair_login_area ::-ms-input-placeholder, .gmair_register_area ::-ms-input-placeholder { /* Microsoft Edge */
-    color:    #FFFFFF !important;
+    color: #FFFFFF !important;
 }
 
 .gmair_login_area ::placeholder, .gmair_register_area ::placeholder { /* Most modern browsers support this now. */
-    color:    #FFFFFF !important;
+    color: #FFFFFF !important;
 }
 
 .gmair_login_btn, .gmair_register_btn {
@@ -73,10 +77,57 @@ body {
 
 .gmair_machine_item_pm2_5 {
     font-family: Helvetica;
+    color: #999999;
 }
 
 .btn-info {
     background-color: #00AEEF !important;
-    opacity: 0.95;
+}
 
+.spin {
+    display: inline-block;
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 1s;
+    -moz-transition-property: -moz-transform;
+    -moz-transition-duration: 1s;
+    -webkit-animation: rotate 3s linear infinite;
+    -moz-animation: rotate 3s linear infinite;
+    -o-animation: rotate 3s linear infinite;
+    animation: rotate 3s linear infinite;
+}
+
+@-webkit-keyframes rotate {
+    from {
+        -webkit-transform: rotate(0deg)
+    }
+    to {
+        -webkit-transform: rotate(360deg)
+    }
+}
+
+@-moz-keyframes rotate {
+    from {
+        -moz-transform: rotate(0deg)
+    }
+    to {
+        -moz-transform: rotate(359deg)
+    }
+}
+
+@-o-keyframes rotate {
+    from {
+        -o-transform: rotate(0deg)
+    }
+    to {
+        -o-transform: rotate(359deg)
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg)
+    }
+    to {
+        transform: rotate(359deg)
+    }
 }

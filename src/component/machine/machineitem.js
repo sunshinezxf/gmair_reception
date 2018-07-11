@@ -37,7 +37,8 @@ const gmair_machine_power = {
 }
 
 const gmair_pm2_5_attr = {
-    marginTop: `0.5rem`
+    marginTop: `0.5rem`,
+    fontWeight: `lighter`
 }
 
 const gmair_machine_index = {
@@ -54,16 +55,31 @@ const gmair_machine_name = {
 
 const gmair_machine_desc = {
     marginTop: `1.5rem`,
-    fontWeight: `lighter`
+    fontWeight: `lighter`,
+    float: `left`
 }
 
 const gmair_machine_desc_item = {
-    marginLeft: `1rem`
+    marginLeft: `1rem`,
+    float: `left`
 }
 
 class MachineItem extends React.Component {
+
     constructor(props) {
         super(props);
+        this.state = {
+            power_status: 'off'
+        }
+        this.power_operate = this.power_operate.bind(this);
+    }
+
+    power_operate = () => {
+        if (this.state.power_status == 'on') {
+            this.setState({power_status: 'off'});
+        } else {
+            this.setState({power_status: 'on'});
+        }
     }
 
     render() {
@@ -71,19 +87,71 @@ class MachineItem extends React.Component {
             <div style={gmair_machine_item}>
                 <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>000</div>
                 <div style={gmair_machine_operation}>
-                    <div><span style={gmair_machine_power}><i className='glyphicon glyphicon-off'></i></span></div>
+                    <MachinePower power={this.state.power_status} operation={this.power_operate}/>
                     <div style={gmair_pm2_5_attr}>ug/m³</div>
                 </div>
                 <div style={gmair_machine_index}>
                     <div style={gmair_machine_name}>卧室</div>
                     <div style={gmair_machine_desc}>
-                        <span style={gmair_machine_desc_item}><i className='fa fa-superpowers'></i> 320m³/h</span>
-                        <span style={gmair_machine_desc_item}><i className='fa fa-thermometer'></i> 26°C</span>
-                        <span style={gmair_machine_desc_item}><i className='glyphicon glyphicon-tint'></i>60%</span>
+                        <span style={gmair_machine_desc_item}>
+                            <span  style={gmair_icon_active} className={this.state.power_status == 'on' ? 'spin' : ''}>
+                                <i className='fa fa-life-bouy'></i>
+                            </span>
+                            <span>&nbsp;320m³/h</span>
+                        </span>
+                        <span style={gmair_machine_desc_item}>
+                            <span style={gmair_icon_active}>
+                                <i className='fa fa-thermometer'></i>
+                            </span>
+                            <span>&nbsp;26°C</span>
+                        </span>
+                        <span style={gmair_machine_desc_item}>
+                            <span style={gmair_icon_active}>
+                                <i className='glyphicon glyphicon-tint'></i>
+                            </span>
+                            <span>&nbsp;60%</span>
+                        </span>
                     </div>
                 </div>
             </div>
         )
+    }
+}
+
+const gmair_icon_inactive = {
+    color: `grey`
+}
+
+const gmair_icon_active = {
+    color: `#00A2E9`,
+    opacity: `0.85`
+}
+
+class MachinePower extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        if (this.props.power === 'on') {
+            return (
+                <div onClick={this.props.operation}>
+                <span style={gmair_machine_power}>
+                    <i className='glyphicon glyphicon-off' style={gmair_icon_active}></i>
+                </span>
+                </div>
+            )
+        } else {
+            return (
+                <div onClick={this.props.operation}>
+                <span style={gmair_machine_power}>
+                    <i className='glyphicon glyphicon-off' style={gmair_icon_inactive}></i>
+                </span>
+                </div>
+            )
+        }
+
+
     }
 }
 
