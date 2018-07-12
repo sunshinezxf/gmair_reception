@@ -63,7 +63,7 @@ class Operation extends React.Component {
                     <div style={operation_gap_top}></div>
                     <Row>
                         <Col xs={4} md={4}>
-                            <i className='fa fa-life-bouy' style={operation_icon}></i>
+                            <i className='fa fa-superpowers' style={operation_icon}></i>
                             <div>风量</div>
                         </Col>
                         <Col xs={4} md={4}>
