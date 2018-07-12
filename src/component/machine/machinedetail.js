@@ -1,5 +1,8 @@
 import React from 'react'
 
+import Operation from './machineoperation'
+import PM2_5Charts from "./pm2_5charts";
+
 const gmair_machine_index = {
     width: `100%`,
     padding: `2rem 7.5% 0rem 7.5%`,
@@ -51,6 +54,10 @@ const indoor_index = {
     height: `12rem`
 }
 
+const charts_area = {
+    margin: `3rem -2rem 0 -2rem`
+}
+
 class MachineDetail extends React.Component {
     constructor(props) {
         super(props);
@@ -93,6 +100,11 @@ class MachineDetail extends React.Component {
                         </div>
                     </div>
                     <Outdoor/>
+                    <Operation/>
+                    <div style={charts_area}>
+                        <PM2_5Charts/>
+                    </div>
+
                 </div>
             </div>
         )
