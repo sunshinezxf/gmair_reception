@@ -5,7 +5,7 @@ const consumer_url = 'https://microservice.gmair.net';
 function request_login_code(mobile) {
     let request_code_url = consumer_url + '/auth/consumer/authentication/request';
     let form = new FormData();
-    form.set('phone', mobile);
+    form.append('phone', mobile);
     return axios.post(request_code_url, form).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -27,19 +27,20 @@ function request_register_code(mobile) {
 function login(username, code) {
     let login_url = consumer_url + '/oauth/consumer/token';
     let form = new FormData();
-    form.set('username', username);
-    form.set('password', code);
-    form.set('grant_type', 'password');
-    form.set('client_secret', '123456');
-    form.set('client_id', 'client_2');
+    form.append('username', username);
+    form.append('password', code);
+    form.append('grant_type', 'password');
+    form.append('client_secret', '123456');
+    form.append('client_id', 'client_2');
     return axios.post(login_url, form).then(response => {
         if (response.status === 200) {
             let access_token = response.data.access_token;
             localStorage.setItem('access_token', access_token);
+            return {responseCode: 'RESPONSE_OK', data: access_token};
         } else {
             console.log('authentication failed for user: ' + username)
         }
-        return response.data;
+
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
     });
@@ -57,12 +58,12 @@ function exist(phone) {
 function register(wechat, username, mobile, code, province, city, address) {
     let register_url = consumer_url + '/auth/consumer/register';
     let form = new FormData();
-    form.set('name', username);
-    form.set('wechat', wechat);
-    form.set('phone', mobile);
-    form.set('addressProvince', province);
-    form.set('addressCity', city);
-    form.set('addressDetail', address);
+    form.append('name', username);
+    form.append('wechat', wechat);
+    form.append('phone', mobile);
+    form.append('addressProvince', province);
+    form.append('addressCity', city);
+    form.append('addressDetail', address);
     return axios.post(register_url, form).then(response => {
         return response;
     }).catch(() => {

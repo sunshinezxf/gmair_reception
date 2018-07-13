@@ -111,7 +111,7 @@ class MachineDetail extends React.Component {
                 <div style={gmair_machine_index}>
                     <div style={gmair_machine_pm2_5}>PM2.5 优</div>
                     <div style={indoor_index}>
-                        <div style={gmair_machine_pm2_5_value}>003</div>
+                        <div style={gmair_machine_pm2_5_value}>000</div>
                         <div style={gmair_machine_index_desc}>
                             <div style={gmair_machine_index_desc_item}>
                                 <span  style={gmair_icon_active} className='spin'>
@@ -188,7 +188,7 @@ class Outdoor extends React.Component {
                         <span style={gmair_icon_active}>
                             <i className='glyphicon glyphicon-leaf'></i>
                         </span>
-                        <span>&nbsp;320ug/m³</span>
+                        <span>&nbsp;47ug/m³</span>
                     </div>
                     <div style={outdoor_temp}>
                         <span style={gmair_icon_active}>

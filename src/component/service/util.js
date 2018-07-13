@@ -24,6 +24,16 @@ function load_script(url, method) {
     document.getElementsByTagName('head')[0].appendChild(node);
 }
 
+function format_pm2_5(value) {
+    if(value < 10) {
+       return '00' +  value.toString();
+    }
+    if(value < 100) {
+        return '0' + value.toString();
+    }
+    return value.toString();
+}
+
 export const util = {
-    is_weixin, load_script
+    is_weixin, load_script, format_pm2_5
 }

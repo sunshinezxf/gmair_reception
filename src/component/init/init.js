@@ -113,7 +113,7 @@ class DeviceInit extends React.Component {
                                 className='glyphicon glyphicon-tags'></i></span> &nbsp;设备型号
                             </div>
                         </ControlLabel>
-                        <FormControl style={transparent_input} type="text" placeholder="Enter text"/>
+                        <FormControl style={transparent_input} type="text" value='35A'/>
                     </FormGroup>
                 </div>
                 <div style={gmair_confirm_btn}>

@@ -47,7 +47,7 @@ class PM2_5Charts extends React.Component {
                 {
                     name: '机器数值',
                     type: 'line',
-                    data: [11, 11, 15, 13, 12, 13, 10],
+                    data: [0, 0, 1, 0, 0, 0, 0],
                     markLine: {
                         data: [
                             {type: 'average', name: '平均值'}
@@ -57,7 +57,7 @@ class PM2_5Charts extends React.Component {
                 {
                     name: '城市数值',
                     type: 'line',
-                    data: [1, -2, 2, 5, 3, 2, 0],
+                    data: [45, 50, 53, 55, 40, 60, 50],
                     markLine: {
                         data: [
                             {type: 'average', name: '平均值'}

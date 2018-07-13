@@ -66,7 +66,7 @@ class MachineList extends React.Component {
         let element = machine_list.map(function (item) {
             return (
                 <div>
-                    <MachineItem qrcode={item.codeValue}/>
+                    <MachineItem qrcode={item.codeValue} name={item.bindName}/>
                     <div style={machine_item_gap}></div>
                 </div>
             )
