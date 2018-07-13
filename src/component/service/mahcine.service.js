@@ -46,6 +46,19 @@ function obtain_machine_status(qrcode) {
     })
 }
 
+function power(qrcode, operation) {
+    let access_token = localStorage.getItem('access_token');
+    let power_operate_url = machine_service_url + '/power/' + operation;
+    let form = new FormData();
+    form.append('qrcode', qrcode);
+    form.append('access_token', access_token);
+    return axios.post(power_operate_url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to operate machine power status'};
+    })
+}
+
 export const machine_service = {
-    check_exist, check_online, obtain_machine_list, obtain_machine_status
+    check_exist, check_online, obtain_machine_list, obtain_machine_status, power
 }

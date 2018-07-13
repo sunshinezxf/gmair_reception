@@ -74,6 +74,7 @@ class MachineItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            qrcode: '',
             pm2_5: '',
             volume: '',
             temp: '',
@@ -86,8 +87,10 @@ class MachineItem extends React.Component {
     power_operate = () => {
         if (this.state.power_status == 'on') {
             this.setState({power_status: 'off'});
+            machine_service.power(this.state.qrcode, 'off');
         } else {
             this.setState({power_status: 'on'});
+            machine_service.power(this.props.qrcode, 'on');
         }
     }
 
@@ -96,17 +99,23 @@ class MachineItem extends React.Component {
         this.setState({qrcode: qrcode});
         machine_service.obtain_machine_status(qrcode).then(response => {
             //machine online
-            if(response.responseCode === 'RESPONSE_OK') {
+            if (response.responseCode === 'RESPONSE_OK') {
                 let information = response.data;
                 let pm2_5 = information.pm2_5;
                 let volume = information.volume;
                 let temp = information.temp;
                 let humid = information.humid;
                 let power = information.power;
-                this.setState({pm2_5: pm2_5, volume: volume, temp: temp, humid: humid, power_status: (power == 1) ? 'on' : 'off'});
+                this.setState({
+                    pm2_5: pm2_5,
+                    volume: volume,
+                    temp: temp,
+                    humid: humid,
+                    power_status: (power == 1) ? 'on' : 'off'
+                });
             }
             //machine offline
-            if(response.responseCode === 'RESPONSE_NULL') {
+            if (response.responseCode === 'RESPONSE_NULL') {
 
             }
         })
@@ -121,31 +130,31 @@ class MachineItem extends React.Component {
                     <MachinePower power={this.state.power_status} operation={this.power_operate}/>
                     <div style={gmair_pm2_5_attr}>ug/m³</div>
                 </div>
-                <Link to={url}>
-                    <div style={gmair_machine_index}>
+                <div style={gmair_machine_index}>
+                    <Link to={url}>
                         <div style={gmair_machine_name}>{this.props.name}</div>
-                        <div style={gmair_machine_desc}>
+                    </Link>
+                    <div style={gmair_machine_desc}>
                         <span style={gmair_machine_desc_item}>
                             <span style={gmair_icon_active} className={this.state.power_status == 'on' ? 'spin' : ''}>
                                 <i className='fa fa-superpowers'></i>
                             </span>
                             <span>&nbsp;{this.state.volume}m³/h</span>
                         </span>
-                            <span style={gmair_machine_desc_item}>
+                        <span style={gmair_machine_desc_item}>
                             <span style={gmair_icon_active}>
                                 <i className='fa fa-thermometer'></i>
                             </span>
                             <span>&nbsp;{this.state.temp}°C</span>
                         </span>
-                            <span style={gmair_machine_desc_item}>
+                        <span style={gmair_machine_desc_item}>
                             <span style={gmair_icon_active}>
                                 <i className='glyphicon glyphicon-tint'></i>
                             </span>
                             <span>&nbsp;{this.state.humid}%</span>
                         </span>
-                        </div>
                     </div>
-                </Link>
+                </div>
             </div>
         )
     }
