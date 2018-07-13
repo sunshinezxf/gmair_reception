@@ -16,6 +16,16 @@ function check_exist(qrcode) {
 
 }
 
+function obtain_machine_list() {
+    let access_token = localStorage.getItem('access_token');
+    let machine_list_url = machine_service_url + '/devicelist?access_token=' + access_token;
+    return axios.get(machine_list_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the list'};
+    })
+}
+
 export const machine_service = {
-    check_exist
+    check_exist, obtain_machine_list
 }

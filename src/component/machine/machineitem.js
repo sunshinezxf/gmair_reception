@@ -95,7 +95,7 @@ class MachineItem extends React.Component {
                     <div style={gmair_machine_desc}>
                         <span style={gmair_machine_desc_item}>
                             <span  style={gmair_icon_active} className={this.state.power_status == 'on' ? 'spin' : ''}>
-                                <i className='fa fa-life-bouy'></i>
+                                <i className='fa fa-superpowers'></i>
                             </span>
                             <span>&nbsp;320m³/h</span>
                         </span>

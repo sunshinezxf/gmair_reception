@@ -204,6 +204,9 @@ class LoginPage extends React.Component {
     login = () => {
         this.setState({ready2send: false, ready2login: false});
         consumerservice.login(this.state.mobile, this.state.password).then(response => {
+            if(response.responseCode === 'RESPONSE_OK') {
+                this.props.history.push('/machine/list')
+            }
             console.log(response);
         });
     }
