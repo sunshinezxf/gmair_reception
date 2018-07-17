@@ -39,7 +39,7 @@ class MachineList extends React.Component {
                 }
             });
         } else {
-            alert("seems that you are not in wechat")
+            // alert("seems that you are not in wechat")
         }
     }
 

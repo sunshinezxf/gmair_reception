@@ -61,7 +61,9 @@ const gmair_machine_name = {
 const gmair_machine_desc = {
     marginTop: `1.5rem`,
     fontWeight: `lighter`,
-    float: `left`
+    float: `left`,
+    textAlign: `center`,
+    width: `100%`
 }
 
 const gmair_machine_desc_item = {
@@ -74,6 +76,7 @@ class MachineItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            online: '',
             qrcode: '',
             pm2_5: '',
             volume: '',
@@ -82,6 +85,7 @@ class MachineItem extends React.Component {
             power_status: 'off'
         }
         this.power_operate = this.power_operate.bind(this);
+        this.obtain_machine_status = this.obtain_machine_status.bind(this);
     }
 
     power_operate = () => {
@@ -94,9 +98,7 @@ class MachineItem extends React.Component {
         }
     }
 
-    componentDidMount() {
-        let qrcode = this.props.qrcode;
-        this.setState({qrcode: qrcode});
+    obtain_machine_status = (qrcode) => {
         machine_service.obtain_machine_status(qrcode).then(response => {
             //machine online
             if (response.responseCode === 'RESPONSE_OK') {
@@ -107,6 +109,7 @@ class MachineItem extends React.Component {
                 let humid = information.humid;
                 let power = information.power;
                 this.setState({
+                    online: true,
                     pm2_5: pm2_5,
                     volume: volume,
                     temp: temp,
@@ -116,44 +119,72 @@ class MachineItem extends React.Component {
             }
             //machine offline
             if (response.responseCode === 'RESPONSE_NULL') {
-
+                this.setState({online: false});
             }
-        })
+            if (response.responseCode === 'RESPONSE_ERROR') {
+                this.setState({online: false});
+            }
+        });
+    }
+
+    componentDidMount() {
+        let qrcode = this.props.qrcode;
+        this.setState({qrcode: qrcode});
+        this.obtain_machine_status(qrcode);
+        setInterval(() => {
+            this.obtain_machine_status(qrcode);
+        }, 10000);
     }
 
     render() {
         let url = '/machine/detail/' + this.props.qrcode;
+
         return (
             <div style={gmair_machine_item}>
-                <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>{this.state.pm2_5}</div>
+                <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>
+                    {this.state.online === true ? this.state.pm2_5 :
+                        <Link to='/network/config'><i className='fa fa-unlink' style={gmair_icon_active}></i></Link>}
+                </div>
                 <div style={gmair_machine_operation}>
-                    <MachinePower power={this.state.power_status} operation={this.power_operate}/>
-                    <div style={gmair_pm2_5_attr}>ug/m³</div>
+                    {this.state.online === true ?
+                        <MachinePower power={this.state.power_status} operation={this.power_operate}/> : ''}
+                    <div style={gmair_pm2_5_attr}>{this.state.online === true ? 'ug/m³' : '离线'}</div>
                 </div>
                 <div style={gmair_machine_index}>
-                    <Link to={url}>
-                        <div style={gmair_machine_name}>{this.props.name}</div>
-                    </Link>
-                    <div style={gmair_machine_desc}>
+                    {
+                        this.state.online === true ?
+                            <Link to={url}>
+                                <div style={gmair_machine_name}>{this.props.name}</div>
+                            </Link> :
+                            <div style={gmair_machine_name}>{this.props.name}</div>
+                    }
+                    {
+                        this.state.online === true ?
+                            <div style={gmair_machine_desc}>
                         <span style={gmair_machine_desc_item}>
                             <span style={gmair_icon_active} className={this.state.power_status == 'on' ? 'spin' : ''}>
                                 <i className='fa fa-superpowers'></i>
                             </span>
                             <span>&nbsp;{this.state.volume}m³/h</span>
                         </span>
-                        <span style={gmair_machine_desc_item}>
+                                <span style={gmair_machine_desc_item}>
                             <span style={gmair_icon_active}>
                                 <i className='fa fa-thermometer'></i>
                             </span>
                             <span>&nbsp;{this.state.temp}°C</span>
                         </span>
-                        <span style={gmair_machine_desc_item}>
+                                <span style={gmair_machine_desc_item}>
                             <span style={gmair_icon_active}>
                                 <i className='glyphicon glyphicon-tint'></i>
                             </span>
                             <span>&nbsp;{this.state.humid}%</span>
                         </span>
-                    </div>
+                            </div>
+                            :
+                            <div style={gmair_machine_desc}>
+                                <span>设备已离线，待重新接入</span>
+                            </div>
+                    }
                 </div>
             </div>
         )

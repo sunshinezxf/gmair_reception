@@ -30,7 +30,7 @@ class Operation extends React.Component {
         super(props);
         this.state = {
             operations: [],
-            expanded: false
+            expanded: true
         }
         this.expand = this.expand.bind(this);
     }
