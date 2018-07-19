@@ -57,7 +57,12 @@ class MachineList extends React.Component {
         })
         //load machine list
         machine_service.obtain_machine_list().then(response => {
-            this.setState({machine_list: response.data})
+            if (response.responseCode == 'RESPONSE_OK') {
+                this.setState({machine_list: response.data})
+            }else {
+                this.props.history.push('/login');
+                return;
+            }
         });
     }
 
