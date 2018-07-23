@@ -32,6 +32,7 @@ function login(username, code) {
     form.append('grant_type', 'password');
     form.append('client_secret', '123456');
     form.append('client_id', 'client_2');
+    form.append('scope', 'select');
     return axios.post(login_url, form).then(response => {
         if (response.status === 200) {
             let access_token = response.data.access_token;
@@ -39,6 +40,29 @@ function login(username, code) {
             return {responseCode: 'RESPONSE_OK', data: access_token};
         } else {
             console.log('authentication failed for user: ' + username)
+        }
+
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    });
+}
+
+function loginbyopenid(openid) {
+    let login_url = consumer_url + '/oauth/consumer/token';
+    let form = new FormData();
+    form.append('username', openid);
+    form.append('password', '');
+    form.append('grant_type', 'password');
+    form.append('client_secret', '123456');
+    form.append('client_id', 'client_2');
+    form.append('scope', 'select');
+    return axios.post(login_url, form).then(response => {
+        if (response.status === 200) {
+            let access_token = response.data.access_token;
+            localStorage.setItem('access_token', access_token);
+            return {responseCode: 'RESPONSE_OK', data: access_token};
+        } else {
+            console.log('authentication failed for user: ' + openid)
         }
 
     }).catch(() => {
@@ -74,5 +98,5 @@ function register(wechat, username, mobile, code, province, city, address) {
 
 
 export const consumerservice = {
-    request_login_code, request_register_code, login, exist, register
+    request_login_code, request_register_code, login, loginbyopenid, exist, register
 }

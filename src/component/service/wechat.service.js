@@ -13,6 +13,25 @@ function configuration(url) {
     });
 }
 
+function openid() {
+    let openid = localStorage.getItem('openid');
+    if(openid == null || openid == undefined || openid === '') {
+        return null;
+    }
+    return openid;
+}
+
+function openidbycode(code) {
+    let request_openid_url = 'https://microservice.gmair.net/reception/wechat/openid/bycode';
+    let form = new FormData();
+    form.append('code', code);
+    return axios.post(request_openid_url, form).then(response => {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+}
+
 export const wechatservice = {
-    configuration
+    configuration, openid, openidbycode
 }

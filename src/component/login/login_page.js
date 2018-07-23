@@ -94,6 +94,29 @@ class LoginPage extends React.Component {
                     });
                     window.wx.ready(() => {
                         window.wx.hideAllNonBaseMenuItem();
+
+                        let reg = new RegExp("(^|&)code=([^&]*)(&|$)");
+                        let r = this.props.location.search.substr(1).match(reg);
+                        let code = '';
+                        if (r != null) {
+                            code = unescape(r[2]);
+                        }
+                        if (code === '' && wechatservice.openid() == null) {
+                            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + result.appId + "&redirect_uri=" + encodeURI('https://reception.gmair.net/login') + "&response_type=code&scope=snsapi_base&state=gmair#wechat_redirect";
+                        }
+                        if (code !== '' && wechatservice.openid() == null) {
+                            wechatservice.openidbycode(code).then(response => {
+                                if (response.responseCode === 'RESPONSE_OK') {
+                                    let openid = response.data;
+                                    localStorage.setItem('openid', openid);
+                                    consumerservice.loginbyopenid(openid).then(response => {
+                                        if (response.responseCode === 'RESPONSE_OK') {
+                                            this.props.history.push('/machine/list');
+                                        }
+                                    })
+                                }
+                            })
+                        }
                     });
                 }
             });
@@ -103,9 +126,14 @@ class LoginPage extends React.Component {
     }
 
     componentDidMount() {
-        util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
-            this.init_config();
-        })
+        if (util.is_weixin()) {
+            util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
+                this.init_config();
+            })
+        }
+        // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
+        //     var vConsole = new window.VConsole();
+        // })
     }
 
     componentWillUnmount() {
@@ -204,7 +232,7 @@ class LoginPage extends React.Component {
     login = () => {
         this.setState({ready2send: false, ready2login: false});
         consumerservice.login(this.state.mobile, this.state.password).then(response => {
-            if(response.responseCode == 'RESPONSE_OK') {
+            if (response.responseCode == 'RESPONSE_OK') {
                 this.props.history.push('/machine/list')
             }
             console.log(response);

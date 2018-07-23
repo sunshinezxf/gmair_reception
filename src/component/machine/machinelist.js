@@ -52,14 +52,18 @@ class MachineList extends React.Component {
         // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
         //     var vConsole = new window.VConsole();
         // })
-        util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
-            this.init_config();
-        })
+        if (util.is_weixin()) {
+            util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
+                this.init_config();
+            })
+        }
         //load machine list
         machine_service.obtain_machine_list().then(response => {
-            if (response.responseCode == 'RESPONSE_OK') {
+            if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({machine_list: response.data})
-            }else {
+            } else if (response.responseCode === 'RESPONSE_NULL') {
+
+            } else {
                 this.props.history.push('/login');
                 return;
             }
