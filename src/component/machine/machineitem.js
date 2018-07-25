@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 import {Link} from 'react-router-dom'
 
 import {machine_service} from "../service/mahcine.service";
@@ -55,7 +54,8 @@ const gmair_machine_index = {
 
 const gmair_machine_name = {
     paddingTop: `0.4rem`,
-    fontWeight: `lighter`
+    fontWeight: `lighter`,
+    hover: `none`
 }
 
 const gmair_machine_desc = {

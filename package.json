@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "http://reception.gmair.net",
   "dependencies": {
+    "antd-mobile": "^2.2.2",
     "axios": "^0.18.0",
     "echarts": "^4.1.0",
     "echarts-for-react": "^2.0.13",

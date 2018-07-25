@@ -16,7 +16,7 @@ function request_login_code(mobile) {
 function request_register_code(mobile) {
     let request_code_url = consumer_url + '/auth/consumer/registration/request';
     let form = new FormData();
-    form.set('phone', mobile);
+    form.append('phone', mobile);
     return axios.post(request_code_url, form).then(function (response) {
         return response.data;
     }).catch(() => {

@@ -16,6 +16,17 @@ function check_exist(qrcode) {
 
 }
 
+function obtain_code_value_via_url(url) {
+    let obtain_url = machine_service_url + '/probe/qrcode/byurl';
+    let form = new FormData();
+    form.append('codeUrl', url);
+    return axios.post(obtain_url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'};
+    })
+}
+
 function check_online(qrcode) {
     let access_token = localStorage.getItem('access_token');
     let online_url = machine_service_url + '/checkonline?access_token=' + access_token + '&qrcode=' + qrcode;
@@ -59,6 +70,19 @@ function power(qrcode, operation) {
     })
 }
 
+function unbind(qrcode) {
+    let access_token = localStorage.getItem('access_token');
+    let unbind_url = machine_service_url + '/consumer/qrcode/unbind';
+    let form = new FormData();
+    form.append('qrcode', qrcode);
+    form.append('access_token', access_token);
+    return axios.post(unbind_url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to unbind qrcode: ' + qrcode};
+    })
+}
+
 export const machine_service = {
-    check_exist, check_online, obtain_machine_list, obtain_machine_status, power
+    check_exist, check_online, obtain_code_value_via_url, obtain_machine_list, obtain_machine_status, power, unbind
 }
