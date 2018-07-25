@@ -20,7 +20,7 @@ class MachineList extends React.Component {
         super(props);
         this.unbind = this.unbind.bind(this);
         this.refresh_list = this.refresh_list.bind(this);
-        this.render = this.render.bind(this);
+        this.scan_qrcode = this.scan_qrcode.bind(this);
         this.state = {
             machine_list: []
         }
@@ -108,6 +108,27 @@ class MachineList extends React.Component {
         });
     }
 
+    scan_qrcode = () => {
+        console.log("Scan QR Code")
+        if (util.is_weixin()) {
+            window.wx.scanQRCode({
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                    machine_service.obtain_code_value_via_url(result).then(response => {
+                        if(response.responseCode === 'RESPONSE_OK') {
+                            console.log(response.data[0].codeValue)
+                            window.location.href = '/init/' + response.data[0].codeValue;
+                        }
+                    })
+                }
+            });
+        } else {
+            alert("请使用微信打开")
+        }
+    }
+
     render() {
         let machine_list = this.state.machine_list;
         let that = this;
@@ -132,7 +153,7 @@ class MachineList extends React.Component {
         return (
             <div>
                 {element}
-                <DeviceScan/>
+                <DeviceScan scan={this.scan_qrcode}/>
             </div>
         );
     }
