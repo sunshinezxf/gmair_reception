@@ -1,8 +1,10 @@
 import React from 'react'
 
-import {Button, FormGroup, ControlLabel, FormControl} from 'react-bootstrap'
+import {Alert, Button, FormGroup, ControlLabel, FormControl} from 'react-bootstrap'
 
 import {machine_service} from '../service/mahcine.service';
+import {util} from "../service/util";
+import {wechatservice} from "../service/wechat.service";
 
 const gmair_init_page = {
     width: `100%`,
@@ -66,28 +68,114 @@ const gmair_confirm_btn = {
 class DeviceInit extends React.Component {
     constructor(props) {
         super(props);
+        this.close_window = this.close_window.bind(this);
+        this.confirm_init = this.confirm_init.bind(this);
+        this.read_name = this.read_name.bind(this);
+        this.validate_name = this.validate_name.bind(this);
+        this.init_config = this.init_config.bind(this);
         this.state = {
-            qrcode: ''
+            qrcode: '',
+            bind_name: '',
+            model_code: '',
+            ready2confirm: false,
+            not_exist: false,
+            already_occupied: false
+        }
+    }
+
+    init_config = () => {
+        let url = window.location.href;
+        if (util.is_weixin()) {
+            wechatservice.configuration(url).then(response => {
+                if (response.responseCode === 'RESPONSE_OK') {
+                    let result = response.data;
+                    window.wx.config({
+                        beta: true,
+                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: result.appId, // 必填，公众号的唯一标识
+                        timestamp: result.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: result.nonceStr, // 必填，生成签名的随机串
+                        signature: result.signature,// 必填，签名
+                        jsApiList: ['hideAllNonBaseMenuItem'] // 必填，需要使用的JS接口列表
+                    });
+                    window.wx.ready(() => {
+                        window.wx.hideAllNonBaseMenuItem();
+                    });
+                }
+            });
+        } else {
+            alert("seems that you are not in wechat")
         }
     }
 
     componentDidMount() {
+        if (util.is_weixin()) {
+            util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
+                this.init_config();
+            })
+        }
         let access_token = localStorage.getItem("access_token");
-        if(access_token === undefined || access_token === null || access_token === '') {
+        if (access_token === undefined || access_token === null || access_token === '') {
             this.props.history.push('/login');
         }
         let qrcode = this.props.match.params.qrcode;
+        this.setState({qrcode: qrcode})
+        util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
+            var vConsole = new window.VConsole();
+        })
         machine_service.check_exist(qrcode).then(response => {
-            if(response.responseCode === 'RESPONSE_ERROR') {
+            if (response.responseCode === 'RESPONSE_ERROR') {
                 this.props.history.push('/login');
                 return;
             }
-            if(response.responseCode === 'RESPONSE_NULL') {
+            if (response.responseCode === 'RESPONSE_NULL') {
                 //qrcode not exist
-                this.props.history.push('/login');
+                this.setState({not_exist: true})
                 return;
+            }
+            if (response.data[0].status === 'CREATED' || response.data[0].status === 'PRE_BINDED' || response.data[0].status === 'ASSIGNED') {
+                this.setState({already_occupied: false});
+            }else {
+                this.setState({already_occupied: true});
+            }
+            this.setState({not_exist: false});
+            machine_service.obtain_model(response.data[0].modelId).then(response => {
+                if (response.responseCode === 'RESPONSE_OK') {
+                    this.setState({model_code: response.data[0].modelCode})
+                }
+            });
+        })
+    }
+
+    confirm_init = () => {
+        machine_service.confirm_init(this.state.qrcode, this.state.bind_name).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                window.location.href = '/machine/list'
             }
         })
+    }
+
+    read_name = (e) => {
+        this.setState({bind_name: e.target.value}, this.validate_name);
+    }
+
+    validate_name = () => {
+        let bind_name = this.state.bind_name;
+        if (bind_name !== '') {
+            machine_service.check_exist_name(this.state.qrcode, this.state.bind_name).then(response => {
+                if (response.responseCode === 'RESPONSE_OK') {
+                    this.setState({ready2confirm: false});
+                } else if (response.responseCode === 'RESPONSE_NULL') {
+                    this.setState({ready2confirm: true});
+                } else {
+                    this.setState({ready2confirm: false});
+                }
+            });
+        }
+    }
+
+    close_window = () => {
+        window.wx.closeWindow();
     }
 
     render() {
@@ -98,27 +186,46 @@ class DeviceInit extends React.Component {
                         className='glyphicon glyphicon-home'></i>&nbsp;设备初始化</span></div>
                 </div>
                 <div style={gmair_device_name_arc}></div>
-                <div style={gmair_device_content}>
-                    <FormGroup>
-                        <ControlLabel>
-                            <div style={gmair_device_item}><span><i
-                                className='glyphicon glyphicon-pencil'></i></span> &nbsp;设备名称
-                            </div>
-                        </ControlLabel>
-                        <FormControl style={transparent_input} type="text" placeholder="请输入设备别名"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <ControlLabel>
-                            <div style={gmair_device_item}><span><i
-                                className='glyphicon glyphicon-tags'></i></span> &nbsp;设备型号
-                            </div>
-                        </ControlLabel>
-                        <FormControl style={transparent_input} type="text" value='35A'/>
-                    </FormGroup>
-                </div>
-                <div style={gmair_confirm_btn}>
-                    <Button bsStyle='info' block>确认信息</Button>
-                </div>
+
+                {
+                    this.state.not_exist ?
+                        <div style={gmair_device_content}>
+                            <Alert bsStyle="info">
+                                二维码信息（{this.state.qrcode}）似乎存在问题，请您与工作人员联系，以进行确认。
+                            </Alert>
+                        </div>
+                        :
+                        <div style={gmair_device_content}>
+                            <FormGroup>
+                                <ControlLabel>
+                                    <div style={gmair_device_item}><span><i
+                                        className='glyphicon glyphicon-pencil'></i></span> &nbsp;设备名称
+                                    </div>
+                                </ControlLabel>
+                                <FormControl style={transparent_input} type="text" placeholder="请输入设备别名"
+                                             onChange={this.read_name}/>
+                            </FormGroup>
+                            <FormGroup>
+                                <ControlLabel>
+                                    <div style={gmair_device_item}><span><i
+                                        className='glyphicon glyphicon-tags'></i></span> &nbsp;设备型号
+                                    </div>
+                                </ControlLabel>
+                                <FormControl style={transparent_input} type="text" value={this.state.model_code} disabled/>
+                            </FormGroup>
+                        </div>
+                }
+                {
+                    this.state.not_exist ?
+                        <div style={gmair_confirm_btn}>
+                            <Button bsStyle='info' onClick={this.close_window} block>我知道了</Button>
+                        </div>
+                        :
+                        <div style={gmair_confirm_btn}>
+                            <Button bsStyle='info' onClick={this.confirm_init} block
+                                    disabled={!this.state.ready2confirm}>确认信息</Button>
+                        </div>
+                }
             </div>
         )
     }
