@@ -42,13 +42,14 @@ const wifi_prompt_item = {
 
 const wifi_operation_area = {
     textAlign: `center`,
-    margin: `8rem 8% 0 8%`
+    margin: `6rem 8% 0 8%`
 }
 
 const lauch_config_btn = {
     textAlign: `center`,
     backgroundColor: `transparent`,
     color: `#58595B`,
+    marginTop: `2rem`,
     letterSpacing: `0.1rem`
 }
 
@@ -58,23 +59,41 @@ class NetworkConfig extends React.Component {
         super(props);
 
         this.init_config = this.init_config.bind(this);
+        this.machine_list = this.machine_list.bind(this);
 
         this.state = {
-            show_config_button: true
+            show_config_button: true,
+            config_result: '',
+            navi_machine_list: false
         }
     }
 
     begin_config = () => {
-        window.wx.invoke('configWXDeviceWiFi', {}, function (response) {
-            if (response.err_msg === 'configWXDeviceWiFi:ok') {
-
-            } else if (response.err_msg === 'configWXDeviceWiFi:fail') {
-
-            } else if (response.err_msg === 'configWXDeviceWiFi:cancel') {
-
-            }
-        })
+        console.log("begin config")
+        let that = this;
+        if (util.is_weixin()) {
+            window.wx.invoke('configWXDeviceWiFi', {}, function (response) {
+                console.log(JSON.stringify(response))
+                if (response.err_msg === 'configWXDeviceWiFi:ok') {
+                    that.setState({show_config_button: false, config_result: 'RESPONSE_OK'});
+                    if (localStorage.getItem('access_token') !== undefined && localStorage.getItem('access_token') !== null) {
+                        that.setState({navi_machine_list: true});
+                    }
+                } else if (response.err_msg === 'configWXDeviceWiFi:fail') {
+                    that.setState({show_config_button: false, config_result: 'RESPONSE_NULL'});
+                    if (localStorage.getItem('access_token') !== undefined && localStorage.getItem('access_token') !== null) {
+                        that.setState({navi_machine_list: true});
+                    }
+                } else if (response.err_msg === 'configWXDeviceWiFi:cancel') {
+                    that.setState({show_config_button: true, config_result: ''});
+                }
+            })
+        }
     };
+
+    machine_list = () => {
+        window.location.href = '/machine/list';
+    }
 
     init_config = () => {
         let url = window.location.href;
@@ -102,9 +121,9 @@ class NetworkConfig extends React.Component {
     }
 
     componentDidMount() {
-        // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
-        //     var vConsole = new window.VConsole();
-        // })
+        util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
+            var vConsole = new window.VConsole();
+        })
         util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
             this.init_config();
         })
@@ -116,14 +135,39 @@ class NetworkConfig extends React.Component {
                 <div style={wifi_logo_area}>
                     <img src={wifi_config} style={logo} alt="WIFI_CONFIG"></img>
                 </div>
-                <div style={wifi_prompt_area}>
-                    <div style={wifi_prompt_item}>1.确定手机已连接Wi-Fi(2.4G网络)</div>
-                    <div style={wifi_prompt_item}>2.请长按设备上的配置键(即辅热)按钮</div>
-                    <div style={wifi_prompt_item}>3.请等待Wi-Fi配置指示灯闪烁后松开</div>
-                </div>
-                <div style={wifi_operation_area}>
-                    <Button block style={lauch_config_btn} onClick={this.begin_config}>开始配置</Button>
-                </div>
+                {
+                    this.state.show_config_button ?
+                        <div style={wifi_prompt_area}>
+                            <div style={wifi_prompt_item}>1.确定手机已连接Wi-Fi(2.4G网络)</div>
+                            <div style={wifi_prompt_item}>2.请长按设备上的配置键(即辅热)按钮</div>
+                            <div style={wifi_prompt_item}>3.请等待Wi-Fi配置指示灯闪烁后松开</div>
+                        </div>
+                        :
+                        <div style={wifi_prompt_area}>
+                            <div style={wifi_prompt_item}>
+                                {new String(this.state.config_result) == 'RESPONSE_OK' ? '网络配置成功' : ''}
+                                {new String(this.state.config_result) == 'RESPONSE_NULL' ? '网络配置未完成' : ''}
+                            </div>
+                        </div>
+                }
+                {
+                    this.state.show_config_button ?
+                        <div style={wifi_operation_area}>
+                            <Button block style={lauch_config_btn} onClick={this.begin_config}>开始配置</Button>
+                        </div>
+                        :
+                        <div style={wifi_operation_area}>
+                            <Button block style={lauch_config_btn} onClick={this.begin_config}>再次配置</Button>
+                            {
+                                this.state.navi_machine_list
+                                    ?
+                                <Button block style={lauch_config_btn} onClick={this.machine_list}>查看设备</Button>
+                                :
+                                ''
+                            }
+                        </div>
+                }
+
             </div>
         );
     }

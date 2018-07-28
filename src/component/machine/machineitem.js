@@ -86,6 +86,7 @@ class MachineItem extends React.Component {
         }
         this.power_operate = this.power_operate.bind(this);
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
+        this.config_network = this.config_network.bind(this);
     }
 
     power_operate = () => {
@@ -127,6 +128,10 @@ class MachineItem extends React.Component {
         });
     }
 
+    config_network = () => {
+        window.location.href = '/network/config';
+    }
+
     componentDidMount() {
         let qrcode = this.props.qrcode;
         this.setState({qrcode: qrcode});
@@ -143,7 +148,7 @@ class MachineItem extends React.Component {
             <div style={gmair_machine_item}>
                 <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>
                     {this.state.online === true ? this.state.pm2_5 :
-                        <Link to='/network/config'><i className='fa fa-unlink' style={gmair_icon_active}></i></Link>}
+                        <span onClick={this.config_network}><i className='fa fa-unlink' style={gmair_icon_active}></i></span>}
                 </div>
                 <div style={gmair_machine_operation}>
                     {this.state.online === true ?

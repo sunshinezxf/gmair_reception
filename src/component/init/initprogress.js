@@ -22,7 +22,6 @@ class InitProgress extends React.Component {
         this.interval = setInterval(() => {
             let percent = this.state.percent + 2;
             this.setState({percent: percent});
-            console.log(percent)
             if(percent >= 100) {
                 this.props.init();
                 clearInterval(this.interval);
