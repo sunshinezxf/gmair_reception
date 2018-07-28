@@ -6,6 +6,10 @@ import {machine_service} from '../service/mahcine.service';
 import {util} from "../service/util";
 import {wechatservice} from "../service/wechat.service";
 
+import InitProgress from './initprogress'
+
+
+
 const gmair_init_page = {
     width: `100%`,
     height: `100%`,
@@ -73,13 +77,20 @@ class DeviceInit extends React.Component {
         this.read_name = this.read_name.bind(this);
         this.validate_name = this.validate_name.bind(this);
         this.init_config = this.init_config.bind(this);
+        this.submit_init = this.submit_init.bind(this);
+        this.config_network = this.config_network.bind(this);
+        this.device_list = this.device_list.bind(this);
         this.state = {
             qrcode: '',
             bind_name: '',
             model_code: '',
             ready2confirm: false,
             not_exist: false,
-            already_occupied: false
+            already_occupied: false,
+            show_progress: false,
+            progress_finished: false,
+            config_network: false,
+            init_failed: false
         }
     }
 
@@ -133,11 +144,14 @@ class DeviceInit extends React.Component {
                 this.setState({not_exist: true})
                 return;
             }
-            if (response.data[0].status === 'CREATED' || response.data[0].status === 'PRE_BINDED' || response.data[0].status === 'ASSIGNED') {
-                this.setState({already_occupied: false});
-            }else {
-                this.setState({already_occupied: true});
-            }
+            //check whether the qrcode is already binded with the current customer
+            machine_service.check_exist_bind(qrcode).then(response => {
+                if (response.responseCode === 'RESPONSE_OK') {
+                    this.setState({already_occupied: true})
+                } else if (response.responseCode === 'RESPONSE_NULL') {
+                    this.setState({already_occupied: false})
+                }
+            });
             this.setState({not_exist: false});
             machine_service.obtain_model(response.data[0].modelId).then(response => {
                 if (response.responseCode === 'RESPONSE_OK') {
@@ -148,9 +162,26 @@ class DeviceInit extends React.Component {
     }
 
     confirm_init = () => {
+        this.setState({show_progress: true});
+    }
+
+    submit_init = () => {
+        this.setState({progress_finished: true});
         machine_service.confirm_init(this.state.qrcode, this.state.bind_name).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
-                window.location.href = '/machine/list'
+                this.setState({init_failed: false})
+                //check whether the machine is online
+                machine_service.check_online(this.state.qrcode).then(response => {
+                    if(response.responseCode === 'RESPONSE_OK') {
+                        this.setState({config_network: false})
+                    }else {
+                        this.setState({config_network: true})
+                    }
+                })
+            } else if (response.responseCode === 'RESPONSE_NULL') {
+                this.setState({init_failed: true});
+            } else {
+                this.setState({init_failed: true});
             }
         })
     }
@@ -178,53 +209,99 @@ class DeviceInit extends React.Component {
         window.wx.closeWindow();
     }
 
+    config_network = () => {
+        window.location.href = '/network/config';
+    }
+
+    device_list = () => {
+        window.location.href = '/machine/list';
+    }
+
     render() {
+        let not_exist_name_arc =
+            <div style={gmair_device_content}>
+                <Alert bsStyle="info">
+                    二维码信息（{this.state.qrcode}）似乎存在问题，请您与工作人员联系，以进行确认。
+                </Alert>
+            </div>
+        let alreay_occupied_name_arc =
+            <div style={gmair_device_content}>
+                <Alert bsStyle="info">
+                    设备（{this.state.qrcode}）已被初始化过，您无需再次配置，请进行确认。
+                </Alert>
+            </div>
+        let init_content =
+            <div style={gmair_device_content}>
+                <FormGroup>
+                    <ControlLabel>
+                        <div style={gmair_device_item}><span><i
+                            className='glyphicon glyphicon-pencil'></i></span> &nbsp;设备名称
+                        </div>
+                    </ControlLabel>
+                    <FormControl style={transparent_input} type="text" placeholder="请输入设备别名"
+                                 onChange={this.read_name}/>
+                </FormGroup>
+                <FormGroup>
+                    <ControlLabel>
+                        <div style={gmair_device_item}><span><i
+                            className='glyphicon glyphicon-tags'></i></span> &nbsp;设备型号
+                        </div>
+                    </ControlLabel>
+                    <FormControl style={transparent_input} type="text" value={this.state.model_code}
+                                 disabled/>
+                </FormGroup>
+            </div>
+
         return (
             <div style={gmair_init_page}>
                 <div style={gmair_device_name}>
                     <div><span style={gmair_device_name_text}><i
                         className='glyphicon glyphicon-home'></i>&nbsp;设备初始化</span></div>
                 </div>
-                <div style={gmair_device_name_arc}></div>
-
                 {
-                    this.state.not_exist ?
-                        <div style={gmair_device_content}>
-                            <Alert bsStyle="info">
-                                二维码信息（{this.state.qrcode}）似乎存在问题，请您与工作人员联系，以进行确认。
-                            </Alert>
-                        </div>
+                    this.state.show_progress ?
+                        <InitProgress init={this.submit_init}/>
                         :
-                        <div style={gmair_device_content}>
-                            <FormGroup>
-                                <ControlLabel>
-                                    <div style={gmair_device_item}><span><i
-                                        className='glyphicon glyphicon-pencil'></i></span> &nbsp;设备名称
+                        <div>
+                            <div style={gmair_device_name_arc}></div>
+                            {this.state.not_exist ? not_exist_name_arc : ''}
+                            {this.state.already_occupied ? alreay_occupied_name_arc : ''}
+                            {this.state.not_exist || this.state.already_occupied ? '' : init_content}
+                            {
+                                this.state.not_exist || this.state.already_occupied ?
+                                    <div style={gmair_confirm_btn}>
+                                        <Button bsStyle='info' onClick={this.close_window} block>我知道了</Button>
                                     </div>
-                                </ControlLabel>
-                                <FormControl style={transparent_input} type="text" placeholder="请输入设备别名"
-                                             onChange={this.read_name}/>
-                            </FormGroup>
-                            <FormGroup>
-                                <ControlLabel>
-                                    <div style={gmair_device_item}><span><i
-                                        className='glyphicon glyphicon-tags'></i></span> &nbsp;设备型号
+                                    :
+                                    <div style={gmair_confirm_btn}>
+                                        <Button bsStyle='info' onClick={this.confirm_init} block
+                                                disabled={!this.state.ready2confirm}>确认信息</Button>
                                     </div>
-                                </ControlLabel>
-                                <FormControl style={transparent_input} type="text" value={this.state.model_code} disabled/>
-                            </FormGroup>
+                            }
                         </div>
                 }
                 {
-                    this.state.not_exist ?
+                    this.state.init_failed && this.state.progress_finished ?
+                        <Alert bsStyle="info">
+                            设备初始化出现异常，请您与工作人员联系。
+                        </Alert> :
+                        ''
+                }
+                {
+                    this.state.progress_finished && this.state.config_network ?
                         <div style={gmair_confirm_btn}>
-                            <Button bsStyle='info' onClick={this.close_window} block>我知道了</Button>
+                            <Button bsStyle='info' onClick={this.config_network} block>前往配网</Button>
                         </div>
                         :
+                        ''
+                }
+                {
+                    this.state.progress_finished && !this.state.config_network ?
                         <div style={gmair_confirm_btn}>
-                            <Button bsStyle='info' onClick={this.confirm_init} block
-                                    disabled={!this.state.ready2confirm}>确认信息</Button>
+                            <Button bsStyle='info' onClick={this.device_list} block>查看设备</Button>
                         </div>
+                        :
+                        ''
                 }
             </div>
         )

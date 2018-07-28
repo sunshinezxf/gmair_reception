@@ -16,9 +16,19 @@ function check_exist(qrcode) {
 
 }
 
-function check_exist_name(qrcode, bind_name) {
+function check_exist_bind(qrcode) {
     let access_token = localStorage.getItem("access_token");
-    let exist_name_url = machine_service_url + '/check/existname?access_token=' + access_token + '&deviceName=' + bind_name + '&qrcode=' + qrcode;
+    let exist_bind_url = machine_service_url + '/check/device/binded?access_token=' + access_token + '&qrcode=' + qrcode;
+    return axios.get(exist_bind_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'};
+    })
+}
+
+function check_exist_name(bind_name) {
+    let access_token = localStorage.getItem("access_token");
+    let exist_name_url = machine_service_url + '/check/device/name/binded?access_token=' + access_token + '&deviceName=' + bind_name;
     return axios.get(exist_name_url).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -119,5 +129,5 @@ function confirm_init(qrcode, bind_name) {
 }
 
 export const machine_service = {
-    check_exist, check_exist_name, check_online, confirm_init, obtain_code_value_via_url, obtain_machine_list, obtain_machine_status, obtain_model, power, unbind
+    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, obtain_code_value_via_url, obtain_machine_list, obtain_machine_status, obtain_model, power, unbind
 }
