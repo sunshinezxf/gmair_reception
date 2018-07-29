@@ -54,8 +54,9 @@ const gmair_machine_index = {
 
 const gmair_machine_name = {
     paddingTop: `0.4rem`,
-    fontWeight: `lighter`,
-    hover: `none`
+    hover: `none`,
+    fontWeight: `bold`,
+    color: `#00AEEF`
 }
 
 const gmair_machine_desc = {
@@ -158,9 +159,8 @@ class MachineItem extends React.Component {
                 <div style={gmair_machine_index}>
                     {
                         this.state.online === true ?
-                            <Link to={url}>
-                                <div style={gmair_machine_name}>{this.props.name}</div>
-                            </Link> :
+                            <div style={gmair_machine_name} onClick={()=>{window.location.href=url}}>{this.props.name}</div>
+                             :
                             <div style={gmair_machine_name}>{this.props.name}</div>
                     }
                     {
