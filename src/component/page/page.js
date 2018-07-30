@@ -8,6 +8,7 @@ import NetworkConfig from '../confignetwork/network'
 import DeviceInit from '../init/init';
 import MachineList from '../machine/machinelist';
 import MachineDetail from "../machine/machinedetail";
+import Person from '../personal/person'
 
 const gmair_page = {
     width: `100%`,
@@ -31,6 +32,7 @@ class Page extends React.Component {
                 <Route exact path="/machine/list" component={MachineList}/>
                 <Route path='/machine/detail/:qrcode' component={MachineDetail}/>
                 <Route exact path="/network/config" component={NetworkConfig}/>
+                <Route exact path="/personal/information" component={Person}/>
             </div>
         );
     }

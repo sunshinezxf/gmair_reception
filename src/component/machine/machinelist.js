@@ -10,7 +10,7 @@ import DeviceScan from "./devicescan";
 import '../../antd-mobile.css';
 
 import {SwipeAction} from 'antd-mobile';
-import Navigation from "../navigation/Navigation";
+import Navigation from "../navigation/navigation";
 
 const machine_item_gap = {
     marginTop: `1rem`
@@ -155,7 +155,7 @@ class MachineList extends React.Component {
             <div>
                 {element}
                 <DeviceScan scan={this.scan_qrcode}/>
-                <Navigation/>
+                <Navigation index={0}/>
             </div>
         );
     }

@@ -19,7 +19,8 @@ class Navigation extends React.Component {
     }
 
     componentDidMount() {
-
+        let index = this.props.index;
+        this.setState({index: index});
     }
 
     mine_device = () => {
@@ -47,11 +48,13 @@ class Navigation extends React.Component {
                     {
                         this.state.index == 1 ?
                             <TabBar.Item icon={<span><i className='fa fa-user-circle'></i></span>}
-                                         selectedIcon={<span><i className='fa fa-user-circle'></i></span>} title='我的' key='我的'
+                                         selectedIcon={<span><i className='fa fa-user-circle'></i></span>} title='我的'
+                                         key='我的'
                                          selected={this.state.index == 1}></TabBar.Item>
                             :
                             <TabBar.Item icon={<span><i className='fa fa-user-circle'></i></span>}
-                                         selectedIcon={<span><i className='fa fa-user-circle'></i></span>} title='我的' key='我的'
+                                         selectedIcon={<span><i className='fa fa-user-circle'></i></span>} title='我的'
+                                         key='我的'
                                          onPress={this.mine_info}></TabBar.Item>
                     }
 
