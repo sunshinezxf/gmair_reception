@@ -88,9 +88,9 @@ function obtain_machine_status(qrcode) {
     })
 }
 
-function power(qrcode, operation) {
+function operate(qrcode, component, operation) {
     let access_token = localStorage.getItem('access_token');
-    let power_operate_url = machine_service_url + '/operate/power/' + operation;
+    let power_operate_url = machine_service_url + '/operate/' + component + '/' + operation;
     let form = new FormData();
     form.append('qrcode', qrcode);
     form.append('access_token', access_token);
@@ -129,5 +129,5 @@ function confirm_init(qrcode, bind_name) {
 }
 
 export const machine_service = {
-    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, obtain_code_value_via_url, obtain_machine_list, obtain_machine_status, obtain_model, power, unbind
+    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, obtain_code_value_via_url, obtain_machine_list, obtain_machine_status, obtain_model, operate, unbind
 }

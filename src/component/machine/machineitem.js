@@ -83,7 +83,9 @@ class MachineItem extends React.Component {
             volume: '',
             temp: '',
             humid: '',
-            power_status: 'off'
+            power_status: 'off',
+            work_mode: '',
+            lock_status: 'off'
         }
         this.power_operate = this.power_operate.bind(this);
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
@@ -93,11 +95,33 @@ class MachineItem extends React.Component {
     power_operate = () => {
         if (this.state.power_status == 'on') {
             this.setState({power_status: 'off'});
-            machine_service.power(this.state.qrcode, 'off');
+            machine_service.operate(this.state.qrcode, 'power', 'off');
         } else {
             this.setState({power_status: 'on'});
-            machine_service.power(this.props.qrcode, 'on');
+            machine_service.operate(this.props.qrcode, 'power', 'on');
         }
+    }
+
+    light_operate = () => {
+
+    }
+
+    lock_operate = () => {
+        if (this.state.lock_status == 'on') {
+            this.setState({lock_status: 'off'});
+            machine_service.operate(this.state.qrcode, 'lock', 'off');
+        } else {
+            this.setState({lock_status: 'on'});
+            machine_service.operate(this.state.qrcode, 'lock', 'on');
+        }
+    }
+
+    mode_operate = (mode) => {
+        if (this.state.work_mode == mode) {
+            return;
+        }
+        this.setState({work_mode: mode});
+        machine_service.operate(this.state.qrcode, 'mode', mode);
     }
 
     obtain_machine_status = (qrcode) => {
@@ -149,7 +173,8 @@ class MachineItem extends React.Component {
             <div style={gmair_machine_item}>
                 <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>
                     {this.state.online === true ? this.state.pm2_5 :
-                        <span onClick={this.config_network}><i className='fa fa-unlink' style={gmair_icon_active}></i></span>}
+                        <span onClick={this.config_network}><i className='fa fa-unlink'
+                                                               style={gmair_icon_active}></i></span>}
                 </div>
                 <div style={gmair_machine_operation}>
                     {this.state.online === true ?
@@ -159,8 +184,10 @@ class MachineItem extends React.Component {
                 <div style={gmair_machine_index}>
                     {
                         this.state.online === true ?
-                            <div style={gmair_machine_name} onClick={()=>{window.location.href=url}}>{this.props.name}</div>
-                             :
+                            <div style={gmair_machine_name} onClick={() => {
+                                window.location.href = url
+                            }}>{this.props.name}</div>
+                            :
                             <div style={gmair_machine_name}>{this.props.name}</div>
                     }
                     {
