@@ -95,8 +95,16 @@ function register(wechat, username, mobile, code, province, city, address) {
     });
 }
 
-
+function profile() {
+    let access_token = localStorage.getItem('access_token');
+    let profile_url = consumer_url + '/reception/consumer/profile&access_token=' + access_token;
+    return axios.get(profile_url).then(response => {
+        return response;
+    }).catch(()=> {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+}
 
 export const consumerservice = {
-    request_login_code, request_register_code, login, loginbyopenid, exist, register
+    request_login_code, request_register_code, login, loginbyopenid, exist, register, profile
 }
