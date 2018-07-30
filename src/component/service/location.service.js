@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-const location_url = 'https://microservice.gmair.net';
+const location_url = 'https://microservice.gmair.net/reception/location';
 
 function list_province() {
-    let request_province_url = location_url + '/location/province/list';
+    let request_province_url = location_url + '/province/list';
     return axios.get(request_province_url).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -12,7 +12,7 @@ function list_province() {
 }
 
 function list_city(province_id) {
-    let request_city_url = location_url + '/location/' + province_id + '/cities';
+    let request_city_url = location_url + '/' + province_id + '/cities';
     return axios.get(request_city_url).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -21,7 +21,7 @@ function list_city(province_id) {
 }
 
 function list_district(city_id) {
-    let district_url = location_url + '/location/' + city_id + '/districts';
+    let district_url = location_url + '/' + city_id + '/districts';
     return axios.get(district_url).then(function (response) {
         return response.data;
     }).catch(() => {

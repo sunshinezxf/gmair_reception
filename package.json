@@ -6,10 +6,12 @@
   "dependencies": {
     "antd-mobile": "^2.2.2",
     "axios": "^0.18.0",
+    "china-area-data": "^4.0.0",
     "echarts": "^4.1.0",
     "echarts-for-react": "^2.0.13",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
+    "react-city-picker": "^1.0.6",
     "react-collapse": "^4.0.3",
     "react-dom": "^16.3.2",
     "react-motion": "^0.5.2",

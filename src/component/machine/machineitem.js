@@ -77,7 +77,7 @@ class MachineItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            online: '',
+            online: false,
             qrcode: '',
             pm2_5: '',
             volume: '',
