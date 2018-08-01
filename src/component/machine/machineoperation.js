@@ -15,11 +15,12 @@ const operation_area = {
 
 const operation_icon = {
     fontSize: `1.8rem`,
+    lineHeight: `1.8rem`,
     fontWeight: `lighter`
 }
 
 const operation_icon_active = {
-    fontSize: `1.5rem`,
+    fontSize: `1.8rem`,
     lineHeight: `1.8rem`,
     fontWeight: `lighter`,
     color: `#00A2E9`
@@ -73,16 +74,24 @@ class Operation extends React.Component {
 
     power_operate = () => {
         if (this.props.power_status == 'on') {
-            this.setState({power_status: 'off'});
-            machine_service.operate(this.state.qrcode, 'power', 'off');
+            machine_service.operate(this.props.qrcode, 'power', 'off');
         } else {
-            this.setState({power_status: 'on'});
             machine_service.operate(this.props.qrcode, 'power', 'on');
         }
     }
 
+    light_operate = () => {
+        if (this.props.light == 'on') {
+            machine_service.operate(this.props.qrcode, 'light', 'off');
+            this.props.operate_local_light('off');
+        } else {
+            machine_service.operate(this.props.qrcode, 'light', 'on');
+            this.props.operate_local_light('on');
+        }
+    }
+
     fan_operate = (volume) => {
-        machine_service.volume(this.state.qrcode, volume).then(response => {
+        machine_service.volume(this.props.qrcode, volume).then(response => {
 
         })
     }
@@ -119,33 +128,14 @@ class Operation extends React.Component {
                 <Collapse isOpened={this.state.expanded}>
                     <div style={operation_gap_top}></div>
                     <Row>
-                        <Col xs={4} md={4}>
-                            <i className='fa fa-superpowers' style={operation_icon}></i>
-                            <div>风量</div>
-                        </Col>
-                        <Col xs={4} md={4}>
-                            <i className='fa fa-lightbulb-o' style={operation_icon}></i>
-                            <div>屏显</div>
-                        </Col>
+                        <Light light={this.props.light} light_operate={this.light_operate} operate_local_light={this.props.operate_local_light}/>
                         <Col xs={4} md={4}>
                             <i className='fa fa-thermometer' style={operation_icon}></i>
                             <div>辅热</div>
                         </Col>
-                    </Row>
-                    <div style={operation_gap_bottom}></div>
-                    <div style={operation_gap_top}></div>
-                    <Row>
                         <Col xs={4} md={4}>
                             <i className='fa fa-child' style={operation_icon}></i>
                             <div>童锁</div>
-                        </Col>
-                        <Col xs={4} md={4}>
-                            <i className='fa fa-recycle' style={operation_icon}></i>
-                            <div>节能</div>
-                        </Col>
-                        <Col xs={4} md={4}>
-                            <i className='fa fa-clock-o' style={operation_icon}></i>
-                            <div>定时</div>
                         </Col>
                     </Row>
                     <div style={operation_gap_bottom}></div>
@@ -183,6 +173,26 @@ class Power extends React.Component {
                 <i className={this.state.power_loading ? 'fa fa-spinner fa-spin' : 'fa fa-power-off'}
                    style={this.props.power_status == 'off' ? operation_icon : operation_icon_active}></i>
                 <div>电源</div>
+            </Col>
+        );
+    }
+}
+
+class Light extends React.Component {
+    constructor(props) {
+        super(props);
+        this.light = this.light.bind(this);
+    }
+
+    light = () => {
+        this.props.light_operate();
+    }
+
+    render(){
+        return (
+            <Col xs={4} md={4} onClick={this.light}>
+                <i className='fa fa-lightbulb-o' style={this.props.light == 'on' ? operation_icon_active : operation_icon}></i>
+                <div>屏显</div>
             </Col>
         );
     }

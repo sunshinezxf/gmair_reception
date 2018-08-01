@@ -72,6 +72,7 @@ class MachineDetail extends React.Component {
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
         this.operate_local_volume = this.operate_local_volume.bind(this);
         this.operate_local_mode = this.operate_local_mode.bind(this);
+        this.operate_local_light = this.operate_local_light.bind(this);
         this.state = {
             qrcode: '',
             modelId: '',
@@ -81,7 +82,8 @@ class MachineDetail extends React.Component {
             temp: 0,
             humid: 0,
             power_status: 'off',
-            work_mode: 'manual'
+            work_mode: 'manual',
+            light: 'off'
         }
     }
 
@@ -91,6 +93,10 @@ class MachineDetail extends React.Component {
 
     operate_local_mode = (mode) => {
         this.setState({work_mode: mode})
+    }
+
+    operate_local_light = (light) => {
+        this.setState({light: light});
     }
 
     init_config = () => {
@@ -123,20 +129,23 @@ class MachineDetail extends React.Component {
             //machine online
             if (response.responseCode === 'RESPONSE_OK') {
                 let information = response.data;
+                console.log(JSON.stringify(information))
                 let pm2_5 = information.pm2_5;
                 let volume = information.volume;
                 let temp = information.temp;
                 let humid = information.humid;
                 let power = information.power;
                 let mode = information.mode;
+                let light = information.light;
                 this.setState({
                     online: false,
                     pm2_5: pm2_5,
                     volume: volume,
                     temp: temp,
                     humid: humid,
-                    power_status: (power == 1) ? 'on' : 'off',
-                    work_mode: util.tell_mode(mode)
+                    power_status: (power === 1) ? 'on' : 'off',
+                    work_mode: util.tell_mode(mode),
+                    light: (light === 1) ? 'on' : 'off'
                 });
             }
             //machine offline
@@ -175,7 +184,7 @@ class MachineDetail extends React.Component {
         } else if (this.state.pm2_5 > 115 && this.state.pm2_5 <= 150) {
             pm2_5_color = 'pm2_5_unhealthy';
         } else if (this.state.pm2_5 > 150 && this.state.pm2_5 <= 250) {
-            pm2_5_color = 'pm2_5_hazardous';
+            pm2_5_color = 'pm2_5_very_unhealthy';
         } else {
             pm2_5_color = 'pm2_5_hazardous';
         }
@@ -213,7 +222,7 @@ class MachineDetail extends React.Component {
                     <Operation qrcode={this.props.match.params.qrcode} power_status={this.state.power_status}
                                volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}
                                work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
-                    />
+                               light={this.state.light} operate_local_light={this.operate_local_light}/>
                     <div style={charts_area}>
                         <PM2_5Charts/>
                     </div>
