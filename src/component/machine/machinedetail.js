@@ -71,6 +71,7 @@ class MachineDetail extends React.Component {
         super(props);
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
         this.operate_local_volume = this.operate_local_volume.bind(this);
+        this.operate_local_mode = this.operate_local_mode.bind(this);
         this.state = {
             qrcode: '',
             modelId: '',
@@ -79,12 +80,17 @@ class MachineDetail extends React.Component {
             volume: 0,
             temp: 0,
             humid: 0,
-            power_status: 'off'
+            power_status: 'off',
+            work_mode: 'manual'
         }
     }
 
     operate_local_volume = (volume) => {
         this.setState({volume: volume});
+    }
+
+    operate_local_mode = (mode) => {
+        this.setState({work_mode: mode})
     }
 
     init_config = () => {
@@ -181,7 +187,8 @@ class MachineDetail extends React.Component {
                         <div style={gmair_machine_pm2_5_value}>{util.format_pm2_5(this.state.pm2_5)}</div>
                         <div style={gmair_machine_index_desc}>
                             <div style={gmair_machine_index_desc_item}>
-                                <span style={gmair_icon_active} className={this.state.power_status == 'on' ? 'spin': '' }>
+                                <span style={gmair_icon_active}
+                                      className={this.state.power_status == 'on' ? 'spin' : ''}>
                                     <i className='fa fa-superpowers'></i>
                                 </span>
                                 <span>&nbsp;{this.state.volume}m³/h</span>
@@ -201,7 +208,10 @@ class MachineDetail extends React.Component {
                         </div>
                     </div>
                     <Outdoor qrcode={this.props.match.params.qrcode}/>
-                    <Operation qrcode={this.props.match.params.qrcode} power_status={this.state.power_status} volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}/>
+                    <Operation qrcode={this.props.match.params.qrcode} power_status={this.state.power_status}
+                               volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}
+                               work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
+                    />
                     <div style={charts_area}>
                         <PM2_5Charts/>
                     </div>
@@ -284,7 +294,7 @@ class Outdoor extends React.Component {
         return (
             <div style={outdoor_area}>
                 <div style={outdoor_title}>
-                    <Picker extra={this.state.province + this.state.city}  title="地址选择" onOk={e => {
+                    <Picker extra={this.state.province + this.state.city} title="地址选择" onOk={e => {
                         this.config_outdoor(e)
                     }}>
                         <List.Item arrow="horizontal">户外空气指数</List.Item>

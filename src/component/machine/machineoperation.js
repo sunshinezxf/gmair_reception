@@ -5,7 +5,7 @@ import {Col, Row} from 'react-bootstrap'
 import {Collapse} from 'react-collapse'
 import {machine_service} from "../service/mahcine.service";
 
-import {Modal, Slider} from 'antd-mobile';
+import {Button, Modal, Slider, WhiteSpace} from 'antd-mobile';
 
 const operation_area = {
     marginTop: `1.5rem`,
@@ -62,7 +62,7 @@ class Operation extends React.Component {
                 let control_list = response.data;
                 this.setState({operations: control_list})
             }
-            // console.log(this.state.operations)
+            console.log(this.state.operations)
         })
         machine_service.obtain_volume_range(this.state.modelId).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
@@ -89,7 +89,7 @@ class Operation extends React.Component {
 
     mode_operate = (mode_name) => {
         machine_service.operate(this.props.qrcode, 'mode', mode_name).then(response => {
-            console.log(JSON.stringify(response.data[0]))
+            console.log(JSON.stringify(response))
         });
     }
 
@@ -112,7 +112,8 @@ class Operation extends React.Component {
                     <Fan power_status={this.props.power_status} min_volume={this.state.min_volume}
                          max_volume={this.state.max_volume} current_volume={this.props.volume_value}
                          fan_operate={this.fan_operate} operate_local_volume={this.props.operate_local_volume}/>
-                    <Workmode power_status={this.props.power_status} mode_operate={this.mode_operate}/>
+                    <Workmode power_status={this.props.power_status} mode_operate={this.mode_operate}
+                              operate_local_mode={this.props.operate_local_mode} current_mode={this.props.work_mode}/>
                 </Row>
                 <div style={operation_gap_bottom}></div>
                 <Collapse isOpened={this.state.expanded}>
@@ -171,7 +172,7 @@ class Power extends React.Component {
         this.setState({power_loading: true})
         setTimeout(() => {
             this.setState({power_loading: false})
-        }, 15000);
+        }, 10000);
         this.props.power_operate();
     }
 
@@ -254,10 +255,10 @@ class Fan extends React.Component {
             <Col xs={4} md={4} onClick={this.speed_panel}>
                 <i style={this.props.power_status == 'off' ? operation_icon : operation_icon_active}>{this.props.current_volume}</i>
                 <div>风量</div>
-                <Modal popup visible={this.state.show_panel} onClose={() => {
-                }} animationType="slide-up">
+                <Modal popup visible={this.state.show_panel} animationType="slide-up">
                     <div style={area_desc}>风量调节</div>
-                    <Slider style={config_panel_area} defaultValue={this.props.current_volume} value={this.props.current_volume}
+                    <Slider style={config_panel_area} defaultValue={this.props.current_volume}
+                            value={this.props.current_volume}
                             min={this.state.min_volume} max={this.state.max_volume} included={true}
                             onChange={(e) => {
                                 this.local_volume(e);
@@ -277,16 +278,55 @@ class Fan extends React.Component {
     }
 }
 
+const mode_operation_area = {
+    width: `85%`,
+    margin: `1rem 7.5%`,
+    textAlign: `center`
+}
+
 class Workmode extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            show_panel: false
+        }
+        this.mode_panel = this.mode_panel.bind(this);
+        this.operate_mode = this.operate_mode.bind(this);
+    }
+
+    mode_panel = () => {
+        this.setState({show_panel: !this.state.show_panel})
+    }
+
+    operate_mode = (mode) => {
+        this.props.operate_local_mode(mode)
+        this.props.mode_operate(mode)
     }
 
     render() {
+        let mode_name = 'fa fa-hand-paper-o';
+        if (this.props.current_mode == 'sleep') {
+            mode_name = 'fa fa-moon-o';
+        }
+        if(this.props.current_mode == 'auto') {
+            mode_name = 'fa fa-refresh';
+        }
         return (
-            <Col xs={4} md={4}>
-                <i className='fa fa-moon-o' style={operation_icon}></i>
+            <Col xs={4} md={4} onClick={this.mode_panel}>
+                <i className={mode_name} style={operation_icon_active}></i>
                 <div>模式</div>
+                <Modal popup visible={this.state.show_panel} animationType="slide-up">
+                    <div style={area_desc}>模式调节</div>
+                    <div style={mode_operation_area}>
+                        <Button type={this.props.current_mode == 'sleep' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
+                                style={{margin: '0 1.5rem'}} onClick={() => {
+                            {this.props.current_mode === 'sleep' ? '' : this.operate_mode('sleep')}}}>睡眠</Button>
+                        <Button type="ghost" inline size="small" className='am-button-borderfix'
+                                style={{margin: '0 1.5rem'}} onClick={() => {
+                            this.operate_mode('auto')
+                        }}>自动</Button>
+                    </div>
+                </Modal>
             </Col>
         );
     }
