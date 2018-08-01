@@ -41,7 +41,9 @@ class Operation extends React.Component {
             qrcode: '',
             modelId: '',
             expanded: true,
-            operations: []
+            operations: [],
+            min_volume: 0,
+            max_volume: 400
         }
         this.expand = this.expand.bind(this);
         this.init_control_option = this.init_control_option.bind(this);
@@ -59,7 +61,12 @@ class Operation extends React.Component {
                 let control_list = response.data;
                 this.setState({operations: control_list})
             }
-            console.log(this.state.operations)
+            // console.log(this.state.operations)
+        })
+        machine_service.obtain_volume_range(this.state.modelId).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                this.setState({min_volume: response.data[0].minVolume, max_volume: response.data[0].maxVolume})
+            }
         })
     }
 
@@ -75,8 +82,14 @@ class Operation extends React.Component {
 
     fan_operate = (volume) => {
         machine_service.volume(this.state.qrcode, volume).then(response => {
-            console.log(JSON.stringify(response))
+
         })
+    }
+
+    mode_operate = (mode_name) => {
+        machine_service.operate(this.props.qrcode, 'mode', mode_name).then(response => {
+            console.log(JSON.stringify(response.data[0]))
+        });
     }
 
     componentDidMount() {
@@ -95,7 +108,10 @@ class Operation extends React.Component {
                 <div style={operation_gap_top}></div>
                 <Row>
                     <Power power_status={this.props.power_status} power_operate={this.power_operate}/>
-                    <Fan power_status={this.props.power_status} fan_operate={this.fan_operate}/>
+                    <Fan power_status={this.props.power_status} min_volume={this.state.min_volume}
+                         max_volume={this.state.max_volume} current_volume={this.props.volume_value}
+                         fan_operate={this.fan_operate} operate_local_volume={this.props.operate_local_volume}/>
+                    <Workmode power_status={this.props.power_status} mode_operate={this.mode_operate}/>
                 </Row>
                 <div style={operation_gap_bottom}></div>
                 <Row>
@@ -212,17 +228,22 @@ const max_volume = {
     float: `left`
 }
 
+const volume_area = {
+    marginBottom: `2rem`,
+    height: `2rem`
+}
+
 class Fan extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             min_volume: 0,
             max_volume: 400,
-            current_volume: 100,
             show_panel: false
         }
         this.speed_panel = this.speed_panel.bind(this);
         this.volume = this.volume.bind(this);
+        this.local_volume = this.local_volume.bind(this);
     }
 
     speed_panel = () => {
@@ -230,8 +251,14 @@ class Fan extends React.Component {
     }
 
     volume = (e) => {
+        console.log(e);
         this.setState({current_volume: e});
+        this.local_volume(e);
         this.props.fan_operate(e);
+    }
+
+    local_volume = (e) => {
+        this.props.operate_local_volume(e);
     }
 
     render() {
@@ -243,18 +270,36 @@ class Fan extends React.Component {
                 <Modal popup visible={this.state.show_panel} onClose={() => {
                 }} animationType="slide-up">
                     <div style={area_desc}>风量调节</div>
-                    <Slider style={config_panel_area} defaultValue={this.state.current_volume}
+                    <Slider style={config_panel_area} defaultValue={this.props.current_volume} value={this.props.current_volume}
                             min={this.state.min_volume} max={this.state.max_volume} included={true}
+                            onChange={(e) => {
+                                this.local_volume(e);
+                            }}
                             onAfterChange={(e) => {
                                 this.volume(e);
                             }}
                     />
-                    <div>
-                        <div style={min_volume}>最小风量</div>
-                        <div style={current_volume}>当前风量</div>
-                        <div style={max_volume}>最大风量</div>
+                    <div style={volume_area}>
+                        <div style={min_volume}>{this.props.min_volume}</div>
+                        <div style={current_volume}>{this.props.current_volume}</div>
+                        <div style={max_volume}>{this.props.max_volume}</div>
                     </div>
                 </Modal>
+            </Col>
+        );
+    }
+}
+
+class Workmode extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Col xs={4} md={4}>
+                <i className='fa fa-moon-o' style={operation_icon}></i>
+                <div>模式</div>
             </Col>
         );
     }

@@ -151,6 +151,16 @@ function obtain_control_option(modelId) {
     });
 }
 
+function obtain_volume_range(modelId) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_volume_url = machine_service_url + '/probe/volume?access_token=' + access_token + '&modelId=' + modelId;
+    return axios.get(obtain_volume_url).then(function(response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch volume range for ' + modelId};
+    });
+}
+
 export const machine_service = {
-    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, obtain_code_value_via_url, obtain_control_option, obtain_machine_list, obtain_machine_status, obtain_model, operate, unbind, volume
+    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, obtain_code_value_via_url, obtain_control_option, obtain_machine_list, obtain_machine_status, obtain_model, obtain_volume_range, operate, unbind, volume
 }

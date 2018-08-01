@@ -70,6 +70,7 @@ class MachineDetail extends React.Component {
     constructor(props) {
         super(props);
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
+        this.operate_local_volume = this.operate_local_volume.bind(this);
         this.state = {
             qrcode: '',
             modelId: '',
@@ -80,6 +81,10 @@ class MachineDetail extends React.Component {
             humid: 0,
             power_status: 'off'
         }
+    }
+
+    operate_local_volume = (volume) => {
+        this.setState({volume: volume});
     }
 
     init_config = () => {
@@ -196,7 +201,7 @@ class MachineDetail extends React.Component {
                         </div>
                     </div>
                     <Outdoor qrcode={this.props.match.params.qrcode}/>
-                    <Operation qrcode={this.props.match.params.qrcode} power_status={this.state.power_status}/>
+                    <Operation qrcode={this.props.match.params.qrcode} power_status={this.state.power_status} volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}/>
                     <div style={charts_area}>
                         <PM2_5Charts/>
                     </div>
