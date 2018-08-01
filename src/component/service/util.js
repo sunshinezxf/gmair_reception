@@ -53,6 +53,11 @@ function tell_pm2_5_desc(value) {
     return '严重污染';
 }
 
+function tell_mode(value) {
+    let mode_name = ['auto', 'manual', 'sleep'];
+    return mode_name[value];
+}
+
 export const util = {
-    is_weixin, load_script, format_pm2_5, tell_pm2_5_desc
+    is_weixin, load_script, format_pm2_5, tell_mode, tell_pm2_5_desc
 }

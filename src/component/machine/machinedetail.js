@@ -128,13 +128,15 @@ class MachineDetail extends React.Component {
                 let temp = information.temp;
                 let humid = information.humid;
                 let power = information.power;
+                let mode = information.mode;
                 this.setState({
                     online: false,
                     pm2_5: pm2_5,
                     volume: volume,
                     temp: temp,
                     humid: humid,
-                    power_status: (power == 1) ? 'on' : 'off'
+                    power_status: (power == 1) ? 'on' : 'off',
+                    work_mode: util.tell_mode(mode)
                 });
             }
             //machine offline
