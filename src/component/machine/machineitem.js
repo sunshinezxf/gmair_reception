@@ -250,7 +250,7 @@ class MachinePower extends React.Component {
 
     render() {
         return (
-            <div onClick={this.power}>
+            <div onClick={this.state.show_progress ? () => {} : this.power}>
                 <span style={gmair_machine_power}>
                     {
                         this.state.show_progress ?
