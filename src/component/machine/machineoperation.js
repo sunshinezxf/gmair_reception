@@ -318,6 +318,9 @@ class Workmode extends React.Component {
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">
                     <div style={area_desc}>模式调节</div>
                     <div style={mode_operation_area}>
+                        <Button type={this.props.current_mode == 'manual' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
+                                style={{margin: '0 1.5rem'}} onClick={() => {
+                            {this.props.current_mode === 'manual' ? '' : this.operate_mode('manual')}}}>手动</Button>
                         <Button type={this.props.current_mode == 'sleep' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             {this.props.current_mode === 'sleep' ? '' : this.operate_mode('sleep')}}}>睡眠</Button>
