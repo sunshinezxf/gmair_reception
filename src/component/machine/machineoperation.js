@@ -129,10 +129,7 @@ class Operation extends React.Component {
                     <div style={operation_gap_top}></div>
                     <Row>
                         <Light light={this.props.light} light_operate={this.light_operate} operate_local_light={this.props.operate_local_light}/>
-                        <Col xs={4} md={4}>
-                            <i className='fa fa-thermometer' style={operation_icon}></i>
-                            <div>辅热</div>
-                        </Col>
+                        <Heat />
                         <Col xs={4} md={4}>
                             <i className='fa fa-child' style={operation_icon}></i>
                             <div>童锁</div>
@@ -338,6 +335,52 @@ class Workmode extends React.Component {
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             this.operate_mode('auto')
                         }}>自动</Button>
+                    </div>
+                </Modal>
+            </Col>
+        );
+    }
+}
+
+class Heat extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            show_panel: false
+        }
+        this.heat_panel = this.heat_panel.bind(this);
+        this.operate_heat = this.operate_heat.bind(this);
+    }
+
+    heat_panel = () => {
+        this.setState({show_panel: !this.state.show_panel})
+    }
+
+    operate_heat = (heat) => {
+        this.props.mode_operate(heat)
+    }
+
+    render() {
+        let heat_name = 'fa fa-thermometer-0';
+        if (this.props.heat == '') {
+            heat_name = 'fa fa-thermometer-2';
+        }
+        if(this.props.heat == '') {
+            heat_name = 'fa fa-thermometer-4';
+        }
+        return (
+            <Col xs={4} md={4} onClick={this.heat_panel}>
+                <i className={heat_name} style={operation_icon_active}></i>
+                <div>辅热</div>
+                <Modal popup visible={this.state.show_panel} animationType="slide-up">
+                    <div style={area_desc}>辅热调节</div>
+                    <div style={mode_operation_area}>
+                        <Button type={this.props.current_mode == 'manual' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
+                                style={{margin: '0 1.5rem'}} onClick={() => {
+                            {this.props.current_mode === 'manual' ? '' : this.operate_heat('manual')}}}>开启</Button>
+                        <Button type={this.props.current_mode == 'sleep' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
+                                style={{margin: '0 1.5rem'}} onClick={() => {
+                            {this.props.current_mode === 'sleep' ? '' : this.operate_heat('sleep')}}}>关闭</Button>
                     </div>
                 </Modal>
             </Col>
