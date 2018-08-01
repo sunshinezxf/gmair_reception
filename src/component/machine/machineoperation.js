@@ -3,6 +3,9 @@ import React from 'react'
 import {Col, Row} from 'react-bootstrap'
 
 import {Collapse} from 'react-collapse'
+import {machine_service} from "../service/mahcine.service";
+
+import {Modal, Slider} from 'antd-mobile';
 
 const operation_area = {
     marginTop: `1.5rem`,
@@ -13,6 +16,12 @@ const operation_area = {
 const operation_icon = {
     fontSize: `1.8rem`,
     fontWeight: `lighter`
+}
+
+const operation_icon_active = {
+    fontSize: `1.8rem`,
+    fontWeight: `lighter`,
+    color: `#00A2E9`
 }
 
 const operation_gap_top = {
@@ -29,10 +38,14 @@ class Operation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            operations: [],
-            expanded: true
+            qrcode: '',
+            modelId: '',
+            expanded: true,
+            operations: []
         }
         this.expand = this.expand.bind(this);
+        this.init_control_option = this.init_control_option.bind(this);
+        this.power_operate = this.power_operate.bind(this);
     }
 
     expand = () => {
@@ -40,15 +53,53 @@ class Operation extends React.Component {
         this.setState({expanded: !current});
     }
 
+    init_control_option = () => {
+        machine_service.obtain_control_option(this.state.modelId).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                let control_list = response.data;
+                this.setState({operations: control_list})
+            }
+            console.log(this.state.operations)
+        })
+    }
+
+    power_operate = () => {
+        if (this.props.power_status == 'on') {
+            this.setState({power_status: 'off'});
+            machine_service.operate(this.state.qrcode, 'power', 'off');
+        } else {
+            this.setState({power_status: 'on'});
+            machine_service.operate(this.props.qrcode, 'power', 'on');
+        }
+    }
+
+    fan_operate = (volume) => {
+        machine_service.volume(this.state.qrcode, volume).then(response => {
+            console.log(JSON.stringify(response))
+        })
+    }
+
+    componentDidMount() {
+        let qrcode = this.props.qrcode
+        this.setState({qrcode: qrcode});
+        machine_service.check_exist(qrcode).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                this.setState({modelId: response.data[0].modelId}, this.init_control_option);
+            }
+        });
+    }
+
     render() {
         return (
             <div style={operation_area}>
                 <div style={operation_gap_top}></div>
                 <Row>
-                    <Col xs={4} md={4}>
-                        <i className='fa fa-power-off' style={operation_icon}></i>
-                        <div>电源</div>
-                    </Col>
+                    <Power power_status={this.props.power_status} power_operate={this.power_operate}/>
+                    <Fan power_status={this.props.power_status} fan_operate={this.fan_operate}/>
+                </Row>
+                <div style={operation_gap_bottom}></div>
+                <Row>
+
                     <Col xs={4} md={4}>
                         <i className='fa fa-moon-o' style={operation_icon}></i>
                         <div>睡眠</div>
@@ -93,9 +144,119 @@ class Operation extends React.Component {
                     </Row>
                     <div style={operation_gap_bottom}></div>
                 </Collapse>
-                <div onClick={this.expand}><i className={this.state.expanded == false ? 'fa fa-angle-double-down' : 'fa fa-angle-double-up'}></i></div>
+                <div onClick={this.expand}><i
+                    className={this.state.expanded == false ? 'fa fa-angle-double-down' : 'fa fa-angle-double-up'}></i>
+                </div>
             </div>
         )
+    }
+}
+
+class Power extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            power_status: '',
+            power_loading: false
+        }
+        this.power = this.power.bind(this);
+    }
+
+    power = () => {
+        this.setState({power_loading: true})
+        setTimeout(() => {
+            this.setState({power_loading: false})
+        }, 15000);
+        this.props.power_operate();
+    }
+
+    render() {
+        return (
+            <Col xs={4} md={4} onClick={this.state.power_loading ? () => {
+            } : this.power}>
+                <i className={this.state.power_loading ? 'fa fa-spinner fa-spin' : 'fa fa-power-off'}
+                   style={this.props.power_status == 'off' ? operation_icon : operation_icon_active}></i>
+                <div>电源</div>
+            </Col>
+        );
+    }
+}
+
+const area_desc = {
+    marginTop: `1rem`
+}
+
+const config_panel_area = {
+    height: `4.5rem`,
+    margin: `3rem 7.5% 0rem 7.5%`
+}
+
+const min_volume = {
+    marginLeft: `7.5%`,
+    textAlign: `left`,
+    width: `22.5%`,
+    float: `left`
+}
+
+const current_volume = {
+    width: `40%`,
+    float: `left`,
+    width: `40%`,
+    float: `left`
+}
+
+const max_volume = {
+    marginRight: `7.5%`,
+    textAlign: `right`,
+    width: `22.5%`,
+    float: `left`
+}
+
+class Fan extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            min_volume: 0,
+            max_volume: 400,
+            current_volume: 100,
+            show_panel: false
+        }
+        this.speed_panel = this.speed_panel.bind(this);
+        this.volume = this.volume.bind(this);
+    }
+
+    speed_panel = () => {
+        this.setState({show_panel: !this.state.show_panel})
+    }
+
+    volume = (e) => {
+        this.setState({current_volume: e});
+        this.props.fan_operate(e);
+    }
+
+    render() {
+        return (
+            <Col xs={4} md={4} onClick={this.speed_panel}>
+                <i className={this.props.power_status == 'off' ? 'fa fa-superpowers' : 'fa fa-superpowers fa-spin'}
+                   style={this.props.power_status == 'off' ? operation_icon : operation_icon_active}></i>
+                <div>风量</div>
+                <Modal popup visible={this.state.show_panel} onClose={() => {
+                }} animationType="slide-up">
+                    <div style={area_desc}>风量调节</div>
+                    <Slider style={config_panel_area} defaultValue={this.state.current_volume}
+                            min={this.state.min_volume} max={this.state.max_volume} included={true}
+                            onAfterChange={(e) => {
+                                this.volume(e);
+                            }}
+                    />
+                    <div>
+                        <div style={min_volume}>最小风量</div>
+                        <div style={current_volume}>当前风量</div>
+                        <div style={max_volume}>最大风量</div>
+                    </div>
+                </Modal>
+            </Col>
+        );
     }
 }
 

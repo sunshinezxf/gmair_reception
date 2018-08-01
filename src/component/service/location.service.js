@@ -3,7 +3,8 @@ import axios from 'axios'
 const location_url = 'https://microservice.gmair.net/reception/location';
 
 function list_province() {
-    let request_province_url = location_url + '/province/list';
+    let access_token = localStorage.getItem('access_token');
+    let request_province_url = location_url + '/province/list?access_token=' + access_token;
     return axios.get(request_province_url).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -12,7 +13,8 @@ function list_province() {
 }
 
 function list_city(province_id) {
-    let request_city_url = location_url + '/' + province_id + '/cities';
+    let access_token = localStorage.getItem('access_token');
+    let request_city_url = location_url + '/' + province_id + '/cities?access_token=' + access_token;
     return axios.get(request_city_url).then(function (response) {
         return response.data;
     }).catch(() => {

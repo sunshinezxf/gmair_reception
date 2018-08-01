@@ -6,7 +6,11 @@ import PM2_5Charts from "./pm2_5charts";
 import {wechatservice} from "../service/wechat.service";
 import {util} from "../service/util";
 import {machine_service} from "../service/mahcine.service";
+import {locationservice} from "../service/location.service";
 
+import {Picker, List} from 'antd-mobile'
+
+import 'antd/dist/antd.css';
 
 const gmair_machine_index = {
     width: `100%`,
@@ -15,7 +19,6 @@ const gmair_machine_index = {
 }
 
 const gmair_machine_pm2_5 = {
-    color: `#00AEEF`,
     textAlign: `left`,
     fontWeight: `1rem`,
     height: `2.5rem`,
@@ -69,11 +72,12 @@ class MachineDetail extends React.Component {
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
         this.state = {
             qrcode: '',
+            modelId: '',
             online: false,
-            pm2_5: '',
-            volume: '',
-            temp: '',
-            humid: '',
+            pm2_5: 0,
+            volume: 0,
+            temp: 0,
+            humid: 0,
             power_status: 'off'
         }
     }
@@ -132,16 +136,6 @@ class MachineDetail extends React.Component {
         });
     }
 
-    power_operate = () => {
-        if (this.state.power_status == 'on') {
-            this.setState({power_status: 'off'});
-            machine_service.power(this.state.qrcode, 'off');
-        } else {
-            this.setState({power_status: 'on'});
-            machine_service.power(this.props.qrcode, 'on');
-        }
-    }
-
     componentDidMount() {
         util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
             var vConsole = new window.VConsole();
@@ -158,18 +152,34 @@ class MachineDetail extends React.Component {
     }
 
     render() {
+        let pm2_5_color = 'pm2_5_excellent';
+        if (this.state.pm2_5 >= 0 && this.state.pm2_5 <= 35) {
+            pm2_5_color = 'pm2_5_excellent'
+        } else if (this.state.pm2_5 > 35 && this.state.pm2_5 <= 75) {
+            pm2_5_color = 'pm2_5_moderate'
+        } else if (this.state.pm2_5 > 75 && this.state.pm2_5 <= 115) {
+            pm2_5_color = 'pm2_5_sensative';
+        } else if (this.state.pm2_5 > 115 && this.state.pm2_5 <= 150) {
+            pm2_5_color = 'pm2_5_unhealthy';
+        } else if (this.state.pm2_5 > 150 && this.state.pm2_5 <= 250) {
+            pm2_5_color = 'pm2_5_hazardous';
+        } else {
+            pm2_5_color = 'pm2_5_hazardous';
+        }
+
         return (
             <div>
                 <div style={gmair_machine_index}>
-                    <div style={gmair_machine_pm2_5}>PM2.5 优</div>
+                    <div style={gmair_machine_pm2_5}
+                         className={pm2_5_color}>PM2.5 {util.tell_pm2_5_desc(this.state.pm2_5)}</div>
                     <div style={indoor_index}>
                         <div style={gmair_machine_pm2_5_value}>{util.format_pm2_5(this.state.pm2_5)}</div>
                         <div style={gmair_machine_index_desc}>
                             <div style={gmair_machine_index_desc_item}>
-                                <span style={gmair_icon_active} className='spin'>
+                                <span style={gmair_icon_active} className={this.state.power_status == 'on' ? 'spin': '' }>
                                     <i className='fa fa-superpowers'></i>
                                 </span>
-                                <span>&nbsp;{this.state.volume}³/h</span>
+                                <span>&nbsp;{this.state.volume}m³/h</span>
                             </div>
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}>
@@ -185,8 +195,8 @@ class MachineDetail extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <Outdoor qrcode={this.state.qrcode}/>
-                    <Operation/>
+                    <Outdoor qrcode={this.props.match.params.qrcode}/>
+                    <Operation qrcode={this.props.match.params.qrcode} power_status={this.state.power_status}/>
                     <div style={charts_area}>
                         <PM2_5Charts/>
                     </div>
@@ -238,14 +248,30 @@ const location_area = {
 class Outdoor extends React.Component {
     constructor(props) {
         super(props);
+        this.config_outdoor = this.config_outdoor.bind(this);
         this.state = {
             province: '',
             city: '',
-            district: ''
-        }
+            province_list: [],
+            city_list: []
+        };
     }
 
     componentDidMount() {
+        locationservice.list_province().then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                let list = response.data;
+                let target = [];
+                for (let i = 0; i < list.length; i++) {
+                    target.push({value: list[i].provinceId, label: list[i].provinceName, isLeaf: false});
+                }
+                this.setState({province_list: target})
+            }
+        })
+    }
+
+    config_outdoor = (e) => {
+        let city_id = e[1];
 
     }
 
@@ -253,39 +279,42 @@ class Outdoor extends React.Component {
         return (
             <div style={outdoor_area}>
                 <div style={outdoor_title}>
-                    <span><i className='fa fa-location-arrow'></i></span>
-                    <select style={location_area}>
-                        <option>北京市</option>
-                    </select>
-                    <select style={location_area}>
-                        <option>秦淮区</option>
-                    </select>
-                    <select style={location_area}>
-                        <option>朝天宫</option>
-                    </select>
+                    <Picker extra={this.state.province + this.state.city}  title="地址选择" onOk={e => {
+                        this.config_outdoor(e)
+                    }}>
+                        <List.Item arrow="horizontal">户外空气指数</List.Item>
+                    </Picker>
                 </div>
-                <hr/>
-                <div style={outdoor_area_content}>
-                    <div style={outdoor_pm2_5}>
+                {
+                    this.state.province !== '' && this.state.city !== '' ?
+                        <div>
+                            <hr/>
+                            <div style={outdoor_area_content}>
+                                <div style={outdoor_pm2_5}>
                         <span style={gmair_icon_active}>
                             <i className='glyphicon glyphicon-leaf'></i>
                         </span>
-                        <span>&nbsp;47ug/m³</span>
-                    </div>
-                    <div style={outdoor_temp}>
+                                    <span>&nbsp;47ug/m³</span>
+                                </div>
+                                <div style={outdoor_temp}>
                         <span style={gmair_icon_active}>
                             <i className='fa fa-thermometer'></i>
                         </span>
-                        <span>&nbsp;26°C</span>
-                    </div>
-                    <div style={outdoor_humid}>
+                                    <span>&nbsp;26°C</span>
+                                </div>
+                                <div style={outdoor_humid}>
                         <span style={gmair_icon_active}>
                             <i className='glyphicon glyphicon-tint'></i>
                         </span>
-                        <span>&nbsp;60%</span>
-                    </div>
-                </div>
-                <hr/>
+                                    <span>&nbsp;60%</span>
+                                </div>
+                            </div>
+                            <hr/>
+                        </div>
+                        :
+                        ''
+                }
+
             </div>
         )
     }

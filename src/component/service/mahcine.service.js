@@ -57,7 +57,6 @@ function obtain_model(model_id) {
     })
 }
 
-
 function check_online(qrcode) {
     let access_token = localStorage.getItem('access_token');
     let online_url = machine_service_url + '/checkonline?access_token=' + access_token + '&qrcode=' + qrcode;
@@ -101,6 +100,20 @@ function operate(qrcode, component, operation) {
     })
 }
 
+function volume(qrcode, value) {
+    let access_token = localStorage.getItem('access_token');
+    let volume_operation_url = machine_service_url + '/config/speed';
+    let form = new FormData();
+    form.append('access_token', access_token);
+    form.append('qrcode', qrcode);
+    form.append('speed', value);
+    return axios.post(volume_operation_url, form).then(response => {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to config machine volume'};
+    })
+}
+
 function unbind(qrcode) {
     let access_token = localStorage.getItem('access_token');
     let unbind_url = machine_service_url + '/consumer/qrcode/unbind';
@@ -128,6 +141,16 @@ function confirm_init(qrcode, bind_name) {
     })
 }
 
+function obtain_control_option(modelId) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_control_option_url = machine_service_url + '/control/option/probe?access_token=' + access_token + '&modelId=' + modelId;
+    return axios.get(obtain_control_option_url).then(function(response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch control option for ' + modelId};
+    });
+}
+
 export const machine_service = {
-    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, obtain_code_value_via_url, obtain_machine_list, obtain_machine_status, obtain_model, operate, unbind
+    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, obtain_code_value_via_url, obtain_control_option, obtain_machine_list, obtain_machine_status, obtain_model, operate, unbind, volume
 }

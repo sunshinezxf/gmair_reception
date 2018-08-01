@@ -136,3 +136,29 @@ hr {
     margin: 0.8rem 0 0.8rem 0;
     border-top: 1px solid #eeeeee;
 }
+
+.pm2_5_excellent {
+    color: #00CC66;
+}
+
+.pm2_5_moderate {
+    color: #FFFF66;
+}
+
+.pm2_5_sensative {
+    color: #FF9966;
+}
+
+.pm2_5_unhealthy {
+    color: #FF0066
+}
+
+.pm2_5_very_unhealthy {
+    color: #990099;
+}
+
+.pm2_5_hazardous {
+    color: #996666;
+}
+
+

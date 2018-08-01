@@ -34,6 +34,25 @@ function format_pm2_5(value) {
     return value.toString();
 }
 
+function tell_pm2_5_desc(value) {
+    if (value >= 0 && value <= 35) {
+        return '优';
+    }
+    if (value > 35 && value <= 75) {
+        return '良';
+    }
+    if(value > 75 && value <= 115) {
+        return '轻度独然';
+    }
+    if(value > 115 && value <= 150) {
+        return '中度污染';
+    }
+    if(value > 150 && value <= 250) {
+        return '重度污染';
+    }
+    return '严重污染';
+}
+
 export const util = {
-    is_weixin, load_script, format_pm2_5
+    is_weixin, load_script, format_pm2_5, tell_pm2_5_desc
 }
