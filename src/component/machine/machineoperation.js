@@ -19,7 +19,8 @@ const operation_icon = {
 }
 
 const operation_icon_active = {
-    fontSize: `1.8rem`,
+    fontSize: `1.5rem`,
+    lineHeight: `1.8rem`,
     fontWeight: `lighter`,
     color: `#00A2E9`
 }
@@ -112,18 +113,6 @@ class Operation extends React.Component {
                          max_volume={this.state.max_volume} current_volume={this.props.volume_value}
                          fan_operate={this.fan_operate} operate_local_volume={this.props.operate_local_volume}/>
                     <Workmode power_status={this.props.power_status} mode_operate={this.mode_operate}/>
-                </Row>
-                <div style={operation_gap_bottom}></div>
-                <Row>
-
-                    <Col xs={4} md={4}>
-                        <i className='fa fa-moon-o' style={operation_icon}></i>
-                        <div>睡眠</div>
-                    </Col>
-                    <Col xs={4} md={4}>
-                        <i className='fa fa-refresh' style={operation_icon}></i>
-                        <div>自动</div>
-                    </Col>
                 </Row>
                 <div style={operation_gap_bottom}></div>
                 <Collapse isOpened={this.state.expanded}>
@@ -251,7 +240,6 @@ class Fan extends React.Component {
     }
 
     volume = (e) => {
-        console.log(e);
         this.setState({current_volume: e});
         this.local_volume(e);
         this.props.fan_operate(e);
@@ -264,8 +252,7 @@ class Fan extends React.Component {
     render() {
         return (
             <Col xs={4} md={4} onClick={this.speed_panel}>
-                <i className={this.props.power_status == 'off' ? 'fa fa-superpowers' : 'fa fa-superpowers fa-spin'}
-                   style={this.props.power_status == 'off' ? operation_icon : operation_icon_active}></i>
+                <i style={this.props.power_status == 'off' ? operation_icon : operation_icon_active}>{this.props.current_volume}</i>
                 <div>风量</div>
                 <Modal popup visible={this.state.show_panel} onClose={() => {
                 }} animationType="slide-up">
