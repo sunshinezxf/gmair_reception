@@ -234,26 +234,34 @@ const gmair_icon_active = {
 class MachinePower extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            show_progress: false
+        };
+        this.power = this.power.bind(this);
+    }
+
+    power = () => {
+        this.setState({show_progress: true});
+        this.props.operation();
+        setTimeout(() => {
+            this.setState({show_progress: false})
+        }, 10000);
     }
 
     render() {
-        if (this.props.power === 'on') {
-            return (
-                <div onClick={this.props.operation}>
+        return (
+            <div onClick={this.power}>
                 <span style={gmair_machine_power}>
-                    <i className='glyphicon glyphicon-off' style={gmair_icon_active}></i>
+                    {
+                        this.state.show_progress ?
+                            <i className='fa fa-spinner fa-spin' style={gmair_icon_active}></i>
+                            :
+                            <i className='glyphicon glyphicon-off'
+                               style={this.props.power === 'on' ? gmair_icon_active : gmair_icon_inactive}></i>
+                    }
                 </span>
-                </div>
-            )
-        } else {
-            return (
-                <div onClick={this.props.operation}>
-                <span style={gmair_machine_power}>
-                    <i className='glyphicon glyphicon-off' style={gmair_icon_inactive}></i>
-                </span>
-                </div>
-            )
-        }
+            </div>
+        )
     }
 }
 
