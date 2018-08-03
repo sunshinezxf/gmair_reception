@@ -250,7 +250,7 @@ class Fan extends React.Component {
                     <div style={area_desc}>风量调节</div>
                     <Slider style={config_panel_area} defaultValue={this.props.current_volume}
                             value={this.props.current_volume}
-                            min={this.props.min_volume} max={this.props.max_volume} included={true}
+                            min={this.props.min_volume} max={this.props.max_volume}
                             onChange={(e) => {
                                 this.local_volume(e);
                             }}
@@ -300,7 +300,7 @@ class Light extends React.Component {
                     <div style={area_desc}>亮度调节</div>
                     <Slider style={config_panel_area} defaultValue={this.props.current_light}
                             value={this.props.current_light}
-                            min={this.props.min_light} max={this.props.max_light} included={true}
+                            min={this.props.min_light} max={this.props.max_light}
                             step={10}
                             onChange={(e) => {
                                 this.local_light(e);
