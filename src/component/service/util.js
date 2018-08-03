@@ -42,7 +42,7 @@ function tell_pm2_5_desc(value) {
         return '良';
     }
     if(value > 75 && value <= 115) {
-        return '轻度独然';
+        return '轻度污染';
     }
     if(value > 115 && value <= 150) {
         return '中度污染';

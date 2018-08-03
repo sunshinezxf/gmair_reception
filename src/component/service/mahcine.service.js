@@ -114,6 +114,20 @@ function volume(qrcode, value) {
     })
 }
 
+function light(qrcode, value) {
+    let access_token = localStorage.getItem('access_token');
+    let light_operation_url = machine_service_url + '/config/light';
+    let form = new FormData();
+    form.append('access_token', access_token);
+    form.append('qrcode', qrcode);
+    form.append('light', value);
+    return axios.post(light_operation_url, form).then(response => {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to config machine volume'};
+    })
+}
+
 function unbind(qrcode) {
     let access_token = localStorage.getItem('access_token');
     let unbind_url = machine_service_url + '/consumer/qrcode/unbind';
@@ -161,6 +175,16 @@ function obtain_volume_range(modelId) {
     });
 }
 
+function obtain_light_range(modelId) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_volume_url = machine_service_url + '/probe/light?access_token=' + access_token + '&modelId=' + modelId;
+    return axios.get(obtain_volume_url).then(function(response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch volume range for ' + modelId};
+    });
+}
+
 export const machine_service = {
-    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, obtain_code_value_via_url, obtain_control_option, obtain_machine_list, obtain_machine_status, obtain_model, obtain_volume_range, operate, unbind, volume
+    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, light, obtain_code_value_via_url, obtain_control_option, obtain_machine_list, obtain_machine_status, obtain_model, obtain_volume_range, obtain_light_range, operate, unbind, volume
 }

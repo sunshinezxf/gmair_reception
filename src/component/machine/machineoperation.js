@@ -45,7 +45,9 @@ class Operation extends React.Component {
             expanded: true,
             operations: [],
             min_volume: 0,
-            max_volume: 400
+            max_volume: 400,
+            min_light: 0,
+            max_light: 5
         }
         this.expand = this.expand.bind(this);
         this.init_control_option = this.init_control_option.bind(this);
@@ -63,11 +65,15 @@ class Operation extends React.Component {
                 let control_list = response.data;
                 this.setState({operations: control_list})
             }
-            console.log(this.state.operations)
         })
         machine_service.obtain_volume_range(this.state.modelId).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({min_volume: response.data[0].minVolume, max_volume: response.data[0].maxVolume})
+            }
+        })
+        machine_service.obtain_light_range(this.state.modelId).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                this.setState({min_light: response.data[0].minLight, max_light: response.data[0].maxLight})
             }
         })
     }
@@ -80,14 +86,10 @@ class Operation extends React.Component {
         }
     }
 
-    light_operate = () => {
-        if (this.props.light == 'on') {
-            machine_service.operate(this.props.qrcode, 'light', 'off');
-            this.props.operate_local_light('off');
-        } else {
-            machine_service.operate(this.props.qrcode, 'light', 'on');
-            this.props.operate_local_light('on');
-        }
+    light_operate = (light) => {
+        machine_service.light(this.props.qrcode, light).then(response => {
+            console.log(response);
+        });
     }
 
     fan_operate = (volume) => {
@@ -128,8 +130,10 @@ class Operation extends React.Component {
                 <Collapse isOpened={this.state.expanded}>
                     <div style={operation_gap_top}></div>
                     <Row>
-                        <Light light={this.props.light} light_operate={this.light_operate} operate_local_light={this.props.operate_local_light}/>
-                        <Heat />
+                        <Light current_light={this.props.light} light_operate={this.light_operate}
+                               min_light={this.state.min_light} max_light={this.state.max_light}
+                               operate_local_light={this.props.operate_local_light}/>
+                        <Heat/>
                         <Col xs={4} md={4}>
                             <i className='fa fa-child' style={operation_icon}></i>
                             <div>童锁</div>
@@ -170,26 +174,6 @@ class Power extends React.Component {
                 <i className={this.state.power_loading ? 'fa fa-spinner fa-spin' : 'fa fa-power-off'}
                    style={this.props.power_status == 'off' ? operation_icon : operation_icon_active}></i>
                 <div>电源</div>
-            </Col>
-        );
-    }
-}
-
-class Light extends React.Component {
-    constructor(props) {
-        super(props);
-        this.light = this.light.bind(this);
-    }
-
-    light = () => {
-        this.props.light_operate();
-    }
-
-    render(){
-        return (
-            <Col xs={4} md={4} onClick={this.light}>
-                <i className='fa fa-lightbulb-o' style={this.props.light == 'on' ? operation_icon_active : operation_icon}></i>
-                <div>屏显</div>
             </Col>
         );
     }
@@ -266,7 +250,7 @@ class Fan extends React.Component {
                     <div style={area_desc}>风量调节</div>
                     <Slider style={config_panel_area} defaultValue={this.props.current_volume}
                             value={this.props.current_volume}
-                            min={this.state.min_volume} max={this.state.max_volume} included={true}
+                            min={this.props.min_volume} max={this.props.max_volume} included={true}
                             onChange={(e) => {
                                 this.local_volume(e);
                             }}
@@ -278,6 +262,57 @@ class Fan extends React.Component {
                         <div style={min_volume}>{this.props.min_volume}</div>
                         <div style={current_volume}>{this.props.current_volume}</div>
                         <div style={max_volume}>{this.props.max_volume}</div>
+                    </div>
+                </Modal>
+            </Col>
+        );
+    }
+}
+
+class Light extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            show_panel : false
+        }
+        this.light = this.light.bind(this);
+        this.light_panel = this.light_panel.bind(this);
+    }
+
+    light_panel = () => {
+        this.setState({show_panel: !this.state.show_panel});
+    }
+
+    local_light = (light) => {
+        this.props.operate_local_light(light);
+    }
+
+    light = (light) => {
+        this.props.light_operate(light);
+    }
+
+    render() {
+        return (
+            <Col xs={4} md={4} onClick={this.light_panel}>
+                <i className='fa fa-lightbulb-o' style={operation_icon_active}></i>
+                <div>屏显</div>
+                <Modal popup visible={this.state.show_panel} animationType="slide-up">
+                    <div style={area_desc}>亮度调节</div>
+                    <Slider style={config_panel_area} defaultValue={this.props.current_light}
+                            value={this.props.current_light}
+                            min={this.props.min_light} max={this.props.max_light} included={true}
+                            step={10}
+                            onChange={(e) => {
+                                this.local_light(e);
+                            }}
+                            onAfterChange={(e) => {
+                                this.light(e);
+                            }}
+                    />
+                    <div style={volume_area}>
+                        <div style={min_volume}>暗</div>
+                        <div style={current_volume}>{this.props.current_light}</div>
+                        <div style={max_volume}>亮</div>
                     </div>
                 </Modal>
             </Col>
@@ -315,7 +350,7 @@ class Workmode extends React.Component {
         if (this.props.current_mode == 'sleep') {
             mode_name = 'fa fa-moon-o';
         }
-        if(this.props.current_mode == 'auto') {
+        if (this.props.current_mode == 'auto') {
             mode_name = 'fa fa-refresh';
         }
         return (
@@ -325,12 +360,20 @@ class Workmode extends React.Component {
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">
                     <div style={area_desc}>模式调节</div>
                     <div style={mode_operation_area}>
-                        <Button type={this.props.current_mode == 'manual' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
+                        <Button type={this.props.current_mode == 'manual' ? 'primary' : 'ghost'} inline size="small"
+                                className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
-                            {this.props.current_mode === 'manual' ? '' : this.operate_mode('manual')}}}>手动</Button>
-                        <Button type={this.props.current_mode == 'sleep' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
+                            {
+                                this.props.current_mode === 'manual' ? '' : this.operate_mode('manual')
+                            }
+                        }}>手动</Button>
+                        <Button type={this.props.current_mode == 'sleep' ? 'primary' : 'ghost'} inline size="small"
+                                className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
-                            {this.props.current_mode === 'sleep' ? '' : this.operate_mode('sleep')}}}>睡眠</Button>
+                            {
+                                this.props.current_mode === 'sleep' ? '' : this.operate_mode('sleep')
+                            }
+                        }}>睡眠</Button>
                         <Button type="ghost" inline size="small" className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             this.operate_mode('auto')
@@ -365,7 +408,7 @@ class Heat extends React.Component {
         if (this.props.heat == '') {
             heat_name = 'fa fa-thermometer-2';
         }
-        if(this.props.heat == '') {
+        if (this.props.heat == '') {
             heat_name = 'fa fa-thermometer-4';
         }
         return (
@@ -375,12 +418,20 @@ class Heat extends React.Component {
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">
                     <div style={area_desc}>辅热调节</div>
                     <div style={mode_operation_area}>
-                        <Button type={this.props.current_mode == 'manual' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
+                        <Button type={this.props.current_mode == 'manual' ? 'primary' : 'ghost'} inline size="small"
+                                className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
-                            {this.props.current_mode === 'manual' ? '' : this.operate_heat('manual')}}}>开启</Button>
-                        <Button type={this.props.current_mode == 'sleep' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
+                            {
+                                this.props.current_mode === 'manual' ? '' : this.operate_heat('manual')
+                            }
+                        }}>开启</Button>
+                        <Button type={this.props.current_mode == 'sleep' ? 'primary' : 'ghost'} inline size="small"
+                                className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
-                            {this.props.current_mode === 'sleep' ? '' : this.operate_heat('sleep')}}}>关闭</Button>
+                            {
+                                this.props.current_mode === 'sleep' ? '' : this.operate_heat('sleep')
+                            }
+                        }}>关闭</Button>
                     </div>
                 </Modal>
             </Col>

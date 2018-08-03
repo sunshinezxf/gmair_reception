@@ -35,7 +35,6 @@ const gmair_machine_pm2_5_value = {
     float: `left`,
     letterSpacing: `0.55rem`,
     textAlign: `left`,
-    color: `#999999`,
     marginTop: `1rem`
 }
 
@@ -83,7 +82,7 @@ class MachineDetail extends React.Component {
             humid: 0,
             power_status: 'off',
             work_mode: 'manual',
-            light: 'off'
+            light: 0
         }
     }
 
@@ -145,7 +144,7 @@ class MachineDetail extends React.Component {
                     humid: humid,
                     power_status: (power === 1) ? 'on' : 'off',
                     work_mode: util.tell_mode(mode),
-                    light: (light === 1) ? 'on' : 'off'
+                    light: light
                 });
             }
             //machine offline
@@ -195,7 +194,7 @@ class MachineDetail extends React.Component {
                     <div style={gmair_machine_pm2_5}
                          className={pm2_5_color}>PM2.5 {util.tell_pm2_5_desc(this.state.pm2_5)}</div>
                     <div style={indoor_index}>
-                        <div style={gmair_machine_pm2_5_value}>{util.format_pm2_5(this.state.pm2_5)}</div>
+                        <div style={gmair_machine_pm2_5_value} className={pm2_5_color}>{util.format_pm2_5(this.state.pm2_5)}</div>
                         <div style={gmair_machine_index_desc}>
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}
