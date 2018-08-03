@@ -73,6 +73,7 @@ class MachineDetail extends React.Component {
         this.operate_local_mode = this.operate_local_mode.bind(this);
         this.operate_local_light = this.operate_local_light.bind(this);
         this.operate_local_heat = this.operate_local_heat.bind(this);
+        this.operate_local_lock = this.operate_local_lock.bind(this);
         this.state = {
             qrcode: '',
             modelId: '',
@@ -84,7 +85,8 @@ class MachineDetail extends React.Component {
             power_status: 'off',
             work_mode: 'manual',
             heat_mode: 0,
-            light: 0
+            light: 0,
+            lock: 0
         }
     }
 
@@ -102,6 +104,10 @@ class MachineDetail extends React.Component {
 
     operate_local_heat = (heat) => {
         this.setState({heat_mode: heat});
+    }
+
+    operate_local_lock = (lock) => {
+        this.setState({lock: lock});
     }
 
     init_config = () => {
@@ -143,6 +149,7 @@ class MachineDetail extends React.Component {
                 let mode = information.mode;
                 let light = information.light;
                 let heat = information.heat;
+                let lock = information.lock;
                 this.setState({
                     online: false,
                     pm2_5: pm2_5,
@@ -152,7 +159,8 @@ class MachineDetail extends React.Component {
                     power_status: (power === 1) ? 'on' : 'off',
                     work_mode: util.tell_mode(mode),
                     light: light,
-                    heat_mode: heat
+                    heat_mode: heat,
+                    lock: lock
                 });
             }
             //machine offline
@@ -231,6 +239,7 @@ class MachineDetail extends React.Component {
                                work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
                                light={this.state.light} operate_local_light={this.operate_local_light}
                                heat={this.state.heat_mode} operate_local_heat={this.operate_local_heat}
+                               lock={this.state.lock} operate_local_lock={this.operate_local_lock}
                     />
                     <div style={charts_area}>
                         <PM2_5Charts/>
