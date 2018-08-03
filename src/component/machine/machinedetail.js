@@ -72,6 +72,7 @@ class MachineDetail extends React.Component {
         this.operate_local_volume = this.operate_local_volume.bind(this);
         this.operate_local_mode = this.operate_local_mode.bind(this);
         this.operate_local_light = this.operate_local_light.bind(this);
+        this.operate_local_heat = this.operate_local_heat.bind(this);
         this.state = {
             qrcode: '',
             modelId: '',
@@ -82,6 +83,7 @@ class MachineDetail extends React.Component {
             humid: 0,
             power_status: 'off',
             work_mode: 'manual',
+            heat_mode: 0,
             light: 0
         }
     }
@@ -96,6 +98,10 @@ class MachineDetail extends React.Component {
 
     operate_local_light = (light) => {
         this.setState({light: light});
+    }
+
+    operate_local_heat = (heat) => {
+        this.setState({heat_mode: heat});
     }
 
     init_config = () => {
@@ -136,6 +142,7 @@ class MachineDetail extends React.Component {
                 let power = information.power;
                 let mode = information.mode;
                 let light = information.light;
+                let heat = information.heat;
                 this.setState({
                     online: false,
                     pm2_5: pm2_5,
@@ -144,7 +151,8 @@ class MachineDetail extends React.Component {
                     humid: humid,
                     power_status: (power === 1) ? 'on' : 'off',
                     work_mode: util.tell_mode(mode),
-                    light: light
+                    light: light,
+                    heat_mode: heat
                 });
             }
             //machine offline
@@ -221,7 +229,9 @@ class MachineDetail extends React.Component {
                     <Operation qrcode={this.props.match.params.qrcode} power_status={this.state.power_status}
                                volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}
                                work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
-                               light={this.state.light} operate_local_light={this.operate_local_light}/>
+                               light={this.state.light} operate_local_light={this.operate_local_light}
+                               heat={this.state.heat_mode} operate_local_heat={this.operate_local_heat}
+                    />
                     <div style={charts_area}>
                         <PM2_5Charts/>
                     </div>

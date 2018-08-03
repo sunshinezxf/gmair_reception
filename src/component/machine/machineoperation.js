@@ -52,6 +52,7 @@ class Operation extends React.Component {
         this.expand = this.expand.bind(this);
         this.init_control_option = this.init_control_option.bind(this);
         this.power_operate = this.power_operate.bind(this);
+        this.heat_operate = this.heat_operate.bind(this);
     }
 
     expand = () => {
@@ -104,6 +105,12 @@ class Operation extends React.Component {
         });
     }
 
+    heat_operate = (heat) => {
+        machine_service.operate(this.props.qrcode, 'heat', heat).then(response => {
+            console.log(JSON.stringify(response))
+        })
+    }
+
     componentDidMount() {
         let qrcode = this.props.qrcode
         this.setState({qrcode: qrcode});
@@ -133,7 +140,8 @@ class Operation extends React.Component {
                         <Light current_light={this.props.light} light_operate={this.light_operate}
                                min_light={this.state.min_light} max_light={this.state.max_light}
                                operate_local_light={this.props.operate_local_light}/>
-                        <Heat/>
+                        <Heat current_heat={this.props.heat} heat_operate={this.heat_operate}
+                              operate_local_heat={this.props.operate_local_heat}/>
                         <Col xs={4} md={4}>
                             <i className='fa fa-child' style={operation_icon}></i>
                             <div>童锁</div>
@@ -273,7 +281,7 @@ class Light extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            show_panel : false
+            show_panel: false
         }
         this.light = this.light.bind(this);
         this.light_panel = this.light_panel.bind(this);
@@ -400,15 +408,15 @@ class Heat extends React.Component {
     }
 
     operate_heat = (heat) => {
-        this.props.mode_operate(heat)
+        this.props.heat_operate(heat)
     }
 
     render() {
         let heat_name = 'fa fa-thermometer-0';
-        if (this.props.heat == '') {
+        if (this.props.heat === 1) {
             heat_name = 'fa fa-thermometer-2';
         }
-        if (this.props.heat == '') {
+        if (this.props.heat === 2) {
             heat_name = 'fa fa-thermometer-4';
         }
         return (
@@ -418,20 +426,27 @@ class Heat extends React.Component {
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">
                     <div style={area_desc}>辅热调节</div>
                     <div style={mode_operation_area}>
-                        <Button type={this.props.current_mode == 'manual' ? 'primary' : 'ghost'} inline size="small"
+                        <Button type={this.props.heat == 0 ? 'primary' : 'ghost'} inline size="small"
                                 className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             {
-                                this.props.current_mode === 'manual' ? '' : this.operate_heat('manual')
-                            }
-                        }}>开启</Button>
-                        <Button type={this.props.current_mode == 'sleep' ? 'primary' : 'ghost'} inline size="small"
-                                className='am-button-borderfix'
-                                style={{margin: '0 1.5rem'}} onClick={() => {
-                            {
-                                this.props.current_mode === 'sleep' ? '' : this.operate_heat('sleep')
+                                this.props.heat === 0 ? '' : this.operate_heat('off')
                             }
                         }}>关闭</Button>
+                        <Button type={this.props.heat === 1 ? 'primary' : 'ghost'} inline size="small"
+                                className='am-button-borderfix'
+                                style={{margin: '0 1.5rem'}} onClick={() => {
+                            {
+                                this.props.current_mode === 1 ? '' : this.operate_heat('cosy')
+                            }
+                        }}>500W</Button>
+                        <Button type={this.props.heat === 2 ? 'primary' : 'ghost'} inline size="small"
+                                className='am-button-borderfix'
+                                style={{margin: '0 1.5rem'}} onClick={() => {
+                            {
+                                this.props.current_mode === 2 ? '' : this.operate_heat('warm')
+                            }
+                        }}>1000W</Button>
                     </div>
                 </Modal>
             </Col>
