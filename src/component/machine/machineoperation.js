@@ -89,11 +89,11 @@ class Operation extends React.Component {
     }
 
     lock_operate = () => {
-        if(this.props.lock === 0) {
+        if (this.props.lock === 0) {
             machine_service.operate(this.props.qrcode, 'lock', 'on').then(response => {
                 console.log(JSON.stringify(response))
             })
-        }else {
+        } else {
             machine_service.operate(this.props.qrcode, 'lock', 'off')
         }
     }
@@ -153,7 +153,8 @@ class Operation extends React.Component {
                                operate_local_light={this.props.operate_local_light}/>
                         <Heat current_heat={this.props.heat} heat_operate={this.heat_operate}
                               operate_local_heat={this.props.operate_local_heat}/>
-                        <Lock lock={this.props.lock} lock_operate={this.lock_operate} operate_local_lock={this.props.operate_local_lock}/>
+                        <Lock lock={this.props.lock} lock_operate={this.lock_operate}
+                              operate_local_lock={this.props.operate_local_lock}/>
                     </Row>
                     <div style={operation_gap_bottom}></div>
                 </Collapse>
@@ -202,7 +203,11 @@ class Lock extends React.Component {
     }
 
     lock = () => {
-        this.props.operate_local_lock();
+        if (this.props.lock === 0) {
+            this.props.operate_local_lock(1);
+        } else {
+            this.props.operate_local_lock(0);
+        }
         this.props.lock_operate();
     }
 
