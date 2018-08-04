@@ -2,6 +2,8 @@ import React from 'react'
 
 import {Well} from 'react-bootstrap'
 
+import {Card} from 'antd-mobile'
+
 import Navigation from '../navigation/navigation'
 import {consumerservice} from "../service/consumer.service";
 
@@ -10,8 +12,12 @@ const person_info_area = {
     height: `100%`
 }
 
+const person_card = {
+    marginTop: `1.5rem`
+}
+
 const personal_info_item = {
-    height: `7rem`,
+    height: `3rem`,
     width: `100%`,
     textAlign: `left`
 }
@@ -29,34 +35,39 @@ class Person extends React.Component {
 
     componentDidMount() {
         consumerservice.profile().then(response => {
-            console.log(JSON.stringify(response));
-            if (response.responseCode === 'RESPONSE_OK') {
+            if (response.responseCode == 'RESPONSE_OK') {
+                let person = response.data;
+                console.log(JSON.stringify(person));
+                let address = person.province + (person.city == null ? '': person.city) + (person.district === 'null' ? '' : person.district);
+                this.setState({name: person.name, mobile: person.phone, address: address})
+            } else
+                {
 
-            } else {
-
+                }
             }
-        });
+        );
     }
 
     render() {
         return (
             <div style={person_info_area}>
-                <div style={personal_info_item}>
-                    <Well>
-                        <span><i className='fa fa-user'></i></span>姓名
-                    </Well>
-                </div>
-                <div style={personal_info_item}>
-                    <Well>
-                        <span><i className='glyphicon glyphicon-phone'></i></span>电话
-                    </Well>
-                </div>
-                <div style={personal_info_item}>
-                    <Well>
-                        <span><i className='glyphicon glyphicon-map-marker'></i></span>
-                        地址
-                    </Well>
-                </div>
+                <Card style={person_card}>
+                    <Card.Header title='个人信息' extra='...'></Card.Header>
+                    <Card.Body>
+                        <div style={personal_info_item}>
+                            <span><i className='glyphicon glyphicon-user'></i></span>
+                            {this.state.name}
+                        </div>
+                        <div style={personal_info_item}>
+                            <span><i className='glyphicon glyphicon-phone'></i></span>
+                            {this.state.mobile}
+                        </div>
+                        <div style={personal_info_item}>
+                            <span><i className='glyphicon glyphicon-map-marker'></i></span>
+                            {this.state.address}
+                        </div>
+                    </Card.Body>
+                </Card>
                 <div style={personal_info_item}>
                     绑定微信
                 </div>
