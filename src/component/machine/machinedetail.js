@@ -86,7 +86,8 @@ class MachineDetail extends React.Component {
             work_mode: 'manual',
             heat_mode: 0,
             light: 0,
-            lock: 0
+            lock: 0,
+            co2: 0
         }
     }
 
@@ -150,6 +151,7 @@ class MachineDetail extends React.Component {
                 let light = information.light;
                 let heat = information.heat;
                 let lock = information.lock;
+                let co2 = information.co2;
                 this.setState({
                     online: false,
                     pm2_5: pm2_5,
@@ -160,7 +162,8 @@ class MachineDetail extends React.Component {
                     work_mode: util.tell_mode(mode),
                     light: light,
                     heat_mode: heat,
-                    lock: lock
+                    lock: lock,
+                    co2: co2
                 });
             }
             //machine offline
@@ -213,11 +216,10 @@ class MachineDetail extends React.Component {
                         <div style={gmair_machine_pm2_5_value} className={pm2_5_color}>{util.format_pm2_5(this.state.pm2_5)}</div>
                         <div style={gmair_machine_index_desc}>
                             <div style={gmair_machine_index_desc_item}>
-                                <span style={gmair_icon_active}
-                                      className={this.state.power_status == 'on' ? 'spin' : ''}>
-                                    <i className='fa fa-superpowers'></i>
+                                <span style={gmair_icon_active}>
+                                    <i className='fa fa-leaf'></i>
                                 </span>
-                                <span>&nbsp;{this.state.volume}m³/h</span>
+                                <span>&nbsp;{this.state.co2}ppm</span>
                             </div>
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}>
