@@ -35,13 +35,12 @@ class Person extends React.Component {
 
     componentDidMount() {
         consumerservice.profile().then(response => {
-            if (response.responseCode == 'RESPONSE_OK') {
-                let person = response.data;
-                console.log(JSON.stringify(person));
-                let address = person.province + (person.city == null ? '': person.city) + (person.district === 'null' ? '' : person.district);
-                this.setState({name: person.name, mobile: person.phone, address: address})
-            } else
-                {
+                if (response.responseCode == 'RESPONSE_OK') {
+                    let person = response.data;
+                    console.log(JSON.stringify(person));
+                    let address = person.province + (person.city == null ? '' : person.city) + (person.district === 'null' ? '' : person.district) + person.address;
+                    this.setState({name: person.name, mobile: person.phone, address: address})
+                } else {
 
                 }
             }
