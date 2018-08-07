@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {Link} from 'react-router-dom'
-
 import {machine_service} from "../service/mahcine.service";
+
+import {util} from "../service/util";
 
 const gmair_machine_item = {
     width: `100%`,
@@ -172,7 +172,7 @@ class MachineItem extends React.Component {
         return (
             <div style={gmair_machine_item}>
                 <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>
-                    {this.state.online === true ? this.state.pm2_5 :
+                    {this.state.online === true ? util.format_pm2_5(this.state.pm2_5) :
                         <span onClick={this.config_network}><i className='fa fa-unlink'
                                                                style={gmair_icon_active}></i></span>}
                 </div>

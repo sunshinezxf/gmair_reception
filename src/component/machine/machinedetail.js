@@ -8,9 +8,9 @@ import {util} from "../service/util";
 import {machine_service} from "../service/mahcine.service";
 import {locationservice} from "../service/location.service";
 
-import {Picker, List} from 'antd-mobile'
-
 import 'antd/dist/antd.css';
+import Location from "../citypicker/Location";
+import {airquality_service} from "../service/airquality.service";
 
 const gmair_machine_index = {
     width: `100%`,
@@ -53,8 +53,7 @@ const gmair_machine_index_desc_item = {
 const gmair_icon_active = {
     color: `#00A2E9`,
     width: `2rem`,
-    textAlign: `center`,
-    display: `inline-block`
+    textAlign: `center`
 }
 
 const indoor_index = {
@@ -88,6 +87,31 @@ class MachineDetail extends React.Component {
             light: 0,
             lock: 0,
             co2: 0
+        }
+    }
+
+    init_config = () => {
+        let url = window.location.href;
+        if (util.is_weixin()) {
+            wechatservice.configuration(url).then(response => {
+                if (response.responseCode === 'RESPONSE_OK') {
+                    let result = response.data;
+                    window.wx.config({
+                        beta: true,
+                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: result.appId, // 必填，公众号的唯一标识
+                        timestamp: result.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: result.nonceStr, // 必填，生成签名的随机串
+                        signature: result.signature,// 必填，签名
+                        jsApiList: ['hideAllNonBaseMenuItem', 'scanQRCode'] // 必填，需要使用的JS接口列表
+                    });
+                    window.wx.ready(() => {
+                        window.wx.hideAllNonBaseMenuItem();
+                    });
+                }
+            });
+        } else {
+            // alert("seems that you are not in wechat")
         }
     }
 
@@ -213,7 +237,8 @@ class MachineDetail extends React.Component {
                     <div style={gmair_machine_pm2_5}
                          className={pm2_5_color}>PM2.5 {util.tell_pm2_5_desc(this.state.pm2_5)}</div>
                     <div style={indoor_index}>
-                        <div style={gmair_machine_pm2_5_value} className={pm2_5_color}>{util.format_pm2_5(this.state.pm2_5)}</div>
+                        <div style={gmair_machine_pm2_5_value}
+                             className={pm2_5_color}>{util.format_pm2_5(this.state.pm2_5)}</div>
                         <div style={gmair_machine_index_desc}>
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}>
@@ -294,65 +319,64 @@ const location_area = {
 class Outdoor extends React.Component {
     constructor(props) {
         super(props);
-        this.config_outdoor = this.config_outdoor.bind(this);
         this.state = {
             province: '',
             city: '',
-            province_list: [],
-            city_list: []
+            city_id: '',
+            outdoor_aqi: 0,
+            outdoor_level: '',
+            outdoor_pm2_5: 0
         };
+        this.obtain_aqi = this.obtain_aqi.bind(this);
     }
 
-    componentDidMount() {
-        locationservice.list_province().then(response => {
+    obtain_aqi = () => {
+        airquality_service.obtain_latest_aqi(this.state.city_id).then(response => {
+            console.log(response)
             if (response.responseCode === 'RESPONSE_OK') {
-                let list = response.data;
-                let target = [];
-                for (let i = 0; i < list.length; i++) {
-                    target.push({value: list[i].provinceId, label: list[i].provinceName, isLeaf: false});
-                }
-                this.setState({province_list: target})
+
             }
         })
     }
 
-    config_outdoor = (e) => {
-        let city_id = e[1];
 
+    componentDidMount() {
+        machine_service.obtain_current_city(this.props.qrcode).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                this.setState({city_id: response.data[0].cityId});
+                this.obtain_aqi();
+            }
+        })
     }
 
     render() {
         return (
             <div style={outdoor_area}>
                 <div style={outdoor_title}>
-                    <Picker extra={this.state.province + this.state.city} title="地址选择" onOk={e => {
-                        this.config_outdoor(e)
-                    }}>
-                        <List.Item arrow="horizontal">户外空气指数</List.Item>
-                    </Picker>
+                    <Location qrcdoe={this.props.qrcode}/>
                 </div>
                 {
-                    this.state.province !== '' && this.state.city !== '' ?
+                    this.state.cityId !== '' ?
                         <div>
                             <hr/>
                             <div style={outdoor_area_content}>
                                 <div style={outdoor_pm2_5}>
                         <span style={gmair_icon_active}>
-                            <i className='glyphicon glyphicon-leaf'></i>
+                            AQI
                         </span>
-                                    <span>&nbsp;47ug/m³</span>
+                                    <span>&nbsp;{this.state.outdoor_aqi}</span>
                                 </div>
                                 <div style={outdoor_temp}>
                         <span style={gmair_icon_active}>
-                            <i className='fa fa-thermometer'></i>
+                            类别
                         </span>
-                                    <span>&nbsp;26°C</span>
+                                    <span>&nbsp;{this.state.outdoor_level}</span>
                                 </div>
                                 <div style={outdoor_humid}>
                         <span style={gmair_icon_active}>
-                            <i className='glyphicon glyphicon-tint'></i>
+                            PM2.5
                         </span>
-                                    <span>&nbsp;60%</span>
+                                    <span>&nbsp;{this.state.outdoor_pm2_5}</span>
                                 </div>
                             </div>
                             <hr/>
