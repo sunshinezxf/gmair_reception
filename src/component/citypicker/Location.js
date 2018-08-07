@@ -49,7 +49,9 @@ export class Location extends React.Component {
     cityChange() {
         let cityId = document.getElementById('city').value;
         airquality_service.config_default_outdoor(this.props.qrcode, cityId).then(response => {
-
+            if (response.responseCode === 'RESPONSE_OK') {
+                this.props.refresh_city(cityId);
+            }
         })
     }
 
@@ -58,8 +60,9 @@ export class Location extends React.Component {
         return (
             <div style={outdoor_area}>
                 <FormGroup style={{marginBottom: `0`}}>
-                    <FormControl componentClass='select' id='province' onChange={this.provinceChange} style={location_item}>
-                        <option data-code data-text='—— 省 ——' value=''>—— 省 ——</option>
+                    <FormControl componentClass='select' id='province' onChange={this.provinceChange}
+                                 style={location_item}>
+                        <option data-code data-text='—— 省 ——' value=''>请选择省(直辖市)</option>
                         {
                             this.state.province.map(e => {
                                 return <option key={e.provinceId} value={e.provinceId}>{e.provinceName}</option>
@@ -69,7 +72,7 @@ export class Location extends React.Component {
                 </FormGroup>
                 <FormGroup style={{marginBottom: `0`}}>
                     <FormControl componentClass='select' id='city' onChange={this.cityChange} style={location_item}>
-                        <option data-code data-text='—— 市 ——' value=''>—— 市 ——</option>
+                        <option data-code data-text='—— 市 ——' value=''>请选择市(区)</option>
                         {
                             this.state.city.map(e => {
                                 return <option key={e.cityId} value={e.cityId}>{e.cityName}</option>

@@ -328,17 +328,23 @@ class Outdoor extends React.Component {
             outdoor_pm2_5: 0
         };
         this.obtain_aqi = this.obtain_aqi.bind(this);
+        this.refresh_city = this.refresh_city.bind(this);
+    }
+
+    refresh_city = (city_id) => {
+        this.setState({city_id: city_id});
+        this.obtain_aqi();
     }
 
     obtain_aqi = () => {
         airquality_service.obtain_latest_aqi(this.state.city_id).then(response => {
             console.log(response)
             if (response.responseCode === 'RESPONSE_OK') {
-
+                let air = response.data[0];
+                this.setState({outdoor_aqi: air.aqi, outdoor_level: air.aqiLevel, outdoor_pm2_5: air.pm2_5})
             }
         })
     }
-
 
     componentDidMount() {
         machine_service.obtain_current_city(this.props.qrcode).then(response => {
@@ -353,7 +359,7 @@ class Outdoor extends React.Component {
         return (
             <div style={outdoor_area}>
                 <div style={outdoor_title}>
-                    <Location qrcdoe={this.props.qrcode}/>
+                    <Location qrcode={this.props.qrcode} refresh_city={this.refresh_city}/>
                 </div>
                 {
                     this.state.cityId !== '' ?
