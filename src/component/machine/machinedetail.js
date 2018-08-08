@@ -1,5 +1,7 @@
 import React from 'react'
 
+import {Label} from 'react-bootstrap'
+
 import Operation from './machineoperation'
 import PM2_5Charts from "./pm2_5charts";
 
@@ -310,10 +312,9 @@ const outdoor_humid = {
     textAlign: `right`
 }
 
-const location_area = {
-    width: `30%`,
-    height: `2rem`,
-    color: `black`
+const address = {
+    fontSize: `1.6rem`,
+    height: `100%`
 }
 
 class Outdoor extends React.Component {
@@ -322,38 +323,71 @@ class Outdoor extends React.Component {
         this.state = {
             province: '',
             city: '',
+            province_id: '',
             city_id: '',
+            configure_outdoor: false,
             outdoor_aqi: 0,
             outdoor_level: '',
             outdoor_pm2_5: 0
         };
         this.obtain_aqi = this.obtain_aqi.bind(this);
         this.refresh_city = this.refresh_city.bind(this);
+        this.trigger_config_outdoor = this.trigger_config_outdoor.bind(this);
     }
 
     refresh_city = (city_id) => {
         this.setState({city_id: city_id});
+        locationservice.city_profile(city_id).then(response => {
+            this.setState({city: response.data[0].cityName, province_id: response.data[0].provinceId})
+        })
+        this.setState({configure_outdoor: false});
         this.obtain_aqi();
     }
 
     obtain_aqi = () => {
         airquality_service.obtain_latest_aqi(this.state.city_id).then(response => {
-            console.log(response)
             if (response.responseCode === 'RESPONSE_OK') {
                 let air = response.data[0];
                 this.setState({outdoor_aqi: air.aqi, outdoor_level: air.aqiLevel, outdoor_pm2_5: air.pm2_5})
             }
             if (response.responseCode == 'RESPONSE_NULL') {
-                
+                locationservice.city_profile(this.state.city_id).then(response => {
+                    if(response.responseCode === 'RESPONSE_OK') {
+                        this.setState({city: response.data[0].cityName, province_id: response.data[0].provinceId})
+                        airquality_service.obtain_latest_aqi(response.data[0].provinceId).then(response => {
+                            if (response.responseCode === 'RESPONSE_OK') {
+                                let air = response.data[0];
+                                this.setState({outdoor_aqi: air.aqi, outdoor_level: air.aqiLevel, outdoor_pm2_5: air.pm2_5})
+                            }
+                        })
+                    }
+                })
             }
         })
+    }
+
+    trigger_config_outdoor = () => {
+        this.setState({configure_outdoor: true})
     }
 
     componentDidMount() {
         machine_service.obtain_current_city(this.props.qrcode).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({city_id: response.data[0].cityId});
-                this.obtain_aqi();
+                locationservice.city_profile(response.data[0].cityId).then(response => {
+                    this.setState({city: response.data[0].cityName, province_id: response.data[0].provinceId})
+                })
+                this.obtain_aqi()
+            }
+            if (response.responseCode === 'RESPONSE_NULL') {
+                locationservice.tell_location().then(response => {
+                    this.setState({
+                        province: response.data.province,
+                        city: response.data.city,
+                        city_id: response.data.code
+                    });
+                    this.obtain_aqi()
+                })
             }
         })
     }
@@ -362,7 +396,15 @@ class Outdoor extends React.Component {
         return (
             <div style={outdoor_area}>
                 <div style={outdoor_title}>
-                    <Location qrcode={this.props.qrcode} refresh_city={this.refresh_city}/>
+                    {
+                        this.state.configure_outdoor ?
+                            <Location qrcode={this.props.qrcode} refresh_city={this.refresh_city}/>
+                            :
+                            <div style={address} onClick={this.trigger_config_outdoor}>
+                                <Label bsStyle="success">{this.state.city}</Label>
+                            </div>
+                    }
+
                 </div>
                 {
                     this.state.cityId !== '' ?
