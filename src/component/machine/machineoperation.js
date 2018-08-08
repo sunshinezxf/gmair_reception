@@ -152,7 +152,7 @@ class Operation extends React.Component {
                                min_light={this.state.min_light} max_light={this.state.max_light}
                                operate_local_light={this.props.operate_local_light}/>
                         <Heat current_heat={this.props.heat} heat_operate={this.heat_operate}
-                              operate_local_heat={this.props.operate_local_heat}/>
+                              operate_local_heat={this.props.operate_local_heat} heat={this.props.heat}/>
                         <Lock lock={this.props.lock} lock_operate={this.lock_operate}
                               operate_local_lock={this.props.operate_local_lock}/>
                     </Row>
@@ -389,10 +389,10 @@ class Workmode extends React.Component {
 
     render() {
         let mode_name = 'fa fa-hand-paper-o';
-        if (this.props.current_mode == 'sleep') {
+        if (this.props.current_mode === 'sleep') {
             mode_name = 'fa fa-moon-o';
         }
-        if (this.props.current_mode == 'auto') {
+        if (this.props.current_mode === 'auto') {
             mode_name = 'fa fa-refresh';
         }
         return (
@@ -409,14 +409,14 @@ class Workmode extends React.Component {
                                 this.props.current_mode === 'manual' ? '' : this.operate_mode('manual')
                             }
                         }}>手动</Button>
-                        <Button type={this.props.current_mode == 'sleep' ? 'primary' : 'ghost'} inline size="small"
+                        <Button type={this.props.current_mode === 'sleep' ? 'primary' : 'ghost'} inline size="small"
                                 className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             {
                                 this.props.current_mode === 'sleep' ? '' : this.operate_mode('sleep')
                             }
                         }}>睡眠</Button>
-                        <Button type="ghost" inline size="small" className='am-button-borderfix'
+                        <Button type={this.props.current_mode === 'auto' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             this.operate_mode('auto')
                         }}>自动</Button>
@@ -446,6 +446,7 @@ class Heat extends React.Component {
     }
 
     render() {
+        console.log(this.props.heat)
         let heat_name = 'fa fa-thermometer-0';
         if (this.props.heat === 1) {
             heat_name = 'fa fa-thermometer-2';
@@ -455,7 +456,7 @@ class Heat extends React.Component {
         }
         return (
             <Col xs={4} md={4} onClick={this.heat_panel}>
-                <i className={heat_name} style={operation_icon_active}></i>
+                <i className={heat_name} style={this.props.heat === 0 ? operation_icon : operation_icon_active}></i>
                 <div>辅热</div>
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">
                     <div style={area_desc}>辅热调节</div>
