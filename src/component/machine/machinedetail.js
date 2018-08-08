@@ -343,6 +343,9 @@ class Outdoor extends React.Component {
                 let air = response.data[0];
                 this.setState({outdoor_aqi: air.aqi, outdoor_level: air.aqiLevel, outdoor_pm2_5: air.pm2_5})
             }
+            if (response.responseCode == 'RESPONSE_NULL') {
+                
+            }
         })
     }
 
