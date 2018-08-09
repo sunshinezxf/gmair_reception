@@ -70,6 +70,7 @@ class MachineDetail extends React.Component {
     constructor(props) {
         super(props);
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
+        this.operate_local_power = this.operate_local_power.bind(this);
         this.operate_local_volume = this.operate_local_volume.bind(this);
         this.operate_local_mode = this.operate_local_mode.bind(this);
         this.operate_local_light = this.operate_local_light.bind(this);
@@ -115,6 +116,10 @@ class MachineDetail extends React.Component {
         } else {
             // alert("seems that you are not in wechat")
         }
+    }
+
+    operate_local_power = (power) => {
+        this.setState({power_status: power});
     }
 
     operate_local_volume = (volume) => {
@@ -167,7 +172,6 @@ class MachineDetail extends React.Component {
             //machine online
             if (response.responseCode === 'RESPONSE_OK') {
                 let information = response.data;
-                console.log(JSON.stringify(information))
                 let pm2_5 = information.pm2_5;
                 let volume = information.volume;
                 let temp = information.temp;
@@ -263,7 +267,8 @@ class MachineDetail extends React.Component {
                         </div>
                     </div>
                     <Outdoor qrcode={this.props.match.params.qrcode} city={this.refresh_city}/>
-                    <Operation qrcode={this.props.match.params.qrcode} power_status={this.state.power_status}
+                    <Operation qrcode={this.props.match.params.qrcode}
+                               power_status={this.state.power_status} operate_local_power={this.operate_local_power}
                                volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}
                                work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
                                light={this.state.light} operate_local_light={this.operate_local_light}

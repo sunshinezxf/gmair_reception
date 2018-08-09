@@ -84,43 +84,35 @@ class Operation extends React.Component {
     power_operate = () => {
         if (this.props.power_status == 'on') {
             machine_service.operate(this.props.qrcode, 'power', 'off');
+            this.props.operate_local_power('off');
         } else {
             machine_service.operate(this.props.qrcode, 'power', 'on');
+            this.props.operate_local_power('on');
         }
     }
 
     lock_operate = () => {
         if (this.props.lock === 0) {
-            machine_service.operate(this.props.qrcode, 'lock', 'on').then(response => {
-                console.log(JSON.stringify(response))
-            })
+            machine_service.operate(this.props.qrcode, 'lock', 'on');
         } else {
-            machine_service.operate(this.props.qrcode, 'lock', 'off')
+            machine_service.operate(this.props.qrcode, 'lock', 'off');
         }
     }
 
     light_operate = (light) => {
-        machine_service.light(this.props.qrcode, light).then(response => {
-            console.log(response);
-        });
+        machine_service.light(this.props.qrcode, light);
     }
 
     fan_operate = (volume) => {
-        machine_service.volume(this.props.qrcode, volume).then(response => {
-
-        })
+        machine_service.volume(this.props.qrcode, volume);
     }
 
     mode_operate = (mode_name) => {
-        machine_service.operate(this.props.qrcode, 'mode', mode_name).then(response => {
-            console.log(JSON.stringify(response))
-        });
+        machine_service.operate(this.props.qrcode, 'mode', mode_name);
     }
 
     heat_operate = (heat) => {
-        machine_service.operate(this.props.qrcode, 'heat', heat).then(response => {
-            console.log(JSON.stringify(response))
-        })
+        machine_service.operate(this.props.qrcode, 'heat', heat);
     }
 
     componentDidMount() {
@@ -138,7 +130,8 @@ class Operation extends React.Component {
             <div style={operation_area}>
                 <div style={operation_gap_top}></div>
                 <Row>
-                    <Power power_status={this.props.power_status} power_operate={this.power_operate}/>
+                    <Power power_status={this.props.power_status} power_operate={this.power_operate}
+                           operate_local_power={this.props.operate_local_power}/>
                     <Fan power_status={this.props.power_status} min_volume={this.state.min_volume}
                          max_volume={this.state.max_volume} current_volume={this.props.volume_value}
                          fan_operate={this.fan_operate} operate_local_volume={this.props.operate_local_volume}/>
@@ -189,7 +182,7 @@ class Power extends React.Component {
         return (
             <Col xs={4} md={4} onClick={this.state.power_loading ? () => {
             } : this.power}>
-                <i className={this.state.power_loading ? 'fa fa-spinner fa-spin' : 'fa fa-power-off'}
+                <i className='fa fa-power-off'
                    style={this.props.power_status == 'off' ? operation_icon : operation_icon_active}></i>
                 <div>电源</div>
             </Col>
@@ -417,7 +410,8 @@ class Workmode extends React.Component {
                                 this.props.current_mode === 'sleep' ? '' : this.operate_mode('sleep')
                             }
                         }}>睡眠</Button>
-                        <Button type={this.props.current_mode === 'auto' ? 'primary' : 'ghost'} inline size="small" className='am-button-borderfix'
+                        <Button type={this.props.current_mode === 'auto' ? 'primary' : 'ghost'} inline size="small"
+                                className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             this.operate_mode('auto')
                         }}>自动</Button>
@@ -444,13 +438,11 @@ class Heat extends React.Component {
 
     operate_heat = (heat) => {
         this.props.heat_operate(heat)
-        console.log("heat: " + heat + util.tell_heat_value(heat))
         this.props.operate_local_heat(util.tell_heat_value(heat));
 
     }
 
     render() {
-        console.log(this.props.heat)
         let heat_name = 'fa fa-thermometer-0';
         if (this.props.heat === 1) {
             heat_name = 'fa fa-thermometer-2';
