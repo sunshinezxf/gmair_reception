@@ -131,9 +131,9 @@ class DeviceInit extends React.Component {
         }
         let qrcode = this.props.match.params.qrcode;
         this.setState({qrcode: qrcode})
-        util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
-            var vConsole = new window.VConsole();
-        })
+        // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
+        //     var vConsole = new window.VConsole();
+        // })
         machine_service.check_exist(qrcode).then(response => {
             if (response.responseCode === 'RESPONSE_ERROR') {
                 this.props.history.push('/login');

@@ -146,7 +146,6 @@ class RegisterPage extends React.Component{
     validate_mobile = () => {
         var pattern = /^((\+?86)|(\+86\+86))?1\d{10}$/;
         if (pattern.test(this.state.mobile) === true) {
-            console.log("enter mobile")
             //check whether the phone number is occupied by existing user
             consumerservice.exist(this.state.mobile).then(response => {
                 if (response.responseCode == 'RESPONSE_NULL') {
@@ -218,9 +217,7 @@ class RegisterPage extends React.Component{
 
     register = () => {
         this.setState({ready2send: false, ready2reg: false});
-        consumerservice.register(this.state.openid, this.state.username, this.state.mobile, this.state.password, this.state.address_province, this.state.address_city, this.state.address).then(response => {
-            console.log(response);
-        });
+        consumerservice.register(this.state.openid, this.state.username, this.state.mobile, this.state.password, this.state.address_province, this.state.address_city, this.state.address);
     }
 
     render() {

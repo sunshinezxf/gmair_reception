@@ -102,9 +102,7 @@ class LoginPage extends React.Component {
                             code = unescape(r[2]);
                         }
                         if (wechatservice.openid() !== null) {
-                            console.log("Current openid is: " + wechatservice.openid());
                             consumerservice.loginbyopenid(wechatservice.openid()).then(response => {
-                                console.log("Login by openid: " + JSON.stringify(response));
                                 if (response.responseCode === 'RESPONSE_OK') {
                                     this.props.history.push('/machine/list');
                                 }
@@ -114,13 +112,11 @@ class LoginPage extends React.Component {
                             window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + result.appId + "&redirect_uri=" + encodeURI('https://reception.gmair.net/login') + "&response_type=code&scope=snsapi_base&state=gmair#wechat_redirect";
                         }
                         if (code !== '' && wechatservice.openid() == null) {
-                            console.log("Current code is: " + code);
                             wechatservice.openidbycode(code).then(response => {
                                 if (response.responseCode === 'RESPONSE_OK') {
                                     let openid = response.data;
                                     localStorage.setItem('openid', openid);
                                     consumerservice.loginbyopenid(openid).then(response => {
-                                        console.log("Login by openid: " + JSON.stringify(response));
                                         if (response.responseCode === 'RESPONSE_OK') {
                                             this.props.history.push('/machine/list');
                                         }
@@ -142,9 +138,9 @@ class LoginPage extends React.Component {
                 this.init_config();
             })
         }
-        util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
-            var vConsole = new window.VConsole();
-        })
+        // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
+        //     var vConsole = new window.VConsole();
+        // })
     }
 
     componentWillUnmount() {
@@ -246,7 +242,6 @@ class LoginPage extends React.Component {
             if (response.responseCode == 'RESPONSE_OK') {
                 this.props.history.push('/machine/list')
             }
-            console.log(response);
         });
     }
 }

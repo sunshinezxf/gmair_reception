@@ -75,9 +75,9 @@ class MachineList extends React.Component {
             this.props.history.push('/login');
             return;
         }
-        util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
-            var vConsole = new window.VConsole();
-        })
+        // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
+        //     var vConsole = new window.VConsole();
+        // })
         if (util.is_weixin()) {
             util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
                 this.init_config();
@@ -110,7 +110,6 @@ class MachineList extends React.Component {
     }
 
     scan_qrcode = () => {
-        console.log("Scan QR Code")
         if (util.is_weixin()) {
             window.wx.scanQRCode({
                 needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
@@ -119,7 +118,6 @@ class MachineList extends React.Component {
                     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
                     machine_service.obtain_code_value_via_url(result).then(response => {
                         if(response.responseCode === 'RESPONSE_OK') {
-                            console.log(response.data[0].codeValue)
                             window.location.href = '/init/' + response.data[0].codeValue;
                         }
                     })

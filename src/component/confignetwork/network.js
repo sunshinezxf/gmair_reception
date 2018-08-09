@@ -69,11 +69,9 @@ class NetworkConfig extends React.Component {
     }
 
     begin_config = () => {
-        console.log("begin config")
         let that = this;
         if (util.is_weixin()) {
             window.wx.invoke('configWXDeviceWiFi', {}, function (response) {
-                console.log(JSON.stringify(response))
                 if (response.err_msg === 'configWXDeviceWiFi:ok') {
                     that.setState({show_config_button: false, config_result: 'RESPONSE_OK'});
                     if (localStorage.getItem('access_token') !== undefined && localStorage.getItem('access_token') !== null) {
@@ -121,9 +119,9 @@ class NetworkConfig extends React.Component {
     }
 
     componentDidMount() {
-        util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
-            var vConsole = new window.VConsole();
-        })
+        // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
+        //     var vConsole = new window.VConsole();
+        // })
         util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
             this.init_config();
         })

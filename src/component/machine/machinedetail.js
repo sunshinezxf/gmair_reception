@@ -207,9 +207,9 @@ class MachineDetail extends React.Component {
     }
 
     componentDidMount() {
-        util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
-            var vConsole = new window.VConsole();
-        })
+        // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
+        //     var vConsole = new window.VConsole();
+        // })
         util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
             this.init_config();
         })

@@ -39,7 +39,7 @@ function login(username, code) {
             localStorage.setItem('access_token', access_token);
             return {responseCode: 'RESPONSE_OK', data: access_token};
         } else {
-            console.log('authentication failed for user: ' + username)
+
         }
 
     }).catch(() => {
@@ -62,7 +62,6 @@ function loginbyopenid(openid) {
             localStorage.setItem('access_token', access_token);
             return {responseCode: 'RESPONSE_OK', data: access_token};
         } else {
-            console.log('authentication failed for user: ' + openid)
         }
 
     }).catch(() => {
