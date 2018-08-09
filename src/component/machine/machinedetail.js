@@ -262,7 +262,7 @@ class MachineDetail extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <Outdoor qrcode={this.props.match.params.qrcode}/>
+                    <Outdoor qrcode={this.props.match.params.qrcode} city={this.refresh_city}/>
                     <Operation qrcode={this.props.match.params.qrcode} power_status={this.state.power_status}
                                volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}
                                work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
@@ -271,9 +271,8 @@ class MachineDetail extends React.Component {
                                lock={this.state.lock} operate_local_lock={this.operate_local_lock}
                     />
                     <div style={charts_area}>
-                        <PM2_5Charts/>
+                        <PM2_5Charts qrcode={this.props.match.params.qrcode}/>
                     </div>
-
                 </div>
             </div>
         )
@@ -352,12 +351,16 @@ class Outdoor extends React.Component {
             }
             if (response.responseCode == 'RESPONSE_NULL') {
                 locationservice.city_profile(this.state.city_id).then(response => {
-                    if(response.responseCode === 'RESPONSE_OK') {
+                    if (response.responseCode === 'RESPONSE_OK') {
                         this.setState({city: response.data[0].cityName, province_id: response.data[0].provinceId})
                         airquality_service.obtain_latest_aqi(response.data[0].provinceId).then(response => {
                             if (response.responseCode === 'RESPONSE_OK') {
                                 let air = response.data[0];
-                                this.setState({outdoor_aqi: air.aqi, outdoor_level: air.aqiLevel, outdoor_pm2_5: air.pm2_5})
+                                this.setState({
+                                    outdoor_aqi: air.aqi,
+                                    outdoor_level: air.aqiLevel,
+                                    outdoor_pm2_5: air.pm2_5
+                                })
                             }
                         })
                     }

@@ -4,6 +4,7 @@ import {Col, Row} from 'react-bootstrap'
 
 import {Collapse} from 'react-collapse'
 import {machine_service} from "../service/mahcine.service";
+import {util} from "../service/util";
 
 import {Button, Modal, Slider, WhiteSpace} from 'antd-mobile';
 
@@ -443,6 +444,9 @@ class Heat extends React.Component {
 
     operate_heat = (heat) => {
         this.props.heat_operate(heat)
+        console.log("heat: " + heat + util.tell_heat_value(heat))
+        this.props.operate_local_heat(util.tell_heat_value(heat));
+
     }
 
     render() {

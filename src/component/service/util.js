@@ -58,6 +58,15 @@ function tell_mode(value) {
     return mode_name[value];
 }
 
+function tell_heat_value(heat) {
+    if(heat === 'off')
+        return 0;
+    if(heat === 'cosy')
+        return 1;
+    if(heat === 'warm')
+        return 2;
+}
+
 export const util = {
-    is_weixin, load_script, format_pm2_5, tell_mode, tell_pm2_5_desc
+    is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc
 }
