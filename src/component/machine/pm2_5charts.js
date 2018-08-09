@@ -63,22 +63,12 @@ class PM2_5Charts extends React.Component {
                 {
                     name: '室内数值',
                     type: 'line',
-                    data: [0, 0, 1, 0, 0, 0, 0],
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
+                    data: [0, 0, 1, 0, 0, 0, 0]
                 },
                 {
                     name: '户外数值',
                     type: 'line',
-                    data: [45, 50, 53, 55, 40, 60, 50],
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
+                    data: [45, 50, 53, 55, 40, 60, 50]
                 }
             ]
         };

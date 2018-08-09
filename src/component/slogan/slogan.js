@@ -22,7 +22,7 @@ class Slogan extends React.Component {
     }
 
     render() {
-           return <ReactRevealText className='gmair_logo_slogan' show={this.state.showtext}>唤醒新鲜空气</ReactRevealText>
+           return <ReactRevealText className='gmair_logo_slogan' show={this.state.showtext}>简单实现好空气</ReactRevealText>
     }
 }
 

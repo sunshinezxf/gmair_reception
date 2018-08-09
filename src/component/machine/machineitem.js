@@ -170,10 +170,10 @@ class MachineItem extends React.Component {
         let url = '/machine/detail/' + this.props.qrcode;
 
         return (
-            <div style={gmair_machine_item}>
+            <div style={gmair_machine_item} onClick={this.state.online ? ()=> {} : this.config_network}>
                 <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>
                     {this.state.online === true ? util.format_pm2_5(this.state.pm2_5) :
-                        <span onClick={this.config_network}><i className='fa fa-unlink'
+                        <span><i className='fa fa-unlink'
                                                                style={gmair_icon_active}></i></span>}
                 </div>
                 <div style={gmair_machine_operation}>
