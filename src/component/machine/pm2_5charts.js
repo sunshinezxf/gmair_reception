@@ -21,7 +21,7 @@ class PM2_5Charts extends React.Component {
             let city = response.data[0];
             airquality_service.obtain_city_pm2_5_24hrs(city.cityId).then(response => {
                 let data = response.data;
-                for (let i = 0; i < data.length; i ++) {
+                for (let i = 0; i < data.length; i++) {
 
                 }
             })
@@ -31,44 +31,71 @@ class PM2_5Charts extends React.Component {
     render() {
         let option = {
             title: {
-                text: '',
-                subtext: ''
-            },
-            tooltip: {
-                trigger: 'axis'
+                text: '近日空气质量对比',
+                show: true,
+                textStyle: {
+                    color: '#000',
+                    fontWeight: 'normal',
+                    fontSize: 12,
+                    align: 'left'
+                }
             },
             legend: {
-                data: ['室内数值', '户外数值']
+                left: 'right',
+                data: ['室内','室外'],
+                align: 'left'
+            },
+            grid: {
+                top: 38
+            },
+            xAxis: {
+                fontStyle: 'oblique',
+                type: 'category',
+                boundaryGap: false,
+                data: this.state.date
+            },
+            tooltip: {
+                trigger: 'item'
             },
             toolbox: {
                 show: false
             },
             calculable: true,
-            xAxis: [
-                {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: this.state.date
+            yAxis: {
+                name: '空气污染指数',
+                nameLocation: 'center',
+                nameRotate: 90,
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}',
+                    inside: false,
+                    margin: 1,
                 }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    axisLabel: {
-                        formatter: '{value}'
-                    }
-                }
-            ],
+            },
             series: [
                 {
-                    name: '室内数值',
+                    name: '室内',
                     type: 'line',
-                    data: [0, 0, 1, 0, 0, 0, 0]
+                    data: [0, 0, 1, 0, 0, 0, 0],
+                    symbol: 'emptyCircle',
+                    symbolSize: 8,
+                    smooth: false,
+                    lineStyle: {
+                        color: '#F282AA',
+                        width: 3
+                    }
                 },
                 {
-                    name: '户外数值',
+                    name: '室外',
                     type: 'line',
-                    data: [45, 50, 53, 55, 40, 60, 50]
+                    data: [45, 50, 53, 55, 40, 60, 50],
+                    symbol: 'emptyDiamond',
+                    symbolSize: 8,
+                    smooth: false,
+                    lineStyle: {
+                        color: '#11C1F3',
+                        width: 3
+                    }
                 }
             ]
         };
