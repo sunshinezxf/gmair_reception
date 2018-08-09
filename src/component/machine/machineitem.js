@@ -250,15 +250,11 @@ class MachinePower extends React.Component {
 
     render() {
         return (
-            <div onClick={this.state.show_progress ? () => {} : this.power}>
+            <div onClick={this.state.show_progress ? () => {
+            } : this.power}>
                 <span style={gmair_machine_power}>
-                    {
-                        this.state.show_progress ?
-                            <i className='fa fa-spinner fa-spin' style={gmair_icon_active}></i>
-                            :
-                            <i className='glyphicon glyphicon-off'
-                               style={this.props.power === 'on' ? gmair_icon_active : gmair_icon_inactive}></i>
-                    }
+                    <i className='glyphicon glyphicon-off'
+                       style={this.props.power === 'on' ? gmair_icon_active : gmair_icon_inactive}></i>
                 </span>
             </div>
         )
