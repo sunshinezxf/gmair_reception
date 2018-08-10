@@ -5,26 +5,41 @@ import macarons from '../../../node_modules/echarts/theme/macarons'
 import ReactEcharts from 'echarts-for-react';
 import {airquality_service} from "../service/airquality.service";
 import {machine_service} from "../service/mahcine.service";
+import {util} from "../service/util";
 
 class PM2_5Charts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            date: [],
+            outdoor: [],
+            indoor: []
         }
     }
 
     componentDidMount() {
-        let date = new Date();
-
         machine_service.obtain_current_city(this.props.qrcode).then(response => {
             let city = response.data[0];
-            airquality_service.obtain_city_pm2_5_24hrs(city.cityId).then(response => {
+            airquality_service.obtain_city_pm2_5_weekly(city.cityId).then(response => {
                 let data = response.data;
+                let axis = [];
+                let outdoor = [];
                 for (let i = 0; i < data.length; i++) {
-
+                    axis.push(util.format(data[i].createTime));
+                    outdoor.push(data[i].pm25);
                 }
+                this.setState({date: axis, outdoor: outdoor});
             })
+        });
+        machine_service.obtain_pm2_5_weekly(this.props.qrcode).then(response => {
+            if(response.responseCode === 'RESPONSE_OK') {
+                let data = response.data;
+                let indoor = [];
+                for(let i = 0; i < data.length; i ++) {
+                    indoor.push(data[i].pm2_5);
+                }
+                this.setState({indoor: indoor})
+            }
         })
     }
 
@@ -76,7 +91,7 @@ class PM2_5Charts extends React.Component {
                 {
                     name: '室内',
                     type: 'line',
-                    data: [0, 0, 1, 0, 0, 0, 0],
+                    data: this.state.indoor,
                     symbol: 'emptyCircle',
                     symbolSize: 8,
                     smooth: false,
@@ -88,7 +103,7 @@ class PM2_5Charts extends React.Component {
                 {
                     name: '室外',
                     type: 'line',
-                    data: [45, 50, 53, 55, 40, 60, 50],
+                    data: this.state.outdoor,
                     symbol: 'emptyDiamond',
                     symbolSize: 8,
                     smooth: false,

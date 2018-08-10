@@ -67,6 +67,13 @@ function tell_heat_value(heat) {
         return 2;
 }
 
+function format(timestamp) {
+    let date = new Date(timestamp - 1000*60*60*24);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    let M = date.getMonth() + 1;
+    let D = date.getDate();
+    return M + "月" + D + "日";
+}
+
 export const util = {
-    is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc
+    is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc, format
 }
