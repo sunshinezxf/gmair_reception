@@ -140,7 +140,7 @@ class DeviceShare extends React.Component {
                     <FormGroup>
                         <ControlLabel>
                             <div style={gmair_device_item}><span><i
-                                className='fa fa-qrcode'></i></span> &nbsp;分享二维码
+                                className='fa fa-qrcode'></i></span> &nbsp;分享控制权
                             </div>
                         </ControlLabel>
                         <div style={code_area}>
@@ -158,7 +158,7 @@ class DeviceShare extends React.Component {
                                 ''
                             }
                         </div>
-                        <div style={description}>您的家人可以通过此二维码获取设备控制权</div>
+                        <div style={description}>扫描此二维码获取设备控制权</div>
                     </FormGroup>
                 </div>
                 <div style={gmair_confirm_btn}>
