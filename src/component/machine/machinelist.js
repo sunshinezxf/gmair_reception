@@ -137,6 +137,7 @@ class MachineList extends React.Component {
         let machine_list = this.state.machine_list;
         let that = this;
         let element = machine_list.map(function (item) {
+            console.log(item);
             return (
                 <div key={item.codeValue}>
                     <SwipeAction autoClose right={[
@@ -148,15 +149,17 @@ class MachineList extends React.Component {
                             }
                         }
                     ]} left={
-                        [
-                            {
+
+                        item.ownership === 'SHARE' ?
+                            '' :
+                            [{
                                 text: '分享',
                                 style: {backgroundColor: '#108ee9', color: 'white'},
                                 onPress: () => {
                                     that.share(item.codeValue);
                                 },
-                            }
-                        ]
+                            }]
+
                     }>
                         <MachineItem qrcode={item.codeValue} name={item.bindName}/>
                     </SwipeAction>
