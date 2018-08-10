@@ -33,8 +33,12 @@ class Person extends React.Component {
             mobile: '',
             address: '',
             wechat: '',
-            bind: false
+            bind: false,
+            appid: ''
         }
+        this.init_config = this.init_config.bind(this);
+        this.bind_wechat = this.bind_wechat.bind(this);
+        this.unbind_wechat = this.unbind_wechat.bind(this);
     }
 
     init_config = () => {
@@ -52,6 +56,7 @@ class Person extends React.Component {
                         signature: result.signature,// 必填，签名
                         jsApiList: ['hideAllNonBaseMenuItem'] // 必填，需要使用的JS接口列表
                     });
+                    this.setState({appid: result.appId});
                     window.wx.ready(() => {
                         window.wx.hideAllNonBaseMenuItem();
                     });
@@ -74,6 +79,11 @@ class Person extends React.Component {
                     console.log(person)
                     let address = (person.province == null ? '' : person.province) + (person.city == null ? '' : person.city) + (person.district === 'null' ? '' : person.district) + person.address;
                     this.setState({name: person.name, mobile: person.phone, address: address, wechat: person.wechat})
+                    if (new String(this.state.wechat) !== null && this.state.wechat !== '') {
+                        this.setState({bind: false})
+                    } else {
+                        this.setState({bind: true})
+                    }
                 }
                 if (response.responseCode === 'RESPONSE_ERROR') {
                     window.location.href = '/login';
@@ -84,11 +94,15 @@ class Person extends React.Component {
     }
 
     bind_wechat = () => {
-        consumerservice.bind_wechat();
+        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + this.state.appid + "&redirect_uri=" + encodeURI('https://reception.gmair.net/wechat/bind') + "&response_type=code&scope=snsapi_base&state=gmair#wechat_redirect";
     }
 
     unbind_wechat = () => {
-
+        consumerservice.unbind_wechat().then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                window.location.href = '/personal/information'
+            }
+        })
     }
 
     render() {
@@ -113,7 +127,8 @@ class Person extends React.Component {
                 </Card>
                 <div style={personal_info_item}>
                     <ButtonToolbar>
-                        <Button bsStyle={this.state.bind === true ? "success" : "danger"} block>
+                        <Button bsStyle={this.state.bind === true ? "success" : "danger"} block
+                                onClick={this.state.bind === true ? this.bind_wechat : this.unbind_wechat}>
                             {this.state.bind === true ? "绑定微信" : "解绑微信"}
                         </Button>
                     </ButtonToolbar>

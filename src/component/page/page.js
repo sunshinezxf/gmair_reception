@@ -37,7 +37,7 @@ class Page extends React.Component {
                 <Route exact path="/network/config" component={NetworkConfig}/>
                 <Route exact path="/personal/information" component={Person}/>
                 <Route path="/machine/bind/:qrcode" component={DeviceBind}/>
-                <Route path="/wechat/operate" component={WechatBind}/>
+                <Route path="/wechat/bind" component={WechatBind}/>
                 <Route path="/machine/share/:qrcode" component={DeviceShare}/>
             </div>
         );

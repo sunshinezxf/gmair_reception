@@ -132,7 +132,7 @@ function unbind_wechat() {
     let unbind_wechat_url = consumer_url + '/reception/consumer/wechat/unbind';
     let form = new FormData();
     form.append('access_token', access_token);
-    return axios.post(unbind_wechat_url).then(function (response) {
+    return axios.post(unbind_wechat_url, form).then(function (response) {
         return response.data;
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
