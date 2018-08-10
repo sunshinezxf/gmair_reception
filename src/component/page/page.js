@@ -9,6 +9,8 @@ import DeviceInit from '../init/init';
 import MachineList from '../machine/machinelist';
 import MachineDetail from "../machine/machinedetail";
 import Person from '../personal/person'
+import DeviceBind from '../bind/DeviceBind'
+import DeviceShare from '../machine/deviceshare'
 
 const gmair_page = {
     width: `100%`,
@@ -33,6 +35,8 @@ class Page extends React.Component {
                 <Route path='/machine/detail/:qrcode' component={MachineDetail}/>
                 <Route exact path="/network/config" component={NetworkConfig}/>
                 <Route exact path="/personal/information" component={Person}/>
+                <Route path="/machine/bind/:qrcode" component={DeviceBind}/>
+                <Route path="/machine/share/:qrcode" component={DeviceShare}/>
             </div>
         );
     }

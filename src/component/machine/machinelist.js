@@ -9,7 +9,7 @@ import DeviceScan from "./devicescan";
 
 import '../../antd-mobile.css';
 
-import {SwipeAction} from 'antd-mobile';
+import {Modal, SwipeAction} from 'antd-mobile';
 import Navigation from "../navigation/navigation";
 
 const machine_item_gap = {
@@ -20,6 +20,7 @@ class MachineList extends React.Component {
     constructor(props) {
         super(props);
         this.unbind = this.unbind.bind(this);
+        this.share = this.share.bind(this);
         this.refresh_list = this.refresh_list.bind(this);
         this.scan_qrcode = this.scan_qrcode.bind(this);
         this.state = {
@@ -67,6 +68,10 @@ class MachineList extends React.Component {
                 });
             }
         })
+    }
+
+    share = (code_value) => {
+        window.location.href = '/machine/share/' + code_value;
     }
 
     componentDidMount() {
@@ -117,7 +122,7 @@ class MachineList extends React.Component {
                 success: function (res) {
                     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
                     machine_service.obtain_code_value_via_url(result).then(response => {
-                        if(response.responseCode === 'RESPONSE_OK') {
+                        if (response.responseCode === 'RESPONSE_OK') {
                             window.location.href = '/init/' + response.data[0].codeValue;
                         }
                     })
@@ -142,7 +147,17 @@ class MachineList extends React.Component {
                                 that.unbind(item.codeValue);
                             }
                         }
-                    ]}>
+                    ]} left={
+                        [
+                            {
+                                text: '分享',
+                                style: {backgroundColor: '#108ee9', color: 'white'},
+                                onPress: () => {
+                                    that.share(item.codeValue);
+                                },
+                            }
+                        ]
+                    }>
                         <MachineItem qrcode={item.codeValue} name={item.bindName}/>
                     </SwipeAction>
                     <div style={machine_item_gap}></div>
