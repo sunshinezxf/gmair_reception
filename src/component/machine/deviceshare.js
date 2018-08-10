@@ -48,7 +48,7 @@ const gmair_device_name_arc = {
 
 const gmair_device_content = {
     width: `90%`,
-    margin: `10rem 5% 0rem 5%`
+    margin: `6.5rem 5% 0rem 5%`
 }
 
 const code_area = {
