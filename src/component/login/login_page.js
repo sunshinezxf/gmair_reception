@@ -104,7 +104,7 @@ class LoginPage extends React.Component {
                         if (wechatservice.openid() !== null) {
                             consumerservice.loginbyopenid(wechatservice.openid()).then(response => {
                                 if (response.responseCode === 'RESPONSE_OK') {
-                                    this.props.history.push('/machine/list');
+                                    window.location.href = '/machine/list';
                                 }
                             })
                         }
@@ -118,7 +118,7 @@ class LoginPage extends React.Component {
                                     localStorage.setItem('openid', openid);
                                     consumerservice.loginbyopenid(openid).then(response => {
                                         if (response.responseCode === 'RESPONSE_OK') {
-                                            this.props.history.push('/machine/list');
+                                            window.location.href = '/machine/list';
                                         }
                                     })
                                 }
@@ -240,7 +240,7 @@ class LoginPage extends React.Component {
         this.setState({ready2send: false, ready2login: false});
         consumerservice.login(this.state.mobile, this.state.password).then(response => {
             if (response.responseCode == 'RESPONSE_OK') {
-                this.props.history.push('/machine/list')
+                window.location.href = '/machine/list';
             }
         });
     }

@@ -114,6 +114,31 @@ function can_operate(qrcode) {
     })
 }
 
+function bind_wechat(wechat) {
+    let access_token = localStorage.getItem("access_token");
+    let bind_wechat_url = consumer_url + '/reception/consumer/wechat/bind';
+    let form = new FormData();
+    form.append('access_token', access_token);
+    form.append('openid', wechat);
+    return axios.post(bind_wechat_url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+}
+
+function unbind_wechat() {
+    let access_token = localStorage.getItem("access_token");
+    let unbind_wechat_url = consumer_url + '/reception/consumer/wechat/unbind';
+    let form = new FormData();
+    form.append('access_token', access_token);
+    return axios.post(unbind_wechat_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+}
+
 export const consumerservice = {
-    can_operate, request_login_code, request_register_code, login, loginbyopenid, exist, register, profile
+    bind_wechat, can_operate, request_login_code, request_register_code, login, loginbyopenid, exist, register, profile, unbind_wechat
 }

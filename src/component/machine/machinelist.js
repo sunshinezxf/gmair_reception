@@ -77,7 +77,7 @@ class MachineList extends React.Component {
     componentDidMount() {
         let access_token = localStorage.getItem('access_token');
         if (access_token === undefined || access_token === null || access_token === '') {
-            this.props.history.push('/login');
+            window.location.href = '/login';
             return;
         }
         // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
@@ -95,7 +95,7 @@ class MachineList extends React.Component {
             } else if (response.responseCode === 'RESPONSE_NULL') {
 
             } else {
-                this.props.history.push('/login');
+                window.location.href = '/login';
                 return;
             }
         });
@@ -108,7 +108,7 @@ class MachineList extends React.Component {
             } else if (response.responseCode === 'RESPONSE_NULL') {
 
             } else {
-                this.props.history.push('/login');
+                window.location.href = '/login';
                 return;
             }
         });
@@ -137,7 +137,6 @@ class MachineList extends React.Component {
         let machine_list = this.state.machine_list;
         let that = this;
         let element = machine_list.map(function (item) {
-            console.log(item);
             return (
                 <div key={item.codeValue}>
                     <SwipeAction autoClose right={[

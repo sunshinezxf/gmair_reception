@@ -1,11 +1,11 @@
 import React from 'react'
 
-import {Well} from 'react-bootstrap'
-
 import {Card} from 'antd-mobile'
 
 import Navigation from '../navigation/navigation'
 import {consumerservice} from "../service/consumer.service";
+
+import {Button, ButtonToolbar} from 'react-bootstrap'
 
 const person_info_area = {
     width: `100%`,
@@ -18,7 +18,8 @@ const person_card = {
 
 const personal_info_item = {
     height: `3rem`,
-    width: `100%`,
+    width: `85%`,
+    margin: `3rem 7.5%`,
     textAlign: `left`
 }
 
@@ -29,21 +30,33 @@ class Person extends React.Component {
             name: '',
             mobile: '',
             address: '',
-            wechat: ''
+            wechat: '',
+            bind: false
         }
     }
 
     componentDidMount() {
         consumerservice.profile().then(response => {
-                if (response.responseCode == 'RESPONSE_OK') {
+                if (response.responseCode === 'RESPONSE_OK') {
                     let person = response.data;
-                    let address = person.province + (person.city == null ? '' : person.city) + (person.district === 'null' ? '' : person.district) + person.address;
-                    this.setState({name: person.name, mobile: person.phone, address: address})
-                } else {
-
+                    console.log(person)
+                    let address = (person.province == null ? '' : person.province) + (person.city == null ? '' : person.city) + (person.district === 'null' ? '' : person.district) + person.address;
+                    this.setState({name: person.name, mobile: person.phone, address: address, wechat: person.wechat})
+                }
+                if (response.responseCode === 'RESPONSE_ERROR') {
+                    window.location.href = '/login';
+                    return;
                 }
             }
         );
+    }
+
+    bind_wechat = () => {
+        consumerservice.bind_wechat();
+    }
+
+    unbind_wechat = () => {
+
     }
 
     render() {
@@ -67,7 +80,11 @@ class Person extends React.Component {
                     </Card.Body>
                 </Card>
                 <div style={personal_info_item}>
-                    绑定微信
+                    <ButtonToolbar>
+                        <Button bsStyle={this.state.bind === true ? "success" : "danger"} block>
+                            {this.state.bind === true ? "绑定微信" : "解绑微信"}
+                        </Button>
+                    </ButtonToolbar>
                 </div>
                 <Navigation index={1}/>
             </div>
