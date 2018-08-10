@@ -127,7 +127,7 @@ class DeviceInit extends React.Component {
         }
         let access_token = localStorage.getItem("access_token");
         if (access_token === undefined || access_token === null || access_token === '') {
-            this.props.history.push('/login');
+            window.location.href = '/login';
         }
         let qrcode = this.props.match.params.qrcode;
         this.setState({qrcode: qrcode})
@@ -136,7 +136,7 @@ class DeviceInit extends React.Component {
         // })
         machine_service.check_exist(qrcode).then(response => {
             if (response.responseCode === 'RESPONSE_ERROR') {
-                this.props.history.push('/login');
+                window.location.href = '/login';
                 return;
             }
             if (response.responseCode === 'RESPONSE_NULL') {

@@ -155,6 +155,20 @@ function confirm_init(qrcode, bind_name) {
     })
 }
 
+function gain_share(qrcode, bind_name) {
+    let confirm_init_url = machine_service_url + '/device/bind/share';
+    let form = new FormData();
+    form.append('qrcode', qrcode);
+    form.append('deviceName', bind_name);
+    let access_token = localStorage.getItem('access_token');
+    form.append('access_token', access_token);
+    return axios.post(confirm_init_url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to init: ' + qrcode};
+    })
+}
+
 function obtain_control_option(modelId) {
     let access_token = localStorage.getItem('access_token');
     let obtain_control_option_url = machine_service_url + '/control/option/probe?access_token=' + access_token + '&modelId=' + modelId;
@@ -205,5 +219,5 @@ function obtain_pm2_5_weekly(qrcode) {
 }
 
 export const machine_service = {
-    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, light, obtain_code_value_via_url, obtain_control_option, obtain_current_city, obtain_machine_list, obtain_machine_status, obtain_model, obtain_pm2_5_weekly, obtain_volume_range, obtain_light_range, operate, unbind, volume
+    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, gain_share, light, obtain_code_value_via_url, obtain_control_option, obtain_current_city, obtain_machine_list, obtain_machine_status, obtain_model, obtain_pm2_5_weekly, obtain_volume_range, obtain_light_range, operate, unbind, volume
 }

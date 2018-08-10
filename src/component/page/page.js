@@ -9,7 +9,8 @@ import DeviceInit from '../init/init';
 import MachineList from '../machine/machinelist';
 import MachineDetail from "../machine/machinedetail";
 import Person from '../personal/person'
-import DeviceBind from '../bind/DeviceBind'
+import DeviceBind from '../bind/devicebind'
+import WechatBind from '../bind/wechatbind'
 import DeviceShare from '../machine/deviceshare'
 
 const gmair_page = {
@@ -26,9 +27,9 @@ class Page extends React.Component {
     render() {
         return (
             <div style={gmair_page}>
-                <Route exact path="/" component={LoginPage} />
-                <Route exact path="/index" component={LoginPage} />
-                <Route exact path="/login" component={LoginPage} />
+                <Route exact path="/" component={LoginPage}/>
+                <Route exact path="/index" component={LoginPage}/>
+                <Route exact path="/login" component={LoginPage}/>
                 <Route exact path="/register" component={Register}/>
                 <Route path="/init/:qrcode" component={DeviceInit}/>
                 <Route exact path="/machine/list" component={MachineList}/>
@@ -36,6 +37,7 @@ class Page extends React.Component {
                 <Route exact path="/network/config" component={NetworkConfig}/>
                 <Route exact path="/personal/information" component={Person}/>
                 <Route path="/machine/bind/:qrcode" component={DeviceBind}/>
+                <Route path="/wechat/operate" component={WechatBind}/>
                 <Route path="/machine/share/:qrcode" component={DeviceShare}/>
             </div>
         );

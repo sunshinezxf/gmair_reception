@@ -99,11 +99,21 @@ function profile() {
     let profile_url = consumer_url + '/reception/consumer/profile?access_token=' + access_token;
     return axios.get(profile_url).then(response => {
         return response.data;
-    }).catch(()=> {
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+}
+
+function can_operate(qrcode) {
+    let access_token = localStorage.getItem("access_token");
+    let check_url = consumer_url + '/reception/consumer/check/right/qrcode?access_token=' + access_token + '&qrcode=' + qrcode;
+    return axios.get(check_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
     })
 }
 
 export const consumerservice = {
-    request_login_code, request_register_code, login, loginbyopenid, exist, register, profile
+    can_operate, request_login_code, request_register_code, login, loginbyopenid, exist, register, profile
 }
