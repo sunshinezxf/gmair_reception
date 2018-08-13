@@ -1,6 +1,6 @@
 import React from 'react'
 
-import macarons from '../../../node_modules/echarts/theme/macarons'
+import shine from '../../../node_modules/echarts/theme/shine'
 
 import ReactEcharts from 'echarts-for-react';
 import {airquality_service} from "../service/airquality.service";
@@ -84,8 +84,9 @@ class PM2_5Charts extends React.Component {
                 axisLabel: {
                     formatter: '{value}',
                     inside: false,
-                    margin: 1,
-                }
+                    margin: 6.5,
+                },
+                nameGap: 23
             },
             series: [
                 {
@@ -93,9 +94,9 @@ class PM2_5Charts extends React.Component {
                     type: 'line',
                     data: this.state.indoor,
                     symbol: 'emptyCircle',
-                    symbolSize: 8,
+                    symbolSize: 12,
                     smooth: false,
-                    lineStyle: {
+                    textStyle: {
                         color: '#F282AA',
                         width: 3
                     }
@@ -105,7 +106,7 @@ class PM2_5Charts extends React.Component {
                     type: 'line',
                     data: this.state.outdoor,
                     symbol: 'emptyDiamond',
-                    symbolSize: 8,
+                    symbolSize: 12,
                     smooth: false,
                     lineStyle: {
                         color: '#11C1F3',
@@ -118,7 +119,7 @@ class PM2_5Charts extends React.Component {
 
         return (
             <div>
-                <ReactEcharts option={option} theme={'macarons'} notMerge/>
+                <ReactEcharts option={option} theme={'shine'} notMerge/>
             </div>
         )
     }
