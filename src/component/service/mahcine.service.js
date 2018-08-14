@@ -172,7 +172,7 @@ function gain_share(qrcode, bind_name) {
 function obtain_control_option(modelId) {
     let access_token = localStorage.getItem('access_token');
     let obtain_control_option_url = machine_service_url + '/control/option/probe?access_token=' + access_token + '&modelId=' + modelId;
-    return axios.get(obtain_control_option_url).then(function(response) {
+    return axios.get(obtain_control_option_url).then(function (response) {
         return response.data;
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch control option for ' + modelId};
@@ -182,7 +182,7 @@ function obtain_control_option(modelId) {
 function obtain_volume_range(modelId) {
     let access_token = localStorage.getItem('access_token');
     let obtain_volume_url = machine_service_url + '/probe/volume?access_token=' + access_token + '&modelId=' + modelId;
-    return axios.get(obtain_volume_url).then(function(response) {
+    return axios.get(obtain_volume_url).then(function (response) {
         return response.data;
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch volume range for ' + modelId};
@@ -192,7 +192,7 @@ function obtain_volume_range(modelId) {
 function obtain_light_range(modelId) {
     let access_token = localStorage.getItem('access_token');
     let obtain_volume_url = machine_service_url + '/probe/light?access_token=' + access_token + '&modelId=' + modelId;
-    return axios.get(obtain_volume_url).then(function(response) {
+    return axios.get(obtain_volume_url).then(function (response) {
         return response.data;
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch volume range for ' + modelId};
@@ -212,12 +212,66 @@ function obtain_current_city(qrcode) {
 function obtain_pm2_5_weekly(qrcode) {
     let access_token = localStorage.getItem('access_token');
     let obtain_url = machine_service_url + '/probe/daily/pm25?access_token=' + access_token + '&qrcode=' + qrcode;
-    return axios.get(obtain_url).then(function(response) {
+    return axios.get(obtain_url).then(function (response) {
         return response.data;
     }).catch(() => {
-        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch machine weekly pm2.5 for qrcode: ' + qrcode};})
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to fetch machine weekly pm2.5 for qrcode: ' + qrcode
+        };
+    })
+}
+
+function obtain_bind_info(qrcode) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/consumer/bind/probe/byqrcode?access_token=' + access_token + '&qrcode=' + qrcode;
+    return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to fetch machine weekly pm2.5 for qrcode: ' + qrcode
+        };
+    })
+}
+
+function config_bind_name(qrcode, bind_name) {
+    let access_token = localStorage.getItem('access_token');
+    let config_url = machine_service_url + '/modify/bind/name';
+    let form = new FormData();
+    form.append('access_token', access_token);
+    form.append('qrcode', qrcode);
+    form.append('bindName', bind_name);
+    return axios.post(config_url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to fetch machine weekly pm2.5 for qrcode: ' + qrcode
+        };
+    })
 }
 
 export const machine_service = {
-    check_exist, check_exist_bind, check_exist_name, check_online, confirm_init, gain_share, light, obtain_code_value_via_url, obtain_control_option, obtain_current_city, obtain_machine_list, obtain_machine_status, obtain_model, obtain_pm2_5_weekly, obtain_volume_range, obtain_light_range, operate, unbind, volume
+    check_exist,
+    check_exist_bind,
+    check_exist_name,
+    check_online,
+    config_bind_name,
+    confirm_init,
+    gain_share,
+    light,
+    obtain_bind_info,
+    obtain_code_value_via_url,
+    obtain_control_option,
+    obtain_current_city,
+    obtain_machine_list,
+    obtain_machine_status,
+    obtain_model,
+    obtain_pm2_5_weekly,
+    obtain_volume_range,
+    obtain_light_range,
+    operate,
+    unbind,
+    volume
 }

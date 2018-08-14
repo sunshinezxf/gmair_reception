@@ -96,8 +96,8 @@ class PM2_5Charts extends React.Component {
                     symbol: 'emptyCircle',
                     symbolSize: 12,
                     smooth: false,
-                    textStyle: {
-                        color: '#F282AA',
+                    lineStyle: {
+                        color: '#11C1F3',
                         width: 3
                     }
                 },
@@ -109,7 +109,7 @@ class PM2_5Charts extends React.Component {
                     symbolSize: 12,
                     smooth: false,
                     lineStyle: {
-                        color: '#11C1F3',
+                        color: '#F282AA',
                         width: 3
                     }
                 }

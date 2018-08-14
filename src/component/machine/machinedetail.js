@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Label} from 'react-bootstrap'
+import {Button, Col, Form, FormControl, FormGroup, Label} from 'react-bootstrap'
 
 import Operation from './machineoperation'
 import PM2_5Charts from "./pm2_5charts";
@@ -11,12 +11,14 @@ import {machine_service} from "../service/mahcine.service";
 import {locationservice} from "../service/location.service";
 
 import 'antd/dist/antd.css';
+import './machine_bind_name.css'
+
 import Location from "../citypicker/Location";
 import {airquality_service} from "../service/airquality.service";
 
 const gmair_machine_index = {
     width: `100%`,
-    padding: `2rem 7.5% 0rem 7.5%`,
+    padding: `1rem 7.5% 0rem 7.5%`,
     textAlign: `center`
 }
 
@@ -24,7 +26,16 @@ const gmair_machine_pm2_5 = {
     textAlign: `left`,
     fontWeight: `1rem`,
     height: `2.5rem`,
-    lineHeight: `2.5rem`
+    lineHeight: `2.5rem`,
+    width: `50%`,
+    float: `left`
+}
+
+const gmair_machine_name = {
+    width: `50%`,
+    float: `left`,
+    textAlign: `right`,
+    fontWeight: `1rem`
 }
 
 const gmair_machine_pm2_5_value = {
@@ -76,7 +87,11 @@ class MachineDetail extends React.Component {
         this.operate_local_light = this.operate_local_light.bind(this);
         this.operate_local_heat = this.operate_local_heat.bind(this);
         this.operate_local_lock = this.operate_local_lock.bind(this);
+        this.edit_operation = this.edit_operation.bind(this);
+        this.confirm_bind_name = this.confirm_bind_name.bind(this);
+        this.read_bind = this.read_bind.bind(this);
         this.state = {
+            bind_name: '',
             qrcode: '',
             modelId: '',
             online: false,
@@ -89,7 +104,8 @@ class MachineDetail extends React.Component {
             heat_mode: 0,
             light: 0,
             lock: 0,
-            co2: 0
+            co2: 0,
+            edit_machine_name: false
         }
     }
 
@@ -116,6 +132,21 @@ class MachineDetail extends React.Component {
         } else {
             // alert("seems that you are not in wechat")
         }
+    }
+
+    read_bind = (e) => {
+        this.setState({bind_name: e.target.value});
+    }
+
+    edit_operation = () => {
+        this.setState({edit_machine_name: !this.state.edit_machine_name})
+    }
+
+    confirm_bind_name = () => {
+        machine_service.config_bind_name(this.state.qrcode, this.state.bind_name).then(response => {
+            console.log(JSON.stringify(response))
+        })
+        this.edit_operation();
     }
 
     operate_local_power = (power) => {
@@ -214,6 +245,11 @@ class MachineDetail extends React.Component {
             this.init_config();
         })
         let qrcode = this.props.match.params.qrcode;
+        machine_service.obtain_bind_info(qrcode).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                this.setState({bind_name: response.data[0].bindName})
+            }
+        })
         this.setState({qrcode: qrcode});
         this.obtain_machine_status(qrcode);
         setInterval(() => {
@@ -240,8 +276,30 @@ class MachineDetail extends React.Component {
         return (
             <div>
                 <div style={gmair_machine_index}>
-                    <div style={gmair_machine_pm2_5}
-                         className={pm2_5_color}>PM2.5 {util.tell_pm2_5_desc(this.state.pm2_5)}</div>
+                    <div style={gmair_machine_pm2_5}>
+                        <div className={pm2_5_color}>
+                            PM2.5 {util.tell_pm2_5_desc(this.state.pm2_5)}
+                        </div>
+                    </div>
+                    <div style={gmair_machine_name}>
+                        {this.state.edit_machine_name ?
+                            <Form inline>
+                                <Col xs={8} sm={6}>
+                                    <FormGroup style={{padding: `unset`}}>
+                                        <FormControl type='text' value={this.state.bind_name} onChange={this.read_bind}></FormControl>
+                                    </FormGroup>
+                                </Col>
+                                <Col xs={2} sm={4}>
+                                    <Button onClick={this.confirm_bind_name}>确认</Button>
+                                </Col>
+                            </Form> :
+                            <div onClick={this.edit_operation}>{this.state.bind_name}&nbsp;<span
+                                className='fa fa-edit'></span></div>}
+                    </div>
+
+
+                </div>
+                <div style={gmair_machine_index}>
                     <div style={indoor_index}>
                         <div style={gmair_machine_pm2_5_value}
                              className={pm2_5_color}>{util.format_pm2_5(this.state.pm2_5)}</div>
@@ -421,15 +479,15 @@ class Outdoor extends React.Component {
                             <div style={outdoor_area_content}>
                                 <div style={outdoor_pm2_5}>
                         <span style={gmair_icon_active}>
-                            AQI
+                            空气质量
                         </span>
-                                    <span>&nbsp;{this.state.outdoor_aqi}</span>
+                                    <span>&nbsp;{this.state.outdoor_level}</span>
                                 </div>
                                 <div style={outdoor_temp}>
                         <span style={gmair_icon_active}>
-                            类别
+                            AQI
                         </span>
-                                    <span>&nbsp;{this.state.outdoor_level}</span>
+                                    <span>&nbsp;{this.state.outdoor_aqi}</span>
                                 </div>
                                 <div style={outdoor_humid}>
                         <span style={gmair_icon_active}>
