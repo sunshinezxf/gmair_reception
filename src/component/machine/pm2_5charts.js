@@ -24,6 +24,7 @@ class PM2_5Charts extends React.Component {
                 let data = response.data;
                 let axis = [];
                 let outdoor = [];
+                console.log(JSON.stringify(data))
                 for (let i = 0; i < data.length; i++) {
                     axis.push(util.format(data[i].createTime));
                     outdoor.push(data[i].pm25);
@@ -32,10 +33,10 @@ class PM2_5Charts extends React.Component {
             })
         });
         machine_service.obtain_pm2_5_weekly(this.props.qrcode).then(response => {
-            if(response.responseCode === 'RESPONSE_OK') {
+            if (response.responseCode === 'RESPONSE_OK') {
                 let data = response.data;
                 let indoor = [];
-                for(let i = 0; i < data.length; i ++) {
+                for (let i = 0; i < data.length; i++) {
                     indoor.push(data[i].pm2_5);
                 }
                 this.setState({indoor: indoor})
@@ -57,7 +58,7 @@ class PM2_5Charts extends React.Component {
             },
             legend: {
                 left: 'right',
-                data: ['室内','室外'],
+                data: [{name: '室内'}, {name: '室外'}],
                 align: 'left'
             },
             grid: {
@@ -84,9 +85,12 @@ class PM2_5Charts extends React.Component {
                 axisLabel: {
                     formatter: '{value}',
                     inside: false,
-                    margin: 6.5,
+                    margin: 5,
                 },
-                nameGap: 23
+                nameGap: 25,
+                axisTick: {
+                    show: false
+                }
             },
             series: [
                 {
@@ -119,7 +123,7 @@ class PM2_5Charts extends React.Component {
 
         return (
             <div>
-                <ReactEcharts option={option} theme={'shine'} notMerge/>
+                <ReactEcharts option={option} theme={'macarons'} notMerge/>
             </div>
         )
     }
