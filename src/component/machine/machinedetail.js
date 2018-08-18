@@ -4,6 +4,7 @@ import {Button, Col, Form, FormControl, FormGroup, Label} from 'react-bootstrap'
 
 import Operation from './machineoperation'
 import PM2_5Charts from "./pm2_5charts";
+// import ScreenPrompt from '../screen/prompt'
 
 import {wechatservice} from "../service/wechat.service";
 import {util} from "../service/util";
@@ -286,7 +287,8 @@ class MachineDetail extends React.Component {
                             <Form inline>
                                 <Col xs={8} sm={6}>
                                     <FormGroup style={{padding: `unset`}}>
-                                        <FormControl type='text' value={this.state.bind_name} onChange={this.read_bind}></FormControl>
+                                        <FormControl type='text' value={this.state.bind_name}
+                                                     onChange={this.read_bind}></FormControl>
                                     </FormGroup>
                                 </Col>
                                 <Col xs={2} sm={4}>
@@ -324,6 +326,7 @@ class MachineDetail extends React.Component {
                             </div>
                         </div>
                     </div>
+                    {/*<ScreenPrompt/>*/}
                     <Outdoor qrcode={this.props.match.params.qrcode} city={this.refresh_city}/>
                     <Operation qrcode={this.props.match.params.qrcode}
                                power_status={this.state.power_status} operate_local_power={this.operate_local_power}

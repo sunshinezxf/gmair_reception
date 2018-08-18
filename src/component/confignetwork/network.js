@@ -71,6 +71,13 @@ class NetworkConfig extends React.Component {
     begin_config = () => {
         let that = this;
         if (util.is_weixin()) {
+            window.wx.checkJsApi({
+                jsApiList: ['configWXDeviceWiFi'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                success: function (res) {
+                    // 以键值对的形式返回，可用的api值true，不可用为false
+                    // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                }
+            });
             window.wx.invoke('configWXDeviceWiFi', {}, function (response) {
                 if (response.err_msg === 'configWXDeviceWiFi:ok') {
                     that.setState({show_config_button: false, config_result: 'RESPONSE_OK'});
@@ -159,9 +166,9 @@ class NetworkConfig extends React.Component {
                             {
                                 this.state.navi_machine_list
                                     ?
-                                <Button block style={lauch_config_btn} onClick={this.machine_list}>查看设备</Button>
-                                :
-                                ''
+                                    <Button block style={lauch_config_btn} onClick={this.machine_list}>查看设备</Button>
+                                    :
+                                    ''
                             }
                         </div>
                 }

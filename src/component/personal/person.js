@@ -77,7 +77,7 @@ class Person extends React.Component {
                 if (response.responseCode === 'RESPONSE_OK') {
                     let person = response.data;
                     console.log(person)
-                    let address = (person.province == null ? '' : person.province) + (person.city == null ? '' : person.city) + (person.district === 'null' ? '' : person.district) + person.address;
+                    let address = (person.province == null ? '' : person.province) + (person.city == null ? '' : person.city) + (person.district === null ? '' : person.district);
                     this.setState({name: person.name, mobile: person.phone, address: address, wechat: person.wechat})
                     if (new String(this.state.wechat) !== null && this.state.wechat !== '') {
                         this.setState({bind: false})

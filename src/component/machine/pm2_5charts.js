@@ -21,15 +21,16 @@ class PM2_5Charts extends React.Component {
         machine_service.obtain_current_city(this.props.qrcode).then(response => {
             let city = response.data[0];
             airquality_service.obtain_city_pm2_5_weekly(city.cityId).then(response => {
-                let data = response.data;
-                let axis = [];
-                let outdoor = [];
-                console.log(JSON.stringify(data))
-                for (let i = 0; i < data.length; i++) {
-                    axis.push(util.format(data[i].createTime));
-                    outdoor.push(data[i].pm25);
+                if (response.responseCode === 'RESPONSE_OK') {
+                    let data = response.data;
+                    let axis = [];
+                    let outdoor = [];
+                    for (let i = 0; i < data.length; i++) {
+                        axis.push(util.format(data[i].createTime));
+                        outdoor.push(data[i].pm25);
+                    }
+                    this.setState({date: axis, outdoor: outdoor});
                 }
-                this.setState({date: axis, outdoor: outdoor});
             })
         });
         machine_service.obtain_pm2_5_weekly(this.props.qrcode).then(response => {
@@ -46,6 +47,7 @@ class PM2_5Charts extends React.Component {
 
     render() {
         let option = {
+            color: ['#11C1F3','#F282AA'],
             title: {
                 text: '近日空气质量对比',
                 show: true,
@@ -58,7 +60,7 @@ class PM2_5Charts extends React.Component {
             },
             legend: {
                 left: 'right',
-                data: [{name: '室内'}, {name: '室外'}],
+                data: [{name: '室外'}, {name: '室内'}],
                 align: 'left'
             },
             grid: {
@@ -97,8 +99,8 @@ class PM2_5Charts extends React.Component {
                     name: '室内',
                     type: 'line',
                     data: this.state.indoor,
-                    symbol: 'emptyCircle',
-                    symbolSize: 12,
+                    symbol: 'emptyDiamond',
+                    symbolSize: 10,
                     smooth: false,
                     lineStyle: {
                         color: '#11C1F3',
@@ -109,8 +111,8 @@ class PM2_5Charts extends React.Component {
                     name: '室外',
                     type: 'line',
                     data: this.state.outdoor,
-                    symbol: 'emptyDiamond',
-                    symbolSize: 12,
+                    symbol: 'emptyCircle',
+                    symbolSize: 10,
                     smooth: false,
                     lineStyle: {
                         color: '#F282AA',
