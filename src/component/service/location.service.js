@@ -51,6 +51,16 @@ function city_profile(city_id) {
 
 }
 
+function acquire_city_id(code) {
+    let access_token = localStorage.getItem('access_token');
+    let city_url = location_url + '/probe/cityId?access_token=' + access_token + '&code=' + code;
+    return axios.get(city_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+}
+
 export const locationservice = {
-    city_profile, list_province, list_city, list_district, tell_location
+    acquire_city_id, city_profile, list_province, list_city, list_district, tell_location
 }

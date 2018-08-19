@@ -452,10 +452,11 @@ class Outdoor extends React.Component {
                 locationservice.tell_location().then(response => {
                     this.setState({
                         province: response.data.province,
-                        city: response.data.city,
-                        city_id: response.data.code
+                        city: response.data.city
                     });
-                    this.obtain_aqi()
+                    locationservice.acquire_city_id(response.data.code).then(response => {
+                        this.setState({city_id: response.data}, this.obtain_aqi)
+                    })
                 })
             }
         })

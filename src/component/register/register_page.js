@@ -60,7 +60,7 @@ const register_btn = {
     textAlign: `center`
 }
 
-class RegisterPage extends React.Component{
+class RegisterPage extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -114,9 +114,13 @@ class RegisterPage extends React.Component{
 
     componentDidMount() {
         locationservice.tell_location().then(response => {
-            if(response.responseCode !== undefined && response.responseCode === 'RESPONSE_OK') {
+            if (response.responseCode !== undefined && response.responseCode === 'RESPONSE_OK') {
                 let address = response.data;
-                this.setState({address_province: address.province, address_city: address.city, address: address.province + address.city});
+                this.setState({
+                    address_province: address.province,
+                    address_city: address.city,
+                    address: address.province + address.city
+                });
             }
         });
 
@@ -150,14 +154,18 @@ class RegisterPage extends React.Component{
             consumerservice.exist(this.state.mobile).then(response => {
                 if (response.responseCode == 'RESPONSE_NULL') {
                     this.setState({ready2send: true, mobile_confirmed: true}, this.validate);
-                } else if(response.responseCode == 'RESPONSE_OK') {
+                } else if (response.responseCode == 'RESPONSE_OK') {
                     //the mobile phone number has already been registered
-                    this.setState({mobile_desc: '此手机号已注册，请前往登录。', ready2send: false, mobile_confirmed: false}, this.validate);
+                    this.setState({
+                        mobile_desc: '此手机号已注册，请前往登录。',
+                        ready2send: false,
+                        mobile_confirmed: false
+                    }, this.validate);
                 } else {
                     this.setState({ready2send: false, mobile_confirmed: false}, this.validate);
                 }
             })
-        }else {
+        } else {
             this.setState({ready2send: false, mobile_desc: ''}, this.validate);
         }
     }
@@ -217,11 +225,15 @@ class RegisterPage extends React.Component{
 
     register = () => {
         this.setState({ready2send: false, ready2reg: false});
-        consumerservice.register(this.state.openid, this.state.username, this.state.mobile, this.state.password, this.state.address_province, this.state.address_city, this.state.address);
+        consumerservice.register(this.state.openid, this.state.username, this.state.mobile, this.state.password, this.state.address_province, this.state.address_city, this.state.address).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                window.location.href = '/login'
+            }
+        });
     }
 
     render() {
-        return(
+        return (
             <div style={gmair_register_page}>
                 <div className="gmair_logo">
                     <img src={gmair_white} style={logo} alt="GMAIR_LOGO"></img>
@@ -230,37 +242,48 @@ class RegisterPage extends React.Component{
                 <div className="gmair_register_area">
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span className="glyphicon glyphicon-user"></span></InputGroup.Addon>
-                            <FormControl type="text" placeholder='请输入姓名' style={transparent_input} value={this.state.username} onChange={this.read_username}></FormControl>
+                            <InputGroup.Addon style={white_icon}><span
+                                className="glyphicon glyphicon-user"></span></InputGroup.Addon>
+                            <FormControl type="text" placeholder='请输入姓名' style={transparent_input}
+                                         value={this.state.username} onChange={this.read_username}></FormControl>
                         </InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span className="glyphicon glyphicon-phone"></span></InputGroup.Addon>
-                            <FormControl type="tel" placeholder='请输入手机号码' style={transparent_input} value={this.state.mobile} onChange={this.read_mobile}></FormControl>
+                            <InputGroup.Addon style={white_icon}><span
+                                className="glyphicon glyphicon-phone"></span></InputGroup.Addon>
+                            <FormControl type="tel" placeholder='请输入手机号码' style={transparent_input}
+                                         value={this.state.mobile} onChange={this.read_mobile}></FormControl>
                         </InputGroup>
                         <HelpBlock style={help_text}>{this.state.mobile_desc}</HelpBlock>
                     </FormGroup>
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span className="glyphicon glyphicon-lock"></span></InputGroup.Addon>
-                            <FormControl type="password" placeholder = '请输入动态验证码' style={transparent_input} value={this.state.password} onChange={this.read_password}></FormControl>
-                            <InputGroup.Addon><Button style={password_btn} disabled={!this.state.ready2send} onClick={this.send_code}>{this.state.verification_text}</Button></InputGroup.Addon>
+                            <InputGroup.Addon style={white_icon}><span
+                                className="glyphicon glyphicon-lock"></span></InputGroup.Addon>
+                            <FormControl type="password" placeholder='请输入动态验证码' style={transparent_input}
+                                         value={this.state.password} onChange={this.read_password}></FormControl>
+                            <InputGroup.Addon><Button style={password_btn} disabled={!this.state.ready2send}
+                                                      onClick={this.send_code}>{this.state.verification_text}</Button></InputGroup.Addon>
                         </InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span className="glyphicon glyphicon-map-marker"></span></InputGroup.Addon>
-                            <FormControl type="text" placeholder='请输入地址' style={transparent_input} value={this.state.address} onChange={this.read_address}></FormControl>
+                            <InputGroup.Addon style={white_icon}><span
+                                className="glyphicon glyphicon-map-marker"></span></InputGroup.Addon>
+                            <FormControl type="text" placeholder='请输入地址' style={transparent_input}
+                                         value={this.state.address} onChange={this.read_address}></FormControl>
                         </InputGroup>
                     </FormGroup>
                 </div>
                 <div className="gmair_register_btn">
-                    <Button block style={register_btn} disabled={!this.state.ready2reg} onClick={this.register}>注&nbsp;册</Button>
+                    <Button block style={register_btn} disabled={!this.state.ready2reg}
+                            onClick={this.register}>注&nbsp;册</Button>
                 </div>
                 <Footer name="已有账号，请点击登录" link="/login"/>
             </div>
         )
     }
 }
+
 export default RegisterPage
