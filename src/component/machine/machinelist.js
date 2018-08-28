@@ -60,7 +60,7 @@ class MachineList extends React.Component {
                     if (response.responseCode === 'RESPONSE_OK') {
                         this.setState({machine_list: response.data})
                     } else if (response.responseCode === 'RESPONSE_NULL') {
-
+                        this.setState({machine_list: []});
                     } else {
                         this.props.history.push('/login');
                         return;
@@ -124,6 +124,8 @@ class MachineList extends React.Component {
                     machine_service.obtain_code_value_via_url(result).then(response => {
                         if (response.responseCode === 'RESPONSE_OK') {
                             window.location.href = '/init/' + response.data[0].codeValue;
+                        } else {
+                            window.location.href = result;
                         }
                     })
                 }
@@ -139,7 +141,7 @@ class MachineList extends React.Component {
         let element = machine_list.map(function (item) {
             return (
                 <div key={item.codeValue}>
-                    <SwipeAction autoClose right={[
+                    <SwipeAction autoClose left={[
                         {
                             text: '删除',
                             style: {backgroundColor: '#F4333C', color: 'white'},
@@ -147,7 +149,7 @@ class MachineList extends React.Component {
                                 that.unbind(item.codeValue);
                             }
                         }
-                    ]} left={
+                    ]} right={
 
                         item.ownership === 'SHARE' ?
                             '' :

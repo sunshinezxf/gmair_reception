@@ -88,7 +88,7 @@ function register(wechat, username, mobile, code, province, city, address) {
     form.append('addressCity', city);
     form.append('addressDetail', address);
     return axios.post(register_url, form).then(response => {
-        return response;
+        return response.data;
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
     });
