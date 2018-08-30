@@ -142,13 +142,18 @@ class Operation extends React.Component {
                 <Collapse isOpened={this.state.expanded}>
                     <div style={operation_gap_top}></div>
                     <Row>
-                        <Light power_status={this.props.power_status} current_light={this.props.light} light_operate={this.light_operate}
+                        <Light power_status={this.props.power_status} current_light={this.props.light}
+                               light_operate={this.light_operate}
                                min_light={this.state.min_light} max_light={this.state.max_light}
                                operate_local_light={this.props.operate_local_light}/>
-                        <Heat power_status={this.props.power_status} current_heat={this.props.heat} heat_operate={this.heat_operate}
+                        <Heat power_status={this.props.power_status} current_heat={this.props.heat}
+                              heat_operate={this.heat_operate}
                               operate_local_heat={this.props.operate_local_heat} heat={this.props.heat}/>
-                        <Lock power_status={this.props.power_status} lock={this.props.lock} lock_operate={this.lock_operate}
+                        {this.props.lock_enabled &&
+                        <Lock power_status={this.props.power_status} lock={this.props.lock}
+                              lock_operate={this.lock_operate}
                               operate_local_lock={this.props.operate_local_lock}/>
+                        }
                     </Row>
                     <div style={operation_gap_bottom}></div>
                 </Collapse>
@@ -207,7 +212,8 @@ class Lock extends React.Component {
 
     render() {
         return (
-            <Col xs={4} md={4} onClick={this.props.power_status == 'on' && this.lock}>
+            <Col xs={4} md={4} onClick={this.props.power_status == 'on' ? this.lock : () => {
+            }}>
                 <i className='fa fa-child' style={this.props.lock === 0 ? operation_icon : operation_icon_active}></i>
                 <div>童锁</div>
             </Col>
@@ -279,7 +285,8 @@ class Fan extends React.Component {
 
     render() {
         return (
-            <Col xs={4} md={4} onClick={this.props.power_status == 'on' && this.speed_panel}>
+            <Col xs={4} md={4} onClick={this.props.power_status == 'on' ? this.speed_panel : () => {
+            }}>
                 <i style={this.props.power_status == 'off' ? operation_icon : operation_icon_active}>{this.props.current_volume}</i>
                 <div>风量</div>
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">
@@ -329,7 +336,8 @@ class Light extends React.Component {
 
     render() {
         return (
-            <Col xs={4} md={4} onClick={this.props.power_status == 'on' && this.light_panel}>
+            <Col xs={4} md={4} onClick={this.props.power_status == 'on' ? this.light_panel : () => {
+            }}>
                 <i className='fa fa-lightbulb-o' style={operation_icon_active}></i>
                 <div>屏显</div>
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">
@@ -390,7 +398,8 @@ class Workmode extends React.Component {
             mode_name = 'fa fa-refresh';
         }
         return (
-            <Col xs={4} md={4} onClick={this.props.power_status == 'on' && this.mode_panel}>
+            <Col xs={4} md={4} onClick={this.props.power_status == 'on' ? this.mode_panel : () => {
+            }}>
                 <i className={mode_name} style={operation_icon_active}></i>
                 <div>模式</div>
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">
@@ -451,7 +460,8 @@ class Heat extends React.Component {
             heat_name = 'fa fa-thermometer-4';
         }
         return (
-            <Col xs={4} md={4} onClick={this.props.power_status == 'on' && this.heat_panel}>
+            <Col xs={4} md={4} onClick={this.props.power_status == 'on' ? this.heat_panel : () => {
+            }}>
                 <i className={heat_name} style={this.props.heat === 0 ? operation_icon : operation_icon_active}></i>
                 <div>辅热</div>
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">

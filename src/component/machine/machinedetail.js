@@ -91,10 +91,11 @@ class MachineDetail extends React.Component {
         this.edit_operation = this.edit_operation.bind(this);
         this.confirm_bind_name = this.confirm_bind_name.bind(this);
         this.read_bind = this.read_bind.bind(this);
+        this.check_qrcode = this.check_qrcode.bind(this);
         this.state = {
             bind_name: '',
             qrcode: '',
-            modelId: '',
+            model_id: '',
             online: false,
             pm2_5: 0,
             volume: 0,
@@ -106,7 +107,9 @@ class MachineDetail extends React.Component {
             light: 0,
             lock: 0,
             co2: 0,
-            edit_machine_name: false
+            edit_machine_name: false,
+            co2_is_present: false,
+            lock_is_present: false
         }
     }
 
@@ -238,6 +241,31 @@ class MachineDetail extends React.Component {
         });
     }
 
+    check_qrcode = (qrcode) => {
+        machine_service.check_exist(qrcode).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                let info = response.data[0];
+                this.setState({model_id: info.modelId})
+                machine_service.probe_component(info.modelId, 'CO2').then(response => {
+                    if(response.responseCode === 'RESPONSE_OK') {
+                        this.setState({co2_is_present: true})
+                    }else {
+                        this.setState({co2_is_present: false})
+                    }
+                })
+                machine_service.probe_component(info.modelId, 'LOCK').then(response => {
+                    if(response.responseCode === 'RESPONSE_OK') {
+                        this.setState({lock_is_present: true})
+                    }else {
+                        this.setState({lock_is_present: false})
+                    }
+                })
+            }else {
+                window.location.href = '/machine/list'
+            }
+        })
+    }
+
     componentDidMount() {
         // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
         //     var vConsole = new window.VConsole();
@@ -246,6 +274,7 @@ class MachineDetail extends React.Component {
             this.init_config();
         })
         let qrcode = this.props.match.params.qrcode;
+        this.check_qrcode(qrcode);
         machine_service.obtain_bind_info(qrcode).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({bind_name: response.data[0].bindName})
@@ -298,20 +327,20 @@ class MachineDetail extends React.Component {
                             <div onClick={this.edit_operation}>{this.state.bind_name}&nbsp;<span
                                 className='fa fa-edit'></span></div>}
                     </div>
-
-
                 </div>
                 <div style={gmair_machine_index}>
                     <div style={indoor_index}>
                         <div style={gmair_machine_pm2_5_value}
                              className={pm2_5_color}>{util.format_pm2_5(this.state.pm2_5)}</div>
                         <div style={gmair_machine_index_desc}>
+                            {this.state.co2_is_present &&
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}>
                                     <i className='fa fa-leaf'></i>
                                 </span>
                                 <span>&nbsp;{this.state.co2}ppm</span>
                             </div>
+                            }
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}>
                                     <i className='fa fa-thermometer'></i>
@@ -334,7 +363,7 @@ class MachineDetail extends React.Component {
                                work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
                                light={this.state.light} operate_local_light={this.operate_local_light}
                                heat={this.state.heat_mode} operate_local_heat={this.operate_local_heat}
-                               lock={this.state.lock} operate_local_lock={this.operate_local_lock}
+                               lock_enabled={this.state.lock_is_present} lock={this.state.lock} operate_local_lock={this.operate_local_lock}
                     />
                     <div style={charts_area}>
                         <PM2_5Charts qrcode={this.props.match.params.qrcode}/>

@@ -252,6 +252,19 @@ function config_bind_name(qrcode, bind_name) {
     })
 }
 
+function probe_component(model_id, component_name) {
+    let access_token = localStorage.getItem('access_token');
+    let probe_component_url = machine_service_url + '/model/component/probe?access_token=' + access_token + '&modelId=' + model_id + '&componentName=' + component_name;
+    return axios.get(probe_component_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to fetch component for model ' + model_id
+        };
+    })
+}
+
 export const machine_service = {
     check_exist,
     check_exist_bind,
@@ -272,6 +285,7 @@ export const machine_service = {
     obtain_volume_range,
     obtain_light_range,
     operate,
+    probe_component,
     unbind,
     volume
 }
