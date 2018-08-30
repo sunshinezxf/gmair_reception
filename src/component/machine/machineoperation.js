@@ -44,11 +44,10 @@ class Operation extends React.Component {
             qrcode: '',
             modelId: '',
             expanded: true,
-            operations: [],
             min_volume: 0,
             max_volume: 400,
             min_light: 0,
-            max_light: 5
+            max_light: 10
         }
         this.expand = this.expand.bind(this);
         this.init_control_option = this.init_control_option.bind(this);
@@ -63,12 +62,6 @@ class Operation extends React.Component {
     }
 
     init_control_option = () => {
-        machine_service.obtain_control_option(this.state.modelId).then(response => {
-            if (response.responseCode === 'RESPONSE_OK') {
-                let control_list = response.data;
-                this.setState({operations: control_list})
-            }
-        })
         machine_service.obtain_volume_range(this.state.modelId).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({min_volume: response.data[0].minVolume, max_volume: response.data[0].maxVolume})
@@ -136,7 +129,7 @@ class Operation extends React.Component {
                          max_volume={this.state.max_volume} current_volume={this.props.volume_value}
                          fan_operate={this.fan_operate} operate_local_volume={this.props.operate_local_volume}/>
                     <Workmode power_status={this.props.power_status} mode_operate={this.mode_operate}
-                              operate_local_mode={this.props.operate_local_mode} current_mode={this.props.work_mode}/>
+                              operate_local_mode={this.props.operate_local_mode} current_mode={this.props.work_mode} work_mode_list={this.props.work_mode_list}/>
                 </Row>
                 <div style={operation_gap_bottom}></div>
                 <Collapse isOpened={this.state.expanded}>
@@ -148,7 +141,7 @@ class Operation extends React.Component {
                                operate_local_light={this.props.operate_local_light}/>
                         <Heat power_status={this.props.power_status} current_heat={this.props.heat}
                               heat_operate={this.heat_operate}
-                              operate_local_heat={this.props.operate_local_heat} heat={this.props.heat}/>
+                              operate_local_heat={this.props.operate_local_heat} heat={this.props.heat} heat_mode_list={this.props.heat_mode_list}/>
                         {this.props.lock_enabled &&
                         <Lock power_status={this.props.power_status} lock={this.props.lock}
                               lock_operate={this.lock_operate}

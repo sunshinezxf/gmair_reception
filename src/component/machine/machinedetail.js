@@ -92,6 +92,7 @@ class MachineDetail extends React.Component {
         this.confirm_bind_name = this.confirm_bind_name.bind(this);
         this.read_bind = this.read_bind.bind(this);
         this.check_qrcode = this.check_qrcode.bind(this);
+        this.check_control_option = this.check_control_option.bind(this);
         this.state = {
             bind_name: '',
             qrcode: '',
@@ -103,7 +104,9 @@ class MachineDetail extends React.Component {
             humid: 0,
             power_status: 'off',
             work_mode: 'manual',
+            work_mode_list: [],
             heat_mode: 0,
+            heat_mode_list: [],
             light: 0,
             lock: 0,
             co2: 0,
@@ -224,7 +227,7 @@ class MachineDetail extends React.Component {
                     temp: temp,
                     humid: humid,
                     power_status: (power === 1) ? 'on' : 'off',
-                    work_mode: util.tell_mode(mode),
+                    work_mode: util.tell_mode(mode, this.state.work_mode_list),
                     light: light,
                     heat_mode: heat,
                     lock: lock,
@@ -246,22 +249,59 @@ class MachineDetail extends React.Component {
             if (response.responseCode === 'RESPONSE_OK') {
                 let info = response.data[0];
                 this.setState({model_id: info.modelId})
+                this.check_control_option(info.modelId)
                 machine_service.probe_component(info.modelId, 'CO2').then(response => {
-                    if(response.responseCode === 'RESPONSE_OK') {
+                    if (response.responseCode === 'RESPONSE_OK') {
                         this.setState({co2_is_present: true})
-                    }else {
+                    } else {
                         this.setState({co2_is_present: false})
                     }
                 })
                 machine_service.probe_component(info.modelId, 'LOCK').then(response => {
-                    if(response.responseCode === 'RESPONSE_OK') {
+                    if (response.responseCode === 'RESPONSE_OK') {
                         this.setState({lock_is_present: true})
-                    }else {
+                    } else {
                         this.setState({lock_is_present: false})
                     }
                 })
-            }else {
+            } else {
                 window.location.href = '/machine/list'
+            }
+        })
+    }
+
+    check_control_option = (model_id) => {
+        machine_service.obtain_control_option(model_id).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                let control_list = response.data;
+                for (let i = 0; i < control_list.length; i++) {
+                    let item = control_list[i];
+                    if (item.optionComponent === 'heat') {
+                        let action_list = item.actions;
+                        let heat_list = [];
+                        for (let index in action_list) {
+                            let action_item = action_list[index];
+                            heat_list[action_item.commandValue] = {
+                                name: action_item.actionName,
+                                operator: action_item.actionOperator
+                            }
+                        }
+                        this.setState({heat_mode_list: heat_list});
+                    }
+                    if (item.optionComponent === 'mode') {
+                        let action_list = item.actions;
+                        let mode_list = [];
+                        for (let index in action_list) {
+                            let action_item = action_list[index];
+                            mode_list[action_item.commandValue] = {
+                                name: action_item.actionName,
+                                operator: action_item.actionOperator
+                            }
+                        }
+                        this.setState({work_mode_list: mode_list})
+                    }
+                }
+                this.obtain_machine_status(this.state.qrcode);
             }
         })
     }
@@ -281,7 +321,6 @@ class MachineDetail extends React.Component {
             }
         })
         this.setState({qrcode: qrcode});
-        this.obtain_machine_status(qrcode);
         setInterval(() => {
             this.obtain_machine_status(qrcode);
         }, 10000);
@@ -360,10 +399,11 @@ class MachineDetail extends React.Component {
                     <Operation qrcode={this.props.match.params.qrcode}
                                power_status={this.state.power_status} operate_local_power={this.operate_local_power}
                                volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}
-                               work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
+                               work_mode_list={this.state.work_mode_list} work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
                                light={this.state.light} operate_local_light={this.operate_local_light}
-                               heat={this.state.heat_mode} operate_local_heat={this.operate_local_heat}
-                               lock_enabled={this.state.lock_is_present} lock={this.state.lock} operate_local_lock={this.operate_local_lock}
+                               heat_mode_list={this.state.heat_mode_list} heat={this.state.heat_mode} operate_local_heat={this.operate_local_heat}
+                               lock_enabled={this.state.lock_is_present} lock={this.state.lock}
+                               operate_local_lock={this.operate_local_lock}
                     />
                     <div style={charts_area}>
                         <PM2_5Charts qrcode={this.props.match.params.qrcode}/>

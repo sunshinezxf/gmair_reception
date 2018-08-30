@@ -53,11 +53,8 @@ function tell_pm2_5_desc(value) {
     return '严重污染';
 }
 
-function tell_mode(value) {
-    //todo
-    //fetch the mode list by model_id
-    let mode_name = ['auto', 'manual', 'sleep'];
-    return mode_name[value];
+function tell_mode(value, mode_list) {
+    return mode_list[value].operator;
 }
 
 function tell_heat_value(heat) {
