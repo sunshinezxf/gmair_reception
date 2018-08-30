@@ -57,13 +57,12 @@ function tell_mode(value, mode_list) {
     return mode_list[value].operator;
 }
 
-function tell_heat_value(heat) {
-    if(heat === 'off')
-        return 0;
-    if(heat === 'cosy')
-        return 1;
-    if(heat === 'warm')
-        return 2;
+function tell_heat_value(heat, heat_mode_list) {
+    for(let i = 0; i < heat_mode_list.length; i ++) {
+        if(heat == heat_mode_list[i].operator)
+            return i;
+    }
+    return -1;
 }
 
 function format(timestamp) {

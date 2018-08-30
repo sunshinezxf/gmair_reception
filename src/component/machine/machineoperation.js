@@ -129,7 +129,8 @@ class Operation extends React.Component {
                          max_volume={this.state.max_volume} current_volume={this.props.volume_value}
                          fan_operate={this.fan_operate} operate_local_volume={this.props.operate_local_volume}/>
                     <Workmode power_status={this.props.power_status} mode_operate={this.mode_operate}
-                              operate_local_mode={this.props.operate_local_mode} current_mode={this.props.work_mode} work_mode_list={this.props.work_mode_list}/>
+                              operate_local_mode={this.props.operate_local_mode} current_mode={this.props.work_mode}
+                              work_mode_list={this.props.work_mode_list}/>
                 </Row>
                 <div style={operation_gap_bottom}></div>
                 <Collapse isOpened={this.state.expanded}>
@@ -141,7 +142,8 @@ class Operation extends React.Component {
                                operate_local_light={this.props.operate_local_light}/>
                         <Heat power_status={this.props.power_status} current_heat={this.props.heat}
                               heat_operate={this.heat_operate}
-                              operate_local_heat={this.props.operate_local_heat} heat={this.props.heat} heat_mode_list={this.props.heat_mode_list}/>
+                              operate_local_heat={this.props.operate_local_heat} heat={this.props.heat}
+                              heat_mode_list={this.props.heat_mode_list}/>
                         {this.props.lock_enabled &&
                         <Lock power_status={this.props.power_status} lock={this.props.lock}
                               lock_operate={this.lock_operate}
@@ -440,18 +442,28 @@ class Heat extends React.Component {
 
     operate_heat = (heat) => {
         this.props.heat_operate(heat)
-        this.props.operate_local_heat(util.tell_heat_value(heat));
+        this.props.operate_local_heat(util.tell_heat_value(heat, this.props.heat_mode_list));
 
     }
 
     render() {
-        let heat_name = 'fa fa-thermometer-0';
-        if (this.props.heat === 1) {
-            heat_name = 'fa fa-thermometer-2';
+        let heat_mode_list = this.props.heat_mode_list;
+        let heat_class = [];
+        if (heat_mode_list.length == 3) {
+            heat_class = ['fa fa-thermometer-0', 'fa fa-thermometer-2', 'fa fa-thermometer-4'];
+        } else {
+            heat_class = ['fa fa-thermometer-0', 'fa fa-thermometer-4'];
         }
-        if (this.props.heat === 2) {
-            heat_name = 'fa fa-thermometer-4';
-        }
+        let heat_name = heat_class[this.props.heat];
+        let operation_list = heat_mode_list.map((item, index) => {
+            return (<Button type={this.props.heat == index ? 'primary' : 'ghost'} inline size="small"
+                            className='am-button-borderfix'
+                            style={{margin: '0 1.5rem'}} onClick={() => {
+                {
+                    this.props.heat === index ? '' : this.operate_heat(item.operator)
+                }
+            }}>{item.name}</Button>)
+        })
         return (
             <Col xs={4} md={4} onClick={this.props.power_status == 'on' ? this.heat_panel : () => {
             }}>
@@ -460,27 +472,7 @@ class Heat extends React.Component {
                 <Modal popup visible={this.state.show_panel} animationType="slide-up">
                     <div style={area_desc}>辅热调节</div>
                     <div style={mode_operation_area}>
-                        <Button type={this.props.heat == 0 ? 'primary' : 'ghost'} inline size="small"
-                                className='am-button-borderfix'
-                                style={{margin: '0 1.5rem'}} onClick={() => {
-                            {
-                                this.props.heat === 0 ? '' : this.operate_heat('off')
-                            }
-                        }}>关闭</Button>
-                        <Button type={this.props.heat === 1 ? 'primary' : 'ghost'} inline size="small"
-                                className='am-button-borderfix'
-                                style={{margin: '0 1.5rem'}} onClick={() => {
-                            {
-                                this.props.current_mode === 1 ? '' : this.operate_heat('cosy')
-                            }
-                        }}>500W</Button>
-                        <Button type={this.props.heat === 2 ? 'primary' : 'ghost'} inline size="small"
-                                className='am-button-borderfix'
-                                style={{margin: '0 1.5rem'}} onClick={() => {
-                            {
-                                this.props.current_mode === 2 ? '' : this.operate_heat('warm')
-                            }
-                        }}>1000W</Button>
+                        {operation_list}
                     </div>
                 </Modal>
             </Col>
