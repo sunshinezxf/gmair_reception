@@ -22,15 +22,15 @@ class InitProgress extends React.Component {
         this.interval = setInterval(() => {
             let percent = this.state.percent + 2;
             this.setState({percent: percent});
-            if(percent >= 100) {
+            if (percent >= 100) {
                 this.props.init();
                 clearInterval(this.interval);
             }
-            if(this.state.percent >= 66) {
+            if (this.state.percent >= 66) {
                 this.setState({show_steps: 3});
-            }else if(this.state.percent >= 33) {
+            } else if (this.state.percent >= 33) {
                 this.setState({show_steps: 2});
-            }else {
+            } else {
                 this.setState({show_steps: 1});
             }
         }, 80);
@@ -43,8 +43,8 @@ class InitProgress extends React.Component {
     render() {
         return (
             <div style={progress_area}>
-                <div>设备初始化中</div>
-                <ProgressBar active now={this.state.percent}></ProgressBar>
+                <div>{this.state.percent < 100 ? '设备初始化中' : '设备初始化完成'}</div>
+                <ProgressBar active={this.state.percent < 100 ? true : false} now={this.state.percent}></ProgressBar>
                 {this.state.show_steps >= 1 ? <Fade right>正在获取设备配置</Fade> : ''}
                 {this.state.show_steps >= 2 ? <Fade right>正在搜集用户设备注册信息</Fade> : ''}
                 {this.state.show_steps >= 3 ? <Fade right>正在检查设备联网状态</Fade> : ''}

@@ -298,7 +298,7 @@ class DeviceInit extends React.Component {
                 {
                     this.state.progress_finished && !this.state.config_network ?
                         <div style={gmair_confirm_btn}>
-                            <Button bsStyle='info' onClick={this.device_list} block>查看设备</Button>
+                            <Button bsStyle='info' onClick={this.device_list} block>配置完成</Button>
                         </div>
                         :
                         ''
