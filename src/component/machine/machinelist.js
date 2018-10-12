@@ -9,7 +9,7 @@ import DeviceScan from "./devicescan";
 
 import '../../antd-mobile.css';
 
-import {Modal, SwipeAction} from 'antd-mobile';
+import {PullToRefresh, SwipeAction} from 'antd-mobile';
 import Navigation from "../navigation/navigation";
 
 const machine_item_gap = {
@@ -24,7 +24,8 @@ class MachineList extends React.Component {
         this.refresh_list = this.refresh_list.bind(this);
         this.scan_qrcode = this.scan_qrcode.bind(this);
         this.state = {
-            machine_list: []
+            machine_list: [],
+            loading: true
         }
     }
 
@@ -58,12 +59,11 @@ class MachineList extends React.Component {
             if (response.responseCode === 'RESPONSE_OK') {
                 machine_service.obtain_machine_list().then(response => {
                     if (response.responseCode === 'RESPONSE_OK') {
-                        this.setState({machine_list: response.data})
+                        this.setState({machine_list: response.data, loading: false})
                     } else if (response.responseCode === 'RESPONSE_NULL') {
                         this.setState({machine_list: []});
                     } else {
-                        this.props.history.push('/login');
-                        return;
+                        window.location.href = '/login';
                     }
                 });
             }
@@ -91,7 +91,7 @@ class MachineList extends React.Component {
         //load machine list
         machine_service.obtain_machine_list().then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
-                this.setState({machine_list: response.data})
+                this.setState({machine_list: response.data, loading: false})
             } else if (response.responseCode === 'RESPONSE_NULL') {
 
             } else {
@@ -102,6 +102,7 @@ class MachineList extends React.Component {
     }
 
     refresh_list = () => {
+        this.setState({loading: true});
         machine_service.obtain_machine_list().then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({machine_list: response.data})
@@ -112,6 +113,9 @@ class MachineList extends React.Component {
                 return;
             }
         });
+        setTimeout(() => {
+            this.setState({loading: false});
+        }, 1000);
     }
 
     scan_qrcode = () => {
@@ -150,7 +154,6 @@ class MachineList extends React.Component {
                             }
                         }
                     ]} right={
-
                         item.ownership === 'SHARE' ?
                             '' :
                             [{
@@ -170,8 +173,15 @@ class MachineList extends React.Component {
         })
         return (
             <div>
-                {element}
-                <DeviceScan scan={this.scan_qrcode}/>
+                <PullToRefresh refreshing={this.state.loading} onRefresh={this.refresh_list}>
+                    {!this.state.loading && element}
+                    {!this.state.loading &&
+                    <DeviceScan scan={this.scan_qrcode}/>
+                    }
+                </PullToRefresh>
+                {this.state.loading &&
+                    <div>数据获取中</div>
+                }
                 <Navigation index={0}/>
             </div>
         );

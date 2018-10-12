@@ -73,7 +73,8 @@ class WechatBind extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            openid: null
+            openid: null,
+            ready_2_submit: false
         }
         this.bind_wechat = this.bind_wechat.bind(this);
     }
@@ -107,7 +108,7 @@ class WechatBind extends React.Component {
                                 if (response.responseCode === 'RESPONSE_OK') {
                                     let openid = response.data;
                                     localStorage.setItem('openid', openid);
-                                    this.setState({openid: openid});
+                                    this.setState({openid: openid, ready_2_submit: true});
                                 }
                             })
                         }
@@ -161,7 +162,7 @@ class WechatBind extends React.Component {
                     </FormGroup>
                 </div>
                 <div style={gmair_confirm_btn} onClick={this.bind_wechat}>
-                    <Button bsStyle='info' block>确认绑定</Button>
+                    <Button bsStyle='info' block disabled={!this.state.ready_2_submit}>确认绑定</Button>
                 </div>
             </div>
         )

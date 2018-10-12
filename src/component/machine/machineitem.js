@@ -181,12 +181,12 @@ class MachineItem extends React.Component {
                         <MachinePower power={this.state.power_status} operation={this.power_operate}/> : ''}
                     <div style={gmair_pm2_5_attr}>{this.state.online === true ? 'ug/m³' : '离线'}</div>
                 </div>
-                <div style={gmair_machine_index}>
+                <div style={gmair_machine_index} onClick={() => {
+                    window.location.href = url
+                }}>
                     {
                         this.state.online === true ?
-                            <div style={gmair_machine_name} onClick={() => {
-                                window.location.href = url
-                            }}>{this.props.name}</div>
+                            <div style={gmair_machine_name}>{this.props.name}</div>
                             :
                             <div style={gmair_machine_name}>{this.props.name}</div>
                     }
