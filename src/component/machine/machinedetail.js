@@ -399,9 +399,11 @@ class MachineDetail extends React.Component {
                     <Operation qrcode={this.props.match.params.qrcode}
                                power_status={this.state.power_status} operate_local_power={this.operate_local_power}
                                volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}
-                               work_mode_list={this.state.work_mode_list} work_mode={this.state.work_mode} operate_local_mode={this.operate_local_mode}
+                               work_mode_list={this.state.work_mode_list} work_mode={this.state.work_mode}
+                               operate_local_mode={this.operate_local_mode}
                                light={this.state.light} operate_local_light={this.operate_local_light}
-                               heat_mode_list={this.state.heat_mode_list} heat={this.state.heat_mode} operate_local_heat={this.operate_local_heat}
+                               heat_mode_list={this.state.heat_mode_list} heat={this.state.heat_mode}
+                               operate_local_heat={this.operate_local_heat}
                                lock_enabled={this.state.lock_is_present} lock={this.state.lock}
                                operate_local_lock={this.operate_local_lock}
                     />
@@ -462,7 +464,8 @@ class Outdoor extends React.Component {
             configure_outdoor: false,
             outdoor_aqi: 0,
             outdoor_level: '',
-            outdoor_pm2_5: 0
+            outdoor_pm2_5: 0,
+            default_location: {province_id: '110000', province: '北京', city_id: '110101', city: '东城'}
         };
         this.obtain_aqi = this.obtain_aqi.bind(this);
         this.refresh_city = this.refresh_city.bind(this);
@@ -496,6 +499,21 @@ class Outdoor extends React.Component {
                                     outdoor_level: air.aqiLevel,
                                     outdoor_pm2_5: air.pm2_5
                                 })
+                            } else if (response.responseCode === 'RESPONSE_NULL') {
+                                this.setState({
+                                    province: this.state.default_location.province,
+                                    province_id: this.state.default_location.province_id,
+                                    city: this.state.default_location.city,
+                                    city_id: this.state.default_location.city_id
+                                })
+                                airquality_service.obtain_latest_aqi(this.state.default_location.city_id).then(response => {
+                                    let air = response.data[0];
+                                    this.setState({
+                                        outdoor_aqi: air.aqi,
+                                        outdoor_level: air.aqiLevel,
+                                        outdoor_pm2_5: air.pm2_5
+                                    })
+                                })
                             }
                         })
                     }
@@ -524,7 +542,17 @@ class Outdoor extends React.Component {
                         city: response.data.city
                     });
                     locationservice.acquire_city_id(response.data.code).then(response => {
-                        this.setState({city_id: response.data}, this.obtain_aqi)
+                        if (response.responseCode === 'RESPONSE_OK') {
+                            this.setState({city_id: response.data}, this.obtain_aqi)
+                        } else {
+                            this.setState({
+                                province: this.state.default_location.province,
+                                province_id: this.state.default_location.province_id,
+                                city: this.state.default_location.city,
+                                city_id: this.state.default_location.city_id
+                            }, this.obtain_aqi)
+                        }
+
                     })
                 })
             }

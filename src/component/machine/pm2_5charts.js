@@ -28,7 +28,7 @@ class PM2_5Charts extends React.Component {
         let outdoor = [];
         for (let i = 0; i < data.length; i++) {
             axis.push(util.format(data[i].createTime));
-            outdoor.push(data[i].pm25);
+            outdoor.push(Math.round(data[i].pm25));
         }
         this.setState({date: axis, outdoor: outdoor});
     }
@@ -76,7 +76,7 @@ class PM2_5Charts extends React.Component {
                 let data = response.data;
                 let indoor = [];
                 for (let i = 0; i < data.length; i++) {
-                    indoor.push(data[i].pm2_5);
+                    indoor.push(Math.round(data[i].pm2_5));
                 }
                 this.setState({indoor: indoor})
             }

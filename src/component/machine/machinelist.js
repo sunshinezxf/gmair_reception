@@ -61,7 +61,7 @@ class MachineList extends React.Component {
                     if (response.responseCode === 'RESPONSE_OK') {
                         this.setState({machine_list: response.data, loading: false})
                     } else if (response.responseCode === 'RESPONSE_NULL') {
-                        this.setState({machine_list: []});
+                        this.setState({machine_list: [], loading: false});
                     } else {
                         window.location.href = '/login';
                     }
@@ -89,11 +89,12 @@ class MachineList extends React.Component {
             })
         }
         //load machine list
+        this.setState({loading: true});
         machine_service.obtain_machine_list().then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({machine_list: response.data, loading: false})
             } else if (response.responseCode === 'RESPONSE_NULL') {
-
+                this.setState({machine_list: [], loading: false})
             } else {
                 window.location.href = '/login';
                 return;
@@ -180,7 +181,7 @@ class MachineList extends React.Component {
                     }
                 </PullToRefresh>
                 {this.state.loading &&
-                    <div>数据获取中</div>
+                <div>数据获取中</div>
                 }
                 <Navigation index={0}/>
             </div>
