@@ -167,6 +167,7 @@ class DeviceInit extends React.Component {
     }
 
     submit_init = () => {
+        let qrcode = this.state.qrcode;
         this.setState({progress_finished: true});
         machine_service.confirm_init(this.state.qrcode, this.state.bind_name).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
@@ -181,7 +182,11 @@ class DeviceInit extends React.Component {
                 });
                 locationservice.tell_location().then(response => {
                     if (response.responseCode === 'RESPONSE_OK') {
-                        airquality_service.config_default_outdoor(this.state.qrcode, response.data.code);
+                        locationservice.acquire_city_id(response.data.code).then(response => {
+                            if (response.responseCode === 'RESPONSE_OK') {
+                                airquality_service.config_default_outdoor(qrcode, response.data);
+                            }
+                        })
                     }
                 })
             } else if (response.responseCode === 'RESPONSE_NULL') {

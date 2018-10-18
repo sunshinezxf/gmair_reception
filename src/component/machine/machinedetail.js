@@ -531,9 +531,12 @@ class Outdoor extends React.Component {
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({city_id: response.data[0].cityId});
                 locationservice.city_profile(response.data[0].cityId).then(response => {
-                    this.setState({city: response.data[0].cityName, province_id: response.data[0].provinceId})
+                    if (response.responseCode === 'RESPONSE_OK') {
+                        this.setState({city: response.data[0].cityName, province_id: response.data[0].provinceId}, this.obtain_aqi)
+                    } else {
+                        this.setState({city_id: this.state.default_location.city_id, city: this.state.default_location.city, province_id: this.state.default_location.province_id}, this.obtain_aqi)
+                    }
                 })
-                this.obtain_aqi()
             }
             if (response.responseCode === 'RESPONSE_NULL') {
                 locationservice.tell_location().then(response => {
