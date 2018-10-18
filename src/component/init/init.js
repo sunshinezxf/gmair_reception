@@ -3,11 +3,12 @@ import React from 'react'
 import {Alert, Button, FormGroup, ControlLabel, FormControl} from 'react-bootstrap'
 
 import {machine_service} from '../service/mahcine.service';
+import {airquality_service} from "../service/airquality.service";
+import {locationservice} from "../service/location.service";
 import {util} from "../service/util";
 import {wechatservice} from "../service/wechat.service";
 
 import InitProgress from './initprogress'
-
 
 
 const gmair_init_page = {
@@ -172,10 +173,15 @@ class DeviceInit extends React.Component {
                 this.setState({init_failed: false})
                 //check whether the machine is online
                 machine_service.check_online(this.state.qrcode).then(response => {
-                    if(response.responseCode === 'RESPONSE_OK') {
+                    if (response.responseCode === 'RESPONSE_OK') {
                         this.setState({config_network: false})
-                    }else {
+                    } else {
                         this.setState({config_network: true})
+                    }
+                });
+                locationservice.tell_location().then(response => {
+                    if (response.responseCode === 'RESPONSE_OK') {
+                        airquality_service.config_default_outdoor(this.state.qrcode, response.data.code);
                     }
                 })
             } else if (response.responseCode === 'RESPONSE_NULL') {
