@@ -164,6 +164,7 @@ class PM2_5Charts extends React.Component {
         return (
             <div>
                 <ReactEcharts option={option} theme={'macarons'} notMerge/>
+                {/*<div>图表中数据为过去7天的室内外PM2.5数值平均值, 江苏果麦环保科技有限公司保留对数据的解释权.</div>*/}
             </div>
         )
     }
