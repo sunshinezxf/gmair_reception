@@ -76,7 +76,8 @@ class RegisterPage extends React.Component {
             verification_text: '获取验证码',
             filled: false,
             ready2send: false,
-            ready2reg: false
+            ready2reg: false,
+            mode: 'register'
         }
 
         this.read_username = this.read_username.bind(this);
@@ -157,9 +158,10 @@ class RegisterPage extends React.Component {
                 } else if (response.responseCode == 'RESPONSE_OK') {
                     //the mobile phone number has already been registered
                     this.setState({
-                        mobile_desc: '此手机号已注册，请前往登录。',
-                        ready2send: false,
-                        mobile_confirmed: false
+                        mobile_desc: '此手机号已注册，可直接登录。',
+                        ready2send: true,
+                        mobile_confirmed: true,
+                        mode: 'login'
                     }, this.validate);
                 } else {
                     this.setState({ready2send: false, mobile_confirmed: false}, this.validate);
@@ -181,11 +183,21 @@ class RegisterPage extends React.Component {
     }
 
     validate = () => {
-        if (this.state.username !== '' && this.state.mobile_confirmed == true && this.state.code_confirmed == true && this.state.address !== '') {
-            this.setState({ready2reg: true});
+        if (String(this.state.mode) == 'register') {
+            if (this.state.username !== '' && this.state.mobile_confirmed == true && this.state.code_confirmed == true && this.state.address !== '') {
+                this.setState({ready2reg: true});
 
-        } else {
-            this.setState({ready2reg: false});
+            } else {
+                this.setState({ready2reg: false});
+            }
+        }
+        if (String(this.state.mode) == 'login') {
+            if (this.state.mobile_confirmed == true && this.state.code_confirmed == true) {
+                this.setState({ready2reg: true});
+
+            } else {
+                this.setState({ready2reg: false});
+            }
         }
     }
 
@@ -225,11 +237,20 @@ class RegisterPage extends React.Component {
 
     register = () => {
         this.setState({ready2send: false, ready2reg: false});
-        consumerservice.register(this.state.openid, this.state.username, this.state.mobile, this.state.password, this.state.address_province, this.state.address_city, this.state.address).then(response => {
-            if (response.responseCode === 'RESPONSE_OK') {
-                window.location.href = '/login'
-            }
-        });
+        if (String(this.state.mode) == 'register') {
+            consumerservice.register(this.state.openid, this.state.username, this.state.mobile, this.state.password, this.state.address_province, this.state.address_city, this.state.address).then(response => {
+                if (response.responseCode === 'RESPONSE_OK') {
+                    window.location.href = '/login'
+                }
+            });
+        }
+        if (String(this.state.mode) == 'login') {
+            consumerservice.login(this.state.mobile, this.state.password).then(response => {
+                if (response.responseCode === 'RESPONSE_OK') {
+                    window.location.href = '/machine/list'
+                }
+            });
+        }
     }
 
     render() {
@@ -240,6 +261,7 @@ class RegisterPage extends React.Component {
                 </div>
                 <Slogan></Slogan>
                 <div className="gmair_register_area">
+                    {this.state.mode === 'register' &&
                     <FormGroup>
                         <InputGroup>
                             <InputGroup.Addon style={white_icon}><span
@@ -248,6 +270,7 @@ class RegisterPage extends React.Component {
                                          value={this.state.username} onChange={this.read_username}></FormControl>
                         </InputGroup>
                     </FormGroup>
+                    }
                     <FormGroup>
                         <InputGroup>
                             <InputGroup.Addon style={white_icon}><span
@@ -267,6 +290,7 @@ class RegisterPage extends React.Component {
                                                       onClick={this.send_code}>{this.state.verification_text}</Button></InputGroup.Addon>
                         </InputGroup>
                     </FormGroup>
+                    {this.state.mode === 'register' &&
                     <FormGroup>
                         <InputGroup>
                             <InputGroup.Addon style={white_icon}><span
@@ -275,10 +299,17 @@ class RegisterPage extends React.Component {
                                          value={this.state.address} onChange={this.read_address}></FormControl>
                         </InputGroup>
                     </FormGroup>
+                    }
                 </div>
                 <div className="gmair_register_btn">
+                    {String(this.state.mode) == 'register' &&
                     <Button block style={register_btn} disabled={!this.state.ready2reg}
                             onClick={this.register}>注&nbsp;册</Button>
+                    }
+                    {String(this.state.mode) == 'login' &&
+                    <Button block style={register_btn} disabled={!this.state.ready2reg}
+                            onClick={this.register}>登&nbsp;录</Button>
+                    }
                 </div>
                 <Footer name="已有账号，请点击登录" link="/login"/>
             </div>
