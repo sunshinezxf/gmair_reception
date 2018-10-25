@@ -431,19 +431,19 @@ const outdoor_area_content = {
 }
 
 const outdoor_pm2_5 = {
-    width: `33%`,
+    width: `35%`,
     float: `left`,
     textAlign: `left`
 }
 
 const outdoor_temp = {
-    width: `34%`,
+    width: `30%`,
     float: `left`,
     textAlign: `center`
 }
 
 const outdoor_humid = {
-    width: `33%`,
+    width: `35%`,
     float: `left`,
     textAlign: `right`
 }
@@ -563,6 +563,21 @@ class Outdoor extends React.Component {
     }
 
     render() {
+        let pm2_5_color = 'pm2_5_excellent';
+        if (this.state.outdoor_pm2_5 >= 0 && this.state.outdoor_pm2_5 <= 35) {
+            pm2_5_color = 'pm2_5_excellent'
+        } else if (this.state.outdoor_pm2_5 > 35 && this.state.outdoor_pm2_5 <= 75) {
+            pm2_5_color = 'pm2_5_moderate'
+        } else if (this.state.outdoor_pm2_5 > 75 && this.state.outdoor_pm2_5 <= 115) {
+            pm2_5_color = 'pm2_5_sensative';
+        } else if (this.state.outdoor_pm2_5 > 115 && this.state.outdoor_pm2_5 <= 150) {
+            pm2_5_color = 'pm2_5_unhealthy';
+        } else if (this.state.outdoor_pm2_5 > 150 && this.state.outdoor_pm2_5 <= 250) {
+            pm2_5_color = 'pm2_5_very_unhealthy';
+        } else {
+            pm2_5_color = 'pm2_5_hazardous';
+        }
+
         return (
             <div style={outdoor_area}>
                 <div style={outdoor_title}>
@@ -585,7 +600,7 @@ class Outdoor extends React.Component {
                         <span style={gmair_icon_active}>
                             空气质量
                         </span>
-                                    <span>&nbsp;{this.state.outdoor_level}</span>
+                                    <span className={pm2_5_color}>&nbsp;{this.state.outdoor_level}</span>
                                 </div>
                                 <div style={outdoor_temp}>
                         <span style={gmair_icon_active}>
