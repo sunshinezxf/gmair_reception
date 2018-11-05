@@ -12,6 +12,7 @@ import Person from '../personal/person'
 import DeviceBind from '../bind/devicebind'
 import WechatBind from '../bind/wechatbind'
 import DeviceShare from '../machine/deviceshare'
+import QRCodeGen from '../qrcode/generate'
 
 const gmair_page = {
     width: `100%`,
@@ -39,6 +40,7 @@ class Page extends React.Component {
                 <Route path="/machine/bind/:qrcode" component={DeviceBind}/>
                 <Route path="/wechat/bind" component={WechatBind}/>
                 <Route path="/machine/share/:qrcode" component={DeviceShare}/>
+                <Route path="/qrcode/generate" component={QRCodeGen} />
             </div>
         );
     }
