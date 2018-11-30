@@ -34,7 +34,7 @@ class Navigation extends React.Component {
     render() {
         return (
             <div style={tab_bar_area}>
-                <TabBar>
+                <TabBar barTintColor='whitesmoke'>
                     {
                         this.state.index == 0 ?
                             <TabBar.Item icon={<span><i className='fa fa-cloud'></i></span>}
@@ -57,8 +57,6 @@ class Navigation extends React.Component {
                                          key='我的'
                                          onPress={this.mine_info}></TabBar.Item>
                     }
-
-
                 </TabBar>
             </div>
         )

@@ -431,13 +431,13 @@ const outdoor_area_content = {
 }
 
 const outdoor_pm2_5 = {
-    width: `35%`,
+    width: `40%`,
     float: `left`,
     textAlign: `left`
 }
 
 const outdoor_temp = {
-    width: `30%`,
+    width: `25%`,
     float: `left`,
     textAlign: `center`
 }
@@ -529,34 +529,54 @@ class Outdoor extends React.Component {
     componentDidMount() {
         machine_service.obtain_current_city(this.props.qrcode).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
-                this.setState({city_id: response.data[0].cityId});
-                locationservice.city_profile(response.data[0].cityId).then(response => {
+                let city_id = this.state.default_location.city_id
+                if (new String(response.data[0].cityId) != 'null') {
+                    this.setState({city_id: response.data[0].cityId});
+                    city_id = response.data[0].cityId;
+                }
+                locationservice.city_profile(city_id).then(response => {
                     if (response.responseCode === 'RESPONSE_OK') {
-                        this.setState({city: response.data[0].cityName, province_id: response.data[0].provinceId}, this.obtain_aqi)
+                        this.setState({
+                            city: response.data[0].cityName,
+                            province_id: response.data[0].provinceId
+                        }, this.obtain_aqi)
                     } else {
-                        this.setState({city_id: this.state.default_location.city_id, city: this.state.default_location.city, province_id: this.state.default_location.province_id}, this.obtain_aqi)
+                        this.setState({
+                            city_id: this.state.default_location.city_id,
+                            city: this.state.default_location.city,
+                            province_id: this.state.default_location.province_id
+                        }, this.obtain_aqi)
                     }
                 })
             }
             if (response.responseCode === 'RESPONSE_NULL') {
                 locationservice.tell_location().then(response => {
-                    this.setState({
-                        province: response.data.province,
-                        city: response.data.city
-                    });
-                    locationservice.acquire_city_id(response.data.code).then(response => {
-                        if (response.responseCode === 'RESPONSE_OK') {
-                            this.setState({city_id: response.data}, this.obtain_aqi)
-                        } else {
-                            this.setState({
-                                province: this.state.default_location.province,
-                                province_id: this.state.default_location.province_id,
-                                city: this.state.default_location.city,
-                                city_id: this.state.default_location.city_id
-                            }, this.obtain_aqi)
-                        }
+                    if (response.responseCode == 'RESPONSE_OK') {
+                        this.setState({
+                            province: response.data.province,
+                            city: response.data.city
+                        });
+                        locationservice.acquire_city_id(response.data.code).then(response => {
+                            if (response.responseCode === 'RESPONSE_OK') {
+                                this.setState({city_id: response.data}, this.obtain_aqi)
+                            } else {
+                                this.setState({
+                                    province: this.state.default_location.province,
+                                    province_id: this.state.default_location.province_id,
+                                    city: this.state.default_location.city,
+                                    city_id: this.state.default_location.city_id
+                                }, this.obtain_aqi)
+                            }
 
-                    })
+                        })
+                    } else {
+                        this.setState({
+                            province: this.state.default_location.province,
+                            province_id: this.state.default_location.province_id,
+                            city: this.state.default_location.city,
+                            city_id: this.state.default_location.city_id
+                        }, this.obtain_aqi)
+                    }
                 })
             }
         })
