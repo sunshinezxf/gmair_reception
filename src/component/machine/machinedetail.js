@@ -1,5 +1,7 @@
 import React from 'react'
 
+import {Icon, NavBar} from 'antd-mobile'
+
 import {Button, Col, Form, FormControl, FormGroup, Label} from 'react-bootstrap'
 
 import Operation from './machineoperation'
@@ -344,28 +346,34 @@ class MachineDetail extends React.Component {
 
         return (
             <div>
+                <NavBar
+                    mode="light"
+                    rightContent={[
+                        <span className='am-icon'><i className='fa fa-cog fa-lg'></i> </span>
+                    ]}
+                >{this.state.bind_name}</NavBar>
                 <div style={gmair_machine_index}>
                     <div style={gmair_machine_pm2_5}>
                         <div className={pm2_5_color}>
                             PM2.5 {util.tell_pm2_5_desc(this.state.pm2_5)}
                         </div>
                     </div>
-                    <div style={gmair_machine_name}>
-                        {this.state.edit_machine_name ?
-                            <Form inline>
-                                <Col xs={8} sm={6}>
-                                    <FormGroup style={{padding: `unset`}}>
-                                        <FormControl type='text' value={this.state.bind_name}
-                                                     onChange={this.read_bind}></FormControl>
-                                    </FormGroup>
-                                </Col>
-                                <Col xs={2} sm={4}>
-                                    <Button onClick={this.confirm_bind_name}>确认</Button>
-                                </Col>
-                            </Form> :
-                            <div onClick={this.edit_operation}>{this.state.bind_name}&nbsp;<span
-                                className='fa fa-edit'></span></div>}
-                    </div>
+                    {/*<div style={gmair_machine_name}>*/}
+                    {/*{this.state.edit_machine_name ?*/}
+                    {/*<Form inline>*/}
+                    {/*<Col xs={8} sm={6}>*/}
+                    {/*<FormGroup style={{padding: `unset`}}>*/}
+                    {/*<FormControl type='text' value={this.state.bind_name}*/}
+                    {/*onChange={this.read_bind}></FormControl>*/}
+                    {/*</FormGroup>*/}
+                    {/*</Col>*/}
+                    {/*<Col xs={2} sm={4}>*/}
+                    {/*<Button onClick={this.confirm_bind_name}>确认</Button>*/}
+                    {/*</Col>*/}
+                    {/*</Form> :*/}
+                    {/*<div onClick={this.edit_operation}>{this.state.bind_name}&nbsp;<span*/}
+                    {/*className='fa fa-edit'></span></div>}*/}
+                    {/*</div>*/}
                 </div>
                 <div style={gmair_machine_index}>
                     <div style={indoor_index}>
