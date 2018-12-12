@@ -382,21 +382,23 @@ class MachineDetail extends React.Component {
                         <div style={gmair_machine_index_desc}>
                             {this.state.co2_is_present &&
                             <div style={gmair_machine_index_desc_item}>
-                                <span style={gmair_icon_active}>
-                                    <i className='fa fa-leaf'></i>
+                                <span style={{fontSize:`10px`,color: `#00A2E9`,
+                                    width: `2rem`,
+                                    textAlign: `center`}}>
+                                   CO<sub>2</sub>
                                 </span>
                                 <span>&nbsp;{this.state.co2}ppm</span>
                             </div>
                             }
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}>
-                                    <i className='fa fa-thermometer'></i>
+                                    <i className='fa fa-thermometer fa-fw'></i>
                                 </span>
                                 <span>&nbsp;{this.state.temp}°C</span>
                             </div>
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}>
-                                    <i className='glyphicon glyphicon-tint'></i>
+                                    <i className='glyphicon glyphicon-tint fa-fw'></i>
                                 </span>
                                 <span>&nbsp;{this.state.humid}%</span>
                             </div>
