@@ -349,7 +349,7 @@ class MachineDetail extends React.Component {
                 <NavBar
                     mode="light"
                     rightContent={[
-                        <span className='am-icon'><i className='fa fa-cog fa-lg'></i> </span>
+                        <span className='am-icon' onClick={()=>{window.location.href="/machine/operation/"+this.state.qrcode;}}><i className='fa fa-cog fa-lg'></i> </span>
                     ]}
                 >{this.state.bind_name}</NavBar>
                 <div style={gmair_machine_index}>
