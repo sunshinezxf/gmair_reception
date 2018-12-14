@@ -1,6 +1,6 @@
 import connect from "react-redux/es/connect/connect";
 import {switchOff,switchOn,expandTiming,changeStartHour,changeEndHour,changeEndMinute,changeStartMinute,changeModalVisible,
-editUsername,inputUsername,usernameOkClick} from "../../actions/operation.action";
+editUsername,inputUsername,usernameOkClick,startTimeChange,endTimeChange,qrcodeStore} from "../../actions/operation.action";
 import SettingSelect from '../../component/machine/settingSelect';
 
 //映射Redux state到组件的属性
@@ -15,6 +15,9 @@ function mapStateToProps(state) {
         modal_visible:state.operation_reducer.modal_visible,
         username:state.operation_reducer.username,
         username_edit:state.operation_reducer.username_edit,
+        start_time:state.operation_reducer.start_time,
+        end_time:state.operation_reducer.end_time,
+        qrcode:state.operation_reducer.qrcode,
     }
 }
 
@@ -32,6 +35,8 @@ function mapDispatchToProps(dispatch){
         editUsername:()=>dispatch(editUsername()),
         inputUsername:(username)=>dispatch(inputUsername(username)),
         usernameOkClick:()=>dispatch(usernameOkClick()),
+        startTimeChange:(start_time)=>dispatch(startTimeChange(start_time)),
+        endTimeChange:(end_time)=>dispatch(endTimeChange(end_time)),
     }
 }
 

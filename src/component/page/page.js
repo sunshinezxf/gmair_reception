@@ -13,7 +13,7 @@ import DeviceBind from '../bind/devicebind'
 import WechatBind from '../bind/wechatbind'
 import DeviceShare from '../machine/deviceshare'
 import QRCodeGen from '../qrcode/generate'
-import DeviceOperation from '../machine/operation'
+import DeviceOperation from '../../containers/machine/operation'
 
 const gmair_page = {
     width: `100%`,

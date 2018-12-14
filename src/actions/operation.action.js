@@ -9,6 +9,10 @@ export const MODAL_VISIBLE_CHANGE="MODAL_VISIBLE_CHANGE";
 export const EDIT_USERNAME="EDIT_USERNAME";
 export const INPUT_USERNAME="INPUT_USERNAME";
 export const USERNAME_OK_CLICK="USERNAME_OK_CLICK";
+export const START_TIME_CHANGE="START_TIME_CHANGE";
+export const END_TIME_CHANGE="END_TIME_CHANGE";
+export const QRCODE_STORE="QRCODE_STORE";
+export const COMPONENT_IN="COMPONENT_IN";
 
 export function switchOn() {
     return {
@@ -68,5 +72,34 @@ export function inputUsername(username){
 export function usernameOkClick() {
     return {
         type:USERNAME_OK_CLICK,
+    }
+}
+export function startTimeChange(start_time) {
+    return {
+        type:START_TIME_CHANGE,
+        start_time:start_time,
+    }
+}
+export function endTimeChange(end_time) {
+    return {
+        type:END_TIME_CHANGE,
+        end_time:end_time,
+    }
+}
+export function qrcodeStore(qrcode) {
+    return {
+        type:QRCODE_STORE,
+        qrcode:qrcode,
+    }
+}
+export function componentIn(start_hour,start_minute,end_hour,end_minute,start_time,end_time) {
+    return {
+        type:COMPONENT_IN,
+        start_hour:start_hour,
+        start_minute:start_minute,
+        end_hour:end_hour,
+        end_minute:end_minute,
+        start_time:start_time,
+        end_time:end_time,
     }
 }

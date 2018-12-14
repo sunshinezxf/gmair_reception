@@ -2879,7 +2879,6 @@ a {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    padding-left: 15px;
     min-height: 44px;
     background-color: #fff;
     vertical-align: middle;
@@ -2972,7 +2971,6 @@ a {
     -webkit-align-self: stretch;
     -ms-flex-item-align: stretch;
     align-self: stretch;
-    padding-right: 15px;
     overflow: hidden;
     /* list左侧主内容*/
     /* list右补充内容*/
@@ -2984,8 +2982,7 @@ a {
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1;
-    color: #000;
-    font-size: 17px;
+    font-size: 1.45rem;
     line-height: 1.5;
     text-align: left;
     width: auto;
@@ -3000,7 +2997,7 @@ a {
     -ms-flex-preferred-size: 36%;
     flex-basis: 36%;
     color: #888;
-    font-size: 16px;
+    font-size: 1.45rem;
     line-height: 1.5;
     text-align: right;
     width: auto;
