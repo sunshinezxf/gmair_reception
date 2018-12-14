@@ -5,7 +5,7 @@ import Gmair from './gmair';
 import registerServiceWorker from './registerServiceWorker';
 import { createStore } from 'redux';
 import { Provider} from 'react-redux';
-import reducer from './reducers/operation_reducer';
+import reducer from './reducers/index';
 import {LocaleProvider} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import moment from 'moment';
