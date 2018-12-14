@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Icon, NavBar, Modal} from 'antd-mobile'
+import {Icon, NavBar, Modal,Toast} from 'antd-mobile'
 import {message} from 'antd';
 
 import {Button, Col, Form, FormControl, FormGroup, Label} from 'react-bootstrap'
@@ -295,6 +295,7 @@ class MachineDetail extends React.Component {
     }
 
     picture_on_click(){
+        Toast.loading('加载中...', 2);
         consumerservice.profile().then(response=>{
             if(response.responseCode==="RESPONSE_OK"){
                 operation_service.push_picture(this.state.qrcode).then(response=>{
