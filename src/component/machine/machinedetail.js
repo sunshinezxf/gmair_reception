@@ -299,9 +299,8 @@ class MachineDetail extends React.Component {
         consumerservice.profile().then(response=>{
             if(response.responseCode==="RESPONSE_OK"){
                 operation_service.push_picture(this.state.qrcode).then(response=>{
-                    console.log(response);
                     if(response.responseCode==="RESPONSE_OK"){
-                        alert('推送成功', '图片已推送到公众号聊天窗口，是否前往查看？', [
+                        alert('生成成功', '图片将在几秒内推送到公众号聊天窗口，可前往查看', [
                             {text: '下次再说',},
                             {text: '立即前往', onPress:this.drop_out_window},
                         ])

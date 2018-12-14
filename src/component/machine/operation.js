@@ -86,7 +86,7 @@ class MachineOperation extends Component {
                         onLeftClick={() => {
                             window.location.href = "/machine/detail/" +this.props.qrcode
                         }}
-                    >机器设置页</NavBar>
+                    >新风设置</NavBar>
                     {this.state.mode === 0 &&
                     <SettingSelect qrcode={this.props.qrcode}/>
                     }
