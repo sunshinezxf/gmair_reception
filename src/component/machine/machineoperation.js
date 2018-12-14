@@ -404,14 +404,18 @@ class Workmode extends React.Component {
                                 className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             {
-                                this.props.current_mode === 'manual' ? '' : this.operate_mode('manual')
+                                if(this.props.current_mode !== 'manual') {
+                                    this.operate_mode('manual')
+                                }
                             }
                         }}>手动</Button>
                         <Button type={this.props.current_mode === 'sleep' ? 'primary' : 'ghost'} inline size="small"
                                 className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             {
-                                this.props.current_mode === 'sleep' ? '' : this.operate_mode('sleep')
+                                if(this.props.current_mode !== 'sleep') {
+                                    this.operate_mode('sleep')
+                                }
                             }
                         }}>睡眠</Button>
                         <Button type={this.props.current_mode === 'auto' ? 'primary' : 'ghost'} inline size="small"
@@ -460,7 +464,9 @@ class Heat extends React.Component {
                             className='am-button-borderfix'
                             style={{margin: '0 1.5rem'}} onClick={() => {
                 {
-                    this.props.heat === index ? '' : this.operate_heat(item.operator)
+                    if(this.props.heat !== index) {
+                        this.operate_heat(item.operator)
+                    }
                 }
             }}>{item.name}</Button>)
         })

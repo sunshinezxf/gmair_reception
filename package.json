@@ -12,7 +12,7 @@
     "echarts-for-react": "^2.0.13",
     "install": "^0.12.1",
     "moment": "^2.22.2",
-    "npm": "^6.3.0",
+    "npm": "^6.5.0",
     "qrcode.react": "^0.8.0",
     "rc-slider": "^8.6.1",
     "react": "^16.3.2",
@@ -24,12 +24,12 @@
     "react-reveal": "^1.2.2",
     "react-reveal-text": "^0.1.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4",
-    "vconsole": "^3.2.0",
-    "redux": "^4.0.1"
+    "react-scripts": "^2.1.1",
+    "redux": "^4.0.1",
+    "vconsole": "^3.2.0"
   },
   "scripts": {
-    "start": "set PORT=80 &&react-scripts start",
+    "start": "PORT=80 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
@@ -39,5 +39,11 @@
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "react-app-rewired": "^1.5.2"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
