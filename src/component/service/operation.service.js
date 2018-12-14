@@ -39,7 +39,7 @@ function format_time(hour,minute) {
     let year = date.getFullYear();
     let month = date.getMonth();
     let day = date.getDay();
-    let result = new Date(year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00");
+    let result = new Date(year + "/" + month + "/" + day + " " + hour + ":" + minute + ":00");
     return result;
 }
 
