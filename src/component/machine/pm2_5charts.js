@@ -102,7 +102,7 @@ class PM2_5Charts extends React.Component {
                 align: 'left'
             },
             grid: {
-                top: 38
+                top: 38,left:'12%',right:'12%'
             },
             xAxis: {
                 fontStyle: 'oblique',

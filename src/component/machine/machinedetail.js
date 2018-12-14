@@ -1,5 +1,8 @@
 import React from 'react'
 
+import {Icon, NavBar, Modal} from 'antd-mobile'
+import {message} from 'antd';
+
 import {Button, Col, Form, FormControl, FormGroup, Label} from 'react-bootstrap'
 
 import Operation from './machineoperation'
@@ -16,6 +19,10 @@ import './machine_bind_name.css'
 
 import Location from "../citypicker/Location";
 import {airquality_service} from "../service/airquality.service";
+import {consumerservice} from "../service/consumer.service";
+import {operation_service} from "../service/operation.service";
+
+const alert = Modal.alert;
 
 const gmair_machine_index = {
     width: `100%`,
@@ -93,6 +100,8 @@ class MachineDetail extends React.Component {
         this.read_bind = this.read_bind.bind(this);
         this.check_qrcode = this.check_qrcode.bind(this);
         this.check_control_option = this.check_control_option.bind(this);
+        this.drop_out_window=this.drop_out_window.bind(this);
+        this.picture_on_click=this.picture_on_click.bind(this);
         this.state = {
             bind_name: '',
             qrcode: '',
@@ -113,31 +122,6 @@ class MachineDetail extends React.Component {
             edit_machine_name: false,
             co2_is_present: false,
             lock_is_present: false
-        }
-    }
-
-    init_config = () => {
-        let url = window.location.href;
-        if (util.is_weixin()) {
-            wechatservice.configuration(url).then(response => {
-                if (response.responseCode === 'RESPONSE_OK') {
-                    let result = response.data;
-                    window.wx.config({
-                        beta: true,
-                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                        appId: result.appId, // 必填，公众号的唯一标识
-                        timestamp: result.timestamp, // 必填，生成签名的时间戳
-                        nonceStr: result.nonceStr, // 必填，生成签名的随机串
-                        signature: result.signature,// 必填，签名
-                        jsApiList: ['hideAllNonBaseMenuItem', 'scanQRCode'] // 必填，需要使用的JS接口列表
-                    });
-                    window.wx.ready(() => {
-                        window.wx.hideAllNonBaseMenuItem();
-                    });
-                }
-            });
-        } else {
-            // alert("seems that you are not in wechat")
         }
     }
 
@@ -193,7 +177,7 @@ class MachineDetail extends React.Component {
                         timestamp: result.timestamp, // 必填，生成签名的时间戳
                         nonceStr: result.nonceStr, // 必填，生成签名的随机串
                         signature: result.signature,// 必填，签名
-                        jsApiList: ['hideAllNonBaseMenuItem'] // 必填，需要使用的JS接口列表
+                        jsApiList: ['hideAllNonBaseMenuItem', 'closeWindow'] // 必填，需要使用的JS接口列表
                     });
                     window.wx.ready(() => {
                         window.wx.hideAllNonBaseMenuItem();
@@ -306,6 +290,32 @@ class MachineDetail extends React.Component {
         })
     }
 
+    drop_out_window() {
+        window.wx.closeWindow();
+    }
+
+    picture_on_click(){
+        consumerservice.profile().then(response=>{
+            if(response.responseCode==="RESPONSE_OK"){
+                operation_service.push_picture(this.state.qrcode).then(response=>{
+                    console.log(response);
+                    if(response.responseCode==="RESPONSE_OK"){
+                        alert('推送成功', '图片已推送到公众号聊天窗口，是否前往查看？', [
+                            {text: '下次再说',},
+                            {text: '立即前往', onPress:this.drop_out_window},
+                        ])
+                    }
+                    else{
+                        message.error("图片生成失败",1);
+                    }
+                })
+            }else{
+                message.error("推送失败,未绑定微信号",1);
+            }
+        })
+
+    }
+
     componentDidMount() {
         // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
         //     var vConsole = new window.VConsole();
@@ -344,28 +354,44 @@ class MachineDetail extends React.Component {
 
         return (
             <div>
+                <NavBar
+                    mode="light"
+                    leftContent={[<Icon type="left"/>]}
+                    rightContent={[
+                        <div>
+                        <span style={{paddingRight: `2rem`}} onClick={this.picture_on_click}>
+                            <i className="fa fa-picture-o" aria-hidden="true"></i></span>
+                            <span className='am-icon' onClick={() => {
+                                window.location.href = "/machine/operation/" + this.state.qrcode;
+                            }}><i className='fa fa-cog fa-lg'></i> </span>
+                        </div>
+                    ]}
+                    onLeftClick={() => {
+                        window.location.href = "/machine/list"
+                    }}
+                >{this.state.bind_name}</NavBar>
                 <div style={gmair_machine_index}>
                     <div style={gmair_machine_pm2_5}>
                         <div className={pm2_5_color}>
                             PM2.5 {util.tell_pm2_5_desc(this.state.pm2_5)}
                         </div>
                     </div>
-                    <div style={gmair_machine_name}>
-                        {this.state.edit_machine_name ?
-                            <Form inline>
-                                <Col xs={8} sm={6}>
-                                    <FormGroup style={{padding: `unset`}}>
-                                        <FormControl type='text' value={this.state.bind_name}
-                                                     onChange={this.read_bind}></FormControl>
-                                    </FormGroup>
-                                </Col>
-                                <Col xs={2} sm={4}>
-                                    <Button onClick={this.confirm_bind_name}>确认</Button>
-                                </Col>
-                            </Form> :
-                            <div onClick={this.edit_operation}>{this.state.bind_name}&nbsp;<span
-                                className='fa fa-edit'></span></div>}
-                    </div>
+                    {/*<div style={gmair_machine_name}>*/}
+                    {/*{this.state.edit_machine_name ?*/}
+                    {/*<Form inline>*/}
+                    {/*<Col xs={8} sm={6}>*/}
+                    {/*<FormGroup style={{padding: `unset`}}>*/}
+                    {/*<FormControl type='text' value={this.state.bind_name}*/}
+                    {/*onChange={this.read_bind}></FormControl>*/}
+                    {/*</FormGroup>*/}
+                    {/*</Col>*/}
+                    {/*<Col xs={2} sm={4}>*/}
+                    {/*<Button onClick={this.confirm_bind_name}>确认</Button>*/}
+                    {/*</Col>*/}
+                    {/*</Form> :*/}
+                    {/*<div onClick={this.edit_operation}>{this.state.bind_name}&nbsp;<span*/}
+                    {/*className='fa fa-edit'></span></div>}*/}
+                    {/*</div>*/}
                 </div>
                 <div style={gmair_machine_index}>
                     <div style={indoor_index}>
@@ -374,21 +400,25 @@ class MachineDetail extends React.Component {
                         <div style={gmair_machine_index_desc}>
                             {this.state.co2_is_present &&
                             <div style={gmair_machine_index_desc_item}>
-                                <span style={gmair_icon_active}>
-                                    <i className='fa fa-leaf'></i>
+                                <span style={{
+                                    fontSize: `10px`, color: `#00A2E9`,
+                                    width: `2rem`,
+                                    textAlign: `center`
+                                }}>
+                                   CO<sub>2</sub>
                                 </span>
                                 <span>&nbsp;{this.state.co2}ppm</span>
                             </div>
                             }
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}>
-                                    <i className='fa fa-thermometer'></i>
+                                    <i className='fa fa-thermometer fa-fw'></i>
                                 </span>
                                 <span>&nbsp;{this.state.temp}°C</span>
                             </div>
                             <div style={gmair_machine_index_desc_item}>
                                 <span style={gmair_icon_active}>
-                                    <i className='glyphicon glyphicon-tint'></i>
+                                    <i className='glyphicon glyphicon-tint fa-fw'></i>
                                 </span>
                                 <span>&nbsp;{this.state.humid}%</span>
                             </div>
