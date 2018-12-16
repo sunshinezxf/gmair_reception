@@ -37,8 +37,8 @@ function obtain_timing_status(qrcode) {
 function format_time(hour,minute) {
     let date = new Date();
     let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDay();
+    let month = date.getMonth()+1;
+    let day = date.getDate();
     let result = new Date(year + "/" + month + "/" + day + " " + hour + ":" + minute + ":00");
     return result;
 }
