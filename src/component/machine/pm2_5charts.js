@@ -16,7 +16,8 @@ class PM2_5Charts extends React.Component {
             outdoor: [],
             indoor: [],
             province_id: '',
-            city_id: ''
+            city_id: '',
+            over_toast:false,
         };
         this.store_outdoor_data = this.store_outdoor_data.bind(this);
         this.obtain_weekly_data = this.obtain_weekly_data.bind(this);
@@ -78,6 +79,13 @@ class PM2_5Charts extends React.Component {
                 for (let i = 0; i < data.length; i++) {
                     indoor.push(Math.round(data[i].pm2_5));
                 }
+                for(let i=0;i<indoor.length;i++){
+                    if(indoor[i]>=25){
+                        this.setState({
+                            over_toast:true,
+                        })
+                    }
+                }
                 this.setState({indoor: indoor})
             }
         })
@@ -132,6 +140,27 @@ class PM2_5Charts extends React.Component {
                     show: false
                 }
             },
+            visualMap: [{
+                show: false,
+                dimension: 1,
+                pieces: [
+                    {gte: 25 ,color:`red`},
+                    {lt: 24.9999 ,color:`#F282AA`}
+                ],
+                outOfRange: {
+                    color: '#F282AA'
+                }
+            },{
+                show: false,
+                dimension: 1,
+                pieces: [
+                    {gte: 25 ,color:`red`},            // (1500, Infinity]
+                    {lt: 24.9999,color:`#11C1F3`}                 // (-Infinity, 5)
+                ],
+                outOfRange: {
+                    color: '#11C1F3'
+                }
+            }],
             series: [
                 {
                     name: '室内',
@@ -143,6 +172,26 @@ class PM2_5Charts extends React.Component {
                     lineStyle: {
                         color: '#11C1F3',
                         width: 3
+                    },
+                    markLine: {
+                        symbol:'none',
+                        data: [
+                            // {
+                            //     name: '平均线',
+                            //     // 支持 'average', 'min', 'max'
+                            //     type: 'average'
+                            // },
+                            {
+                                name: 'Y 轴值为 25 的水平线',
+                                yAxis: 25,
+                                lineStyle: {
+                                    color: '#00CC66',
+                                    width: 2,
+                                    type: 'dashed'
+                                },
+                                label: { show: false, position:'end' }
+                            },
+                        ]
                     }
                 },
                 {
@@ -164,6 +213,11 @@ class PM2_5Charts extends React.Component {
         return (
             <div>
                 <ReactEcharts option={option} theme={'macarons'} notMerge/>
+                {/*{this.state.over_toast &&*/}
+                    {/*<div>*/}
+                    {/*这是一个提示*/}
+                    {/*</div>*/}
+                {/*}*/}
                 {/*<div>图表中数据为过去7天的室内外PM2.5数值平均值, 江苏果麦环保科技有限公司保留对数据的解释权.</div>*/}
             </div>
         )
