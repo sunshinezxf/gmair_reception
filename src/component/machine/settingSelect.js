@@ -17,8 +17,8 @@ class SettingSelect extends Component {
     }
 
     componentDidMount() {
-        this.props.startTimeChange(new Date("2018-12-14 21:00:00"));
-        this.props.endTimeChange(new Date("2018-12-15 09:00:00"));
+        this.props.startTimeChange(new Date("2018/12/14 21:00:00"));
+        this.props.endTimeChange(new Date("2018/12/15 09:00:00"));
     }
 
     onSwitchChange(e) {

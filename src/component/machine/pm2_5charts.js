@@ -17,7 +17,7 @@ class PM2_5Charts extends React.Component {
             indoor: [],
             province_id: '',
             city_id: '',
-            over_toast:false,
+            over_toast: false,
         };
         this.store_outdoor_data = this.store_outdoor_data.bind(this);
         this.obtain_weekly_data = this.obtain_weekly_data.bind(this);
@@ -79,10 +79,10 @@ class PM2_5Charts extends React.Component {
                 for (let i = 0; i < data.length; i++) {
                     indoor.push(Math.round(data[i].pm2_5));
                 }
-                for(let i=0;i<indoor.length;i++){
-                    if(indoor[i]>=25){
+                for (let i = 0; i < indoor.length; i++) {
+                    if (indoor[i] >= 25) {
                         this.setState({
-                            over_toast:true,
+                            over_toast: true,
                         })
                     }
                 }
@@ -110,7 +110,7 @@ class PM2_5Charts extends React.Component {
                 align: 'left'
             },
             grid: {
-                top: 38,left:'12%',right:'12%'
+                top: 38, left: '12%', right: '12%'
             },
             xAxis: {
                 fontStyle: 'oblique',
@@ -127,6 +127,7 @@ class PM2_5Charts extends React.Component {
             calculable: true,
             yAxis: {
                 name: '空气污染指数',
+                splitLine: false,
                 nameLocation: 'center',
                 nameRotate: 90,
                 type: 'value',
@@ -144,18 +145,18 @@ class PM2_5Charts extends React.Component {
                 show: false,
                 dimension: 1,
                 pieces: [
-                    {gte: 25 ,color:`red`},
-                    {lt: 24.9999 ,color:`#F282AA`}
+                    {gte: 25, color: `red`},
+                    {lt: 24.9999, color: `#F282AA`}
                 ],
                 outOfRange: {
                     color: '#F282AA'
                 }
-            },{
+            }, {
                 show: false,
                 dimension: 1,
                 pieces: [
-                    {gte: 25 ,color:`red`},            // (1500, Infinity]
-                    {lt: 24.9999,color:`#11C1F3`}                 // (-Infinity, 5)
+                    {gte: 25, color: `red`},            // (1500, Infinity]
+                    {lt: 24.9999, color: `#11C1F3`}                 // (-Infinity, 5)
                 ],
                 outOfRange: {
                     color: '#11C1F3'
@@ -174,7 +175,7 @@ class PM2_5Charts extends React.Component {
                         width: 3
                     },
                     markLine: {
-                        symbol:'none',
+                        symbol: 'none',
                         data: [
                             // {
                             //     name: '平均线',
@@ -182,14 +183,14 @@ class PM2_5Charts extends React.Component {
                             //     type: 'average'
                             // },
                             {
-                                name: 'Y 轴值为 25 的水平线',
+                                name: 'PM2.5数值参考线',
                                 yAxis: 25,
                                 lineStyle: {
-                                    color: '#00CC66',
-                                    width: 2,
+                                    color: '#11C1F3',
+                                    width: 1.5,
                                     type: 'dashed'
                                 },
-                                label: { show: false, position:'end' }
+                                label: {show: false, position: 'end'}
                             },
                         ]
                     }
@@ -214,9 +215,9 @@ class PM2_5Charts extends React.Component {
             <div>
                 <ReactEcharts option={option} theme={'macarons'} notMerge/>
                 {/*{this.state.over_toast &&*/}
-                    {/*<div>*/}
-                    {/*这是一个提示*/}
-                    {/*</div>*/}
+                {/*<div>*/}
+                {/*这是一个提示*/}
+                {/*</div>*/}
                 {/*}*/}
                 {/*<div>图表中数据为过去7天的室内外PM2.5数值平均值, 江苏果麦环保科技有限公司保留对数据的解释权.</div>*/}
             </div>
