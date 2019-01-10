@@ -142,16 +142,7 @@ class PM2_5Charts extends React.Component {
                 }
             },
             visualMap: [{
-                show: false,
-                dimension: 1,
-                pieces: [
-                    {gte: 25, color: `red`},
-                    {lt: 24.9999, color: `#F282AA`}
-                ],
-                outOfRange: {
-                    color: '#F282AA'
-                }
-            }, {
+                seriesIndex:0,
                 show: false,
                 dimension: 1,
                 pieces: [
