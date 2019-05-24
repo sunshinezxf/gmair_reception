@@ -196,8 +196,8 @@ class MachineDetail extends React.Component {
                 let information = response.data;
                 let pm2_5 = information.pm2_5;
                 let volume = information.volume;
-                let temp = information.temp;
-                let humid = information.humid;
+                let temp = information.temperature;
+                let humid = information.humidity;
                 let power = information.power;
                 let mode = information.mode;
                 let light = information.light;

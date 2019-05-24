@@ -47,7 +47,8 @@ class Operation extends React.Component {
             min_volume: 0,
             max_volume: 400,
             min_light: 0,
-            max_light: 10
+            max_light: 0,
+            step: 1
         }
         this.expand = this.expand.bind(this);
         this.init_control_option = this.init_control_option.bind(this);
@@ -69,7 +70,11 @@ class Operation extends React.Component {
         })
         machine_service.obtain_light_range(this.state.modelId).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
-                this.setState({min_light: response.data[0].minLight, max_light: response.data[0].maxLight})
+                this.setState({
+                    min_light: response.data[0].minLight,
+                    max_light: response.data[0].maxLight,
+                    step: response.data[0].step
+                })
             }
         })
     }
@@ -138,7 +143,7 @@ class Operation extends React.Component {
                     <Row>
                         <Light power_status={this.props.power_status} current_light={this.props.light}
                                light_operate={this.light_operate}
-                               min_light={this.state.min_light} max_light={this.state.max_light}
+                               min_light={this.state.min_light} max_light={this.state.max_light} step={this.state.step}
                                operate_local_light={this.props.operate_local_light}/>
                         <Heat power_status={this.props.power_status} current_heat={this.props.heat}
                               heat_operate={this.heat_operate}
@@ -340,7 +345,7 @@ class Light extends React.Component {
                     <Slider style={config_panel_area} defaultValue={this.props.current_light}
                             value={this.props.current_light}
                             min={this.props.min_light} max={this.props.max_light}
-                            step={10}
+                            step={this.props.step}
                             onChange={(e) => {
                                 this.local_light(e);
                             }}
@@ -404,7 +409,7 @@ class Workmode extends React.Component {
                                 className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             {
-                                if(this.props.current_mode !== 'manual') {
+                                if (this.props.current_mode !== 'manual') {
                                     this.operate_mode('manual')
                                 }
                             }
@@ -413,7 +418,7 @@ class Workmode extends React.Component {
                                 className='am-button-borderfix'
                                 style={{margin: '0 1.5rem'}} onClick={() => {
                             {
-                                if(this.props.current_mode !== 'sleep') {
+                                if (this.props.current_mode !== 'sleep') {
                                     this.operate_mode('sleep')
                                 }
                             }
@@ -464,7 +469,7 @@ class Heat extends React.Component {
                             className='am-button-borderfix'
                             style={{margin: '0 1.5rem'}} onClick={() => {
                 {
-                    if(this.props.heat !== index) {
+                    if (this.props.heat !== index) {
                         this.operate_heat(item.operator)
                     }
                 }

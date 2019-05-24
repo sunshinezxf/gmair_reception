@@ -76,6 +76,7 @@ class MachineList extends React.Component {
 
     componentDidMount() {
         let access_token = localStorage.getItem('access_token');
+
         if (access_token === undefined || access_token === null || access_token === '') {
             window.location.href = '/login';
             return;
@@ -96,7 +97,7 @@ class MachineList extends React.Component {
             } else if (response.responseCode === 'RESPONSE_NULL') {
                 this.setState({machine_list: [], loading: false})
             } else {
-                window.location.href = '/login';
+                // window.location.href = '/login';
                 return;
             }
         });

@@ -25,6 +25,8 @@ function load_script(url, method) {
 }
 
 function format_pm2_5(value) {
+    if (value === undefined || value === null || value === '')
+        return '000';
     if(value < 10) {
        return '00' +  value.toString();
     }
