@@ -1,4 +1,5 @@
 import React from 'react';
+import {Tag,Badge} from 'antd';
 
 import {machine_service} from "../service/mahcine.service";
 
@@ -85,7 +86,8 @@ class MachineItem extends React.Component {
             humid: '',
             power_status: 'off',
             work_mode: '',
-            lock_status: 'off'
+            lock_status: 'off',
+            model_name:'',
         }
         this.power_operate = this.power_operate.bind(this);
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
@@ -153,6 +155,22 @@ class MachineItem extends React.Component {
         });
     }
 
+    obtain_model_name=(qrcode)=>{
+        machine_service.check_exist(qrcode).then(response=>{
+            if(response.responseCode==="RESPONSE_OK"){
+                let modelId=response.data[0].modelId;
+                machine_service.obtain_model(modelId).then(response=>{
+                    if(response.responseCode==="RESPONSE_OK"){
+                        console.log(response);
+                        this.setState({
+                            model_name:response.data[0].modelName
+                        })
+                    }
+                })
+            }
+        })
+    }
+
     config_network = () => {
         window.location.href = '/network/config';
     }
@@ -161,6 +179,7 @@ class MachineItem extends React.Component {
         let qrcode = this.props.qrcode;
         this.setState({qrcode: qrcode});
         this.obtain_machine_status(qrcode);
+        this.obtain_model_name(qrcode);
         setInterval(() => {
             this.obtain_machine_status(qrcode);
         }, 10000);
@@ -185,11 +204,12 @@ class MachineItem extends React.Component {
                     window.location.href = url
                 }}>
                     {
-                        this.state.online === true ?
+                        this.state.model_name === "" ?
                             <div style={gmair_machine_name}>{this.props.name}</div>
                             :
-                            <div style={gmair_machine_name}>{this.props.name}</div>
+                            <div style={gmair_machine_name}>{this.props.name}<Tag style={{marginLeft:'0.8rem',color:'#58595B',fontWeight:'normal'}}>{this.state.model_name}</Tag></div>
                     }
+
                     {
                         this.state.online === true ?
                             <div style={gmair_machine_desc}>
