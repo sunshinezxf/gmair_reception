@@ -1,5 +1,5 @@
 import React from 'react';
-import {Tag,Badge} from 'antd';
+import {Tag, Badge} from 'antd';
 
 import {machine_service} from "../service/mahcine.service";
 
@@ -87,7 +87,7 @@ class MachineItem extends React.Component {
             power_status: 'off',
             work_mode: '',
             lock_status: 'off',
-            model_name:'',
+            model_name: '',
         }
         this.power_operate = this.power_operate.bind(this);
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
@@ -155,15 +155,14 @@ class MachineItem extends React.Component {
         });
     }
 
-    obtain_model_name=(qrcode)=>{
-        machine_service.check_exist(qrcode).then(response=>{
-            if(response.responseCode==="RESPONSE_OK"){
-                let modelId=response.data[0].modelId;
-                machine_service.obtain_model(modelId).then(response=>{
-                    if(response.responseCode==="RESPONSE_OK"){
-                        console.log(response);
+    obtain_model_name = (qrcode) => {
+        machine_service.check_exist(qrcode).then(response => {
+            if (response.responseCode === "RESPONSE_OK") {
+                let modelId = response.data[0].modelId;
+                machine_service.obtain_model(modelId).then(response => {
+                    if (response.responseCode === "RESPONSE_OK") {
                         this.setState({
-                            model_name:response.data[0].modelName
+                            model_name: response.data[0].modelName
                         })
                     }
                 })
@@ -189,11 +188,12 @@ class MachineItem extends React.Component {
         let url = '/machine/detail/' + this.props.qrcode;
 
         return (
-            <div style={gmair_machine_item} onClick={this.state.online ? ()=> {} : this.config_network}>
+            <div style={gmair_machine_item} onClick={this.state.online ? () => {
+            } : this.config_network}>
                 <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>
                     {this.state.online === true ? util.format_pm2_5(this.state.pm2_5) :
                         <span><i className='fa fa-unlink'
-                                                               style={gmair_icon_active}></i></span>}
+                                 style={gmair_icon_active}></i></span>}
                 </div>
                 <div style={gmair_machine_operation}>
                     {this.state.online === true ?
@@ -207,7 +207,11 @@ class MachineItem extends React.Component {
                         this.state.model_name === "" ?
                             <div style={gmair_machine_name}>{this.props.name}</div>
                             :
-                            <div style={gmair_machine_name}>{this.props.name}<Tag style={{marginLeft:'0.8rem',color:'#58595B',fontWeight:'normal'}}>{this.state.model_name}</Tag></div>
+                            <div style={gmair_machine_name}>{this.props.name}<Tag style={{
+                                marginLeft: '0.8rem',
+                                color: '#58595B',
+                                fontWeight: 'normal'
+                            }}>{this.state.model_name}</Tag></div>
                     }
 
                     {
