@@ -14,6 +14,7 @@ import WechatBind from '../bind/wechatbind'
 import DeviceShare from '../machine/deviceshare'
 import QRCodeGen from '../qrcode/generate'
 import DeviceOperation from '../../containers/machine/operation'
+import FanContent from '../fan/fanContent'
 
 const gmair_page = {
     width: `100%`,
@@ -43,6 +44,7 @@ class Page extends React.Component {
                 <Route path="/machine/share/:qrcode" component={DeviceShare}/>
                 <Route path="/qrcode/generate" component={QRCodeGen} />
                 <Route path="/machine/operation/:qrcode" component={DeviceOperation}/>
+                <Route path="/fan/detail/:qrcode" component={FanContent}/>
             </div>
         );
     }
