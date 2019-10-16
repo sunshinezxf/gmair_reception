@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import OnOffHeader from './on_off_header'
 
 class FanContent extends Component{
     constructor(props){
@@ -8,7 +9,7 @@ class FanContent extends Component{
     render(){
         return (
             <div>
-                风扇操作页
+                <OnOffHeader></OnOffHeader>
             </div>
         )
     }
