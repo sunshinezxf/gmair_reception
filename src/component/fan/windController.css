@@ -1,0 +1,41 @@
+.wind-container{
+    padding:2rem 0;
+    background:#eee;
+}
+
+.wind-container>div{
+    margin-bottom: 2rem;
+}
+
+.wind-container .block-title{
+    font-size: 1.6rem;
+}
+
+.wind-temperature-container{
+    padding:0 1rem;
+    display:flex;
+    justify-content:space-between;
+}
+
+.wind-tag-container{
+    padding:1rem 0;
+    width: 48%;
+    border:1px solid green;
+    border-radius:5px;
+    display:flex;
+    justify-content:center;
+    background: white;
+}
+
+.wind-tag-container.active{
+    background: rgba(198, 234, 251, 0.8);
+}
+
+.wind-icon{
+    width: 2.2rem;
+    margin-right: 0.5rem;
+}
+
+.wind-level-container{
+    padding:0 1rem;
+}
