@@ -13,6 +13,7 @@ export const START_TIME_CHANGE="START_TIME_CHANGE";
 export const END_TIME_CHANGE="END_TIME_CHANGE";
 export const QRCODE_STORE="QRCODE_STORE";
 export const COMPONENT_IN="COMPONENT_IN";
+export const CLICK_Wind = 'clickWind'
 
 export function switchOn() {
     return {
@@ -103,3 +104,8 @@ export function componentIn(start_hour,start_minute,end_hour,end_minute,start_ti
         end_time:end_time,
     }
 }
+
+export const clickWindAction = (windTemperature)=>({
+    type:CLICK_Wind,
+    windTemperature
+})

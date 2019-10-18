@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css'
-import on_off_bg from '../../material/logo/gmair_white.png';
+import on_off_bg from '../../material/bg/gmair_bg.jpg';
 import power_img from '../../material/icon/power.png';
 import { Input , Button , List } from 'antd'
 

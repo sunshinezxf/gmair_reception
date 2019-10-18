@@ -1,7 +1,7 @@
 //operation_reducer
 import {SWITCH_ON,SWITCH_OFF,TIMING_EXPAND,START_MINUTE_CHANGE,START_HOUR_CHANGE,END_MINUTE_CHANGE,
     END_HOUR_CHANGE,MODAL_VISIBLE_CHANGE,EDIT_USERNAME,INPUT_USERNAME,USERNAME_OK_CLICK,START_TIME_CHANGE,
-    END_TIME_CHANGE,QRCODE_STORE,COMPONENT_IN} from '../actions/operation.action';
+    END_TIME_CHANGE,QRCODE_STORE,COMPONENT_IN,CLICK_Wind} from '../actions/operation.action';
 const initialState={
     switch:false,
     expanded:false,
@@ -14,7 +14,8 @@ const initialState={
     username:"未设置",
     start_time: '',
     end_time: '',
-    qrcode:''
+    qrcode:'',
+    windTemperature:'cold'
 }
 const operation_reducer = (state = initialState , action )=>{
     switch(action.type){
@@ -97,6 +98,11 @@ const operation_reducer = (state = initialState , action )=>{
                 start_time:action.start_time,
                 end_time:action.end_time,
             })
+        }
+        case CLICK_Wind:{
+            let newState = JSON.parse(JSON.stringify(state)); //深度拷贝state
+            newState.windTemperature = action.windTemperature;
+            return newState;
         }
         default:
             return state;
