@@ -1,13 +1,14 @@
 import connect from "react-redux/es/connect/connect";
 import WindController from '../../component/fan/windController';
 import {
-    clickWindAction
+    clickWindAction,windLevelChangeAction
 } from "../../actions/wind.action";
 
 //映射Redux state到组件的属性
 function mapStateToProps(state) {
     return {
         windTemperature:state.wind_reducer.windTemperature,
+        windLevel:state.wind_reducer.windLevel,
     }
 }
 
@@ -15,6 +16,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
     return{
         clickWind:(windTemperature)=>dispatch(clickWindAction(windTemperature)),
+        windLevelChange:(windLevel)=>dispatch(windLevelChangeAction(windLevel)),
     }
 }
 
