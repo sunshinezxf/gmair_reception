@@ -1,7 +1,8 @@
 import connect from "react-redux/es/connect/connect";
 import WindController from '../../component/fan/windController';
 import {
-    clickWindAction,windLevelChangeAction
+    clickWindAction,coldWindLevelChangeAction,hotWindLevelChangeAction,selectWindTypeAction,setTimeAction,selectTimeAction,
+    setTemperatureAction
 } from "../../actions/wind.action";
 
 //映射Redux state到组件的属性
@@ -9,6 +10,11 @@ function mapStateToProps(state) {
     return {
         windTemperature:state.wind_reducer.windTemperature,
         windLevel:state.wind_reducer.windLevel,
+        coldWindLevel:state.wind_reducer.coldWindLevel,
+        hotWindLevel:state.wind_reducer.hotWindLevel,
+        isSettingTime:state.wind_reducer.isSettingTime,
+        time:state.wind_reducer.time,
+        temperature:state.wind_reducer.temperature,
     }
 }
 
@@ -16,7 +22,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
     return{
         clickWind:(windTemperature)=>dispatch(clickWindAction(windTemperature)),
-        windLevelChange:(windLevel)=>dispatch(windLevelChangeAction(windLevel)),
+        coldWindLevelChange:(coldWindLevel)=>dispatch(coldWindLevelChangeAction(coldWindLevel)),
+        hotWindLevelChange:(hotWindLevel)=>dispatch(hotWindLevelChangeAction(hotWindLevel)),
+        selectWindType:(windType)=>dispatch(selectWindTypeAction(windType)),
+        setTime:()=>dispatch(setTimeAction()),
+        selectTime:(time)=>dispatch(selectTimeAction(time)),
+        setTemperature:(temperature)=>dispatch(setTemperatureAction(temperature)),
     }
 }
 

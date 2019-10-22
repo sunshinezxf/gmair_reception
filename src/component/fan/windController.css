@@ -1,5 +1,5 @@
 .wind-container{
-    padding:2rem 0;
+    padding:2rem 0 0;
     background:#f8f8f8;
 }
 
@@ -21,7 +21,7 @@
 .wind-tag-container{
     padding:1rem 0;
     width: 48%;
-    border:1px solid green;
+    border:1px solid #57a49f;
     border-radius:5px;
     display:flex;
     justify-content:center;
@@ -58,10 +58,26 @@
     padding:0 1rem;
 }
 
+.cold-wind-level-selector{
+    display: none;
+}
+
+.cold-wind-level-selector.active{
+    display: block;
+}
+
+.hot-wind-level-selector{
+    display: none;
+}
+
+.hot-wind-level-selector.active{
+    display: block;
+}
+
 .icon-wrapper {
     position: relative;
-    padding: 0.5rem 3rem;
-    border:1px solid green;
+    padding: 0.5rem 3rem 0.5rem 2rem;
+    border:1px solid #57a49f;
     border-radius:5px;
 }
   
@@ -77,9 +93,14 @@
 .icon-wrapper .wind-icon:last-child {
     top: -1.2rem;
     bottom: 0;
-    right: 0;
+    right: 0.4rem;
+    width: 2.4rem;
     vertical-align: middle;
     margin: auto 0;
+}
+
+.wind-types-container{
+    padding: 0 1rem;
 }
 
 .wind-types-selector{
@@ -108,4 +129,29 @@
 
 .wind-type-container .wind-type-text{
     text-align: center;
+}
+
+.wind-type-container.active{
+    background: rgba(198, 234, 251, 0.8);
+}
+
+.justify-fix{
+    width: 33%;
+}
+
+.temperature-container{
+    padding: 1rem 1rem;
+    background-color: white;
+}
+
+.temperature-container.active{
+    display: none;
+}
+
+.time-container{
+    display: none;
+}
+
+.time-container.active{
+    display: block;
 }

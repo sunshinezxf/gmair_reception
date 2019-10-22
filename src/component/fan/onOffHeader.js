@@ -2,7 +2,6 @@ import React from 'react';
 import 'antd/dist/antd.css'
 import on_off_bg from '../../material/bg/gmair_bg.jpg';
 import power_img from '../../material/icon/power.png';
-import { Input , Button , List } from 'antd'
 
 const on_off_header = {
     position: `relative`,
