@@ -9,9 +9,9 @@ import {
 function mapStateToProps(state) {
     return {
         windTemperature:state.wind_reducer.windTemperature,
-        windLevel:state.wind_reducer.windLevel,
         coldWindLevel:state.wind_reducer.coldWindLevel,
         hotWindLevel:state.wind_reducer.hotWindLevel,
+        windType:state.wind_reducer.windType,
         isSettingTime:state.wind_reducer.isSettingTime,
         time:state.wind_reducer.time,
         temperature:state.wind_reducer.temperature,

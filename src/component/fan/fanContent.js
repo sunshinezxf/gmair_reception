@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import OnOffHeader from './onOffHeader'
 import WindController from '../../containers/fan/windController'
-import TemperatureController from './temperatureController'
 
 class FanContent extends Component{
     constructor(props){
@@ -16,10 +15,6 @@ class FanContent extends Component{
             </div>
         )
     }
-
-    // storeChange(){
-    //     this.setState(store.getState());
-    // }
 }
 
 export default FanContent;

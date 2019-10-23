@@ -110,6 +110,7 @@
 }
 
 .wind-type-container{
+    position: relative;
     box-sizing: border-box;
     width: 20%;
     padding: 1rem;
@@ -117,6 +118,10 @@
     flex-grow: 1;
     border: 1px dashed green;
     border-radius: 5px;
+}
+
+.wind-type-container.active{
+    background: rgba(198, 234, 251, 0.8);
 }
 
 .wind-type-icon-container{
@@ -131,9 +136,6 @@
     text-align: center;
 }
 
-.wind-type-container.active{
-    background: rgba(198, 234, 251, 0.8);
-}
 
 .justify-fix{
     width: 33%;
@@ -144,14 +146,22 @@
     background-color: white;
 }
 
-.temperature-container.active{
+/* .temperature-container.active{
     display: none;
 }
 
 .time-container{
-    display: none;
+    visibility: hidden;
 }
 
 .time-container.active{
-    display: block;
+    visibility: visible;
+} */
+
+.show-time-tag{
+    /* position: absolute; */
+    font-size: 2rem;
+    /* left: 0;
+    right: 0;
+    margin: auto; */
 }
