@@ -132,6 +132,10 @@
     width: 100%;
 }
 
+.wind-type-icon.invisible{
+    visibility: hidden;
+}
+
 .wind-type-container .wind-type-text{
     text-align: center;
 }
@@ -146,22 +150,12 @@
     background-color: white;
 }
 
-/* .temperature-container.active{
-    display: none;
-}
-
-.time-container{
-    visibility: hidden;
-}
-
-.time-container.active{
-    visibility: visible;
-} */
-
 .show-time-tag{
-    /* position: absolute; */
-    font-size: 2rem;
-    /* left: 0;
+    position: absolute;
+    font-size: 2.5rem;
+    text-align: center;
+    color: #1296db;
+    left: 0;
     right: 0;
-    margin: auto; */
+    top: 0.5rem;
 }

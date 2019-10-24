@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {Slider, LocaleProvider} from 'antd';
 import { DatePickerView, DatePicker, List } from 'antd-mobile';
 import zhCN from 'antd-mobile/lib/locale-provider/locale-provider';
@@ -30,16 +30,22 @@ class WindController extends Component {
               );
             const getTimeTag = (wind_types_img)=>{
                 let nowTime = new Date(this.props.time);
-                if(nowTime.getTime()===0){
+                if(!nowTime.getTime()||(!nowTime.getHours()&&!nowTime.getMinutes())){
                     return (
-                        <img src={wind_types_img} className={`wind-type-icon`}></img>
+                        <img src={wind_types_img} 
+                            className='wind-type-icon'></img>
                     );
                 }
                 return (
-                    <div className='show-time-tag'>
-                        {nowTime.getHours()>=10?nowTime.getHours():'0'+nowTime.getHours()}:
-                        {nowTime.getMinutes()>=10?nowTime.getMinutes():'0'+nowTime.getMinutes()}
-                    </div>
+                    <Fragment>
+                        <img src={wind_types_img} 
+                            className='wind-type-icon invisible'></img>
+                        <div className='show-time-tag'>
+                            {nowTime.getHours()>=10?nowTime.getHours():'0'+nowTime.getHours()}:
+                            {nowTime.getMinutes()>=10?nowTime.getMinutes():'0'+nowTime.getMinutes()}
+                        </div>
+                    </Fragment>
+                    
                 );
             }
             for (let i=0;i<length;i++) {
@@ -64,7 +70,6 @@ class WindController extends Component {
                                                 <CustomChildren>
                                                     <div className='wind-type-icon-container'>
                                                         {getTimeTag(wind_types_imgs[i])}
-                                                        {/* <img src={wind_types_imgs[i]} className={`wind-type-icon`}></img> */}
                                                     </div>
                                                     <div className='wind-type-text'>{wind_types[i]}</div>
                                                 </CustomChildren>
@@ -115,7 +120,7 @@ class WindController extends Component {
                 </div>
                 <div className={`temperature-container ${this.props.isSettingTime?'active':null}`}>
                     <div className='block-title'>温度设置</div>
-                    <Slider className={`cold-wind-level-selector ${this.props.windTemperature==='cold'?'active':null}`} 
+                    <Slider className={`temperature-selector`} 
                             defaultValue={0} tipFormatter={(value)=>`${value}℃`} max={30} marks={{0:'0℃',30:'30℃'}}
                             value={this.props.temperature} onChange={this.props.setTemperature}/>
                 </div>
