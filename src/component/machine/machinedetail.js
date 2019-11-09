@@ -21,6 +21,9 @@ import Location from "../citypicker/Location";
 import {airquality_service} from "../service/airquality.service";
 import {consumerservice} from "../service/consumer.service";
 import {operation_service} from "../service/operation.service";
+import createHistory from 'history/createBrowserHistory'
+
+const history = createHistory();
 
 const alert = Modal.alert;
 
@@ -367,7 +370,7 @@ class MachineDetail extends React.Component {
                         </div>
                     ]}
                     onLeftClick={() => {
-                        window.location.href = "/machine/list"
+                        history.goBack();
                     }}
                 >{this.state.bind_name}</NavBar>
                 <div style={gmair_machine_index}>
