@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Card} from 'antd-mobile'
+import PersonalCard from './card'
 
 import Navigation from '../navigation/navigation'
 import {consumerservice} from "../service/consumer.service";
@@ -11,7 +11,8 @@ import {wechatservice} from "../service/wechat.service";
 
 const person_info_area = {
     width: `100%`,
-    height: `100%`
+    height: `100%`,
+    backgroundColor: `#f2f2f2`
 }
 
 const person_card = {
@@ -106,25 +107,28 @@ class Person extends React.Component {
     }
 
     render() {
+
+
         return (
             <div style={person_info_area}>
-                <Card style={person_card}>
-                    <Card.Header title='个人信息' extra='...'></Card.Header>
-                    <Card.Body>
-                        <div style={personal_info_item}>
-                            <span><i className='glyphicon glyphicon-user'></i></span>
-                            {this.state.name}
-                        </div>
-                        <div style={personal_info_item}>
-                            <span><i className='glyphicon glyphicon-phone'></i></span>
-                            {this.state.mobile}
-                        </div>
-                        <div style={personal_info_item}>
-                            <span><i className='glyphicon glyphicon-map-marker'></i></span>
-                            {this.state.address}
-                        </div>
-                    </Card.Body>
-                </Card>
+                <PersonalCard/>
+                {/*<Card style={person_card}>*/}
+                    {/*<Card.Header title='个人信息' extra='...'></Card.Header>*/}
+                    {/*<Card.Body>*/}
+                        {/*<div style={personal_info_item}>*/}
+                            {/*<span><i className='glyphicon glyphicon-user'></i></span>*/}
+                            {/*{this.state.name}*/}
+                        {/*</div>*/}
+                        {/*<div style={personal_info_item}>*/}
+                            {/*<span><i className='glyphicon glyphicon-phone'></i></span>*/}
+                            {/*{this.state.mobile}*/}
+                        {/*</div>*/}
+                        {/*<div style={personal_info_item}>*/}
+                            {/*<span><i className='glyphicon glyphicon-map-marker'></i></span>*/}
+                            {/*{this.state.address}*/}
+                        {/*</div>*/}
+                    {/*</Card.Body>*/}
+                {/*</Card>*/}
                 <div style={personal_info_item}>
                     <ButtonToolbar>
                         <Button bsStyle={this.state.bind === true ? "success" : "danger"} block

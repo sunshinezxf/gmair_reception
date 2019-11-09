@@ -2993,9 +2993,9 @@ a {
     padding-bottom: 7px;
 }
 .am-list-item .am-list-line .am-list-extra {
-    -webkit-flex-basis: 36%;
-    -ms-flex-preferred-size: 36%;
-    flex-basis: 36%;
+    -webkit-flex-basis: 50%;
+    -ms-flex-preferred-size: 50%;
+    flex-basis: 50%;
     color: #888;
     font-size: 1.45rem;
     line-height: 1.5;
@@ -4264,7 +4264,7 @@ a {
 }
 .am-list-item .am-input-control input {
     color: #000;
-    font-size: 17px;
+    font-size: 1.45rem;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -4325,9 +4325,9 @@ a {
     max-height: 21px;
     overflow: hidden;
     padding-right: 0;
-    line-height: 1;
+    /*line-height: 1;*/
     color: #888;
-    font-size: 15px;
+    font-size: 1.45rem;
     margin-left: 5px;
 }
 .am-list-item.am-input-error .am-input-control input {

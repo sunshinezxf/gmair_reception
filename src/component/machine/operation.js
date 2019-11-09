@@ -7,6 +7,9 @@ import {operation_service} from "../service/operation.service";
 import {consumerservice} from "../service/consumer.service";
 import {util} from "../service/util";
 import {wechatservice} from "../service/wechat.service";
+import createHistory from 'history/createBrowserHistory'
+
+const history = createHistory();
 
 class MachineOperation extends Component {
     constructor(props) {
@@ -83,9 +86,7 @@ class MachineOperation extends Component {
                     <NavBar
                         mode="light"
                         leftContent={[<Icon key="return" type="left"/>]}
-                        onLeftClick={() => {
-                            window.location.href = "/machine/detail/" +this.props.qrcode
-                        }}
+                        onLeftClick={() => {history.goBack();}}
                     >新风设置</NavBar>
                     {this.state.mode === 0 &&
                     <SettingSelect qrcode={this.props.qrcode}/>

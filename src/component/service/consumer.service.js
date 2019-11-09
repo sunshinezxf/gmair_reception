@@ -139,6 +139,37 @@ function unbind_wechat() {
     })
 }
 
+function update_user(username) {
+    let access_token = localStorage.getItem("access_token");
+    let url = consumer_url + '/reception/consumer/edit/username';
+    let form = new FormData();
+    form.append('access_token', access_token);
+    form.append('username', username);
+    return axios.post(url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+}
+
+function update_address(province,city,district,detail) {
+    let access_token = localStorage.getItem("access_token");
+    let url = consumer_url + '/reception/consumer/edit/location';
+    let form = new FormData();
+    form.append('access_token', access_token);
+    form.append('province', province);
+    form.append('city', city);
+    form.append('district', district);
+    form.append('detail', detail);
+    form.append('preferred', true);
+    return axios.post(url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+}
+
 export const consumerservice = {
-    bind_wechat, can_operate, request_login_code, request_register_code, login, loginbyopenid, exist, register, profile, unbind_wechat
+    bind_wechat, can_operate, request_login_code, request_register_code, login,
+    loginbyopenid, exist, register, profile, unbind_wechat,update_user,update_address
 }
