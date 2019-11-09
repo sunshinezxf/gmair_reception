@@ -47,13 +47,14 @@ const wind_reducer = (state = initialState , action )=>{
         case SELECT_TIME:{
             let newState = JSON.parse(JSON.stringify(state));
             newState.time = action.time;
+            newState.time.setYear(2000);
             // console.log(newState.time);
             return newState;
         }
         case SELECT_TEMPERATURE:{
             let newState = JSON.parse(JSON.stringify(state));
             newState.temperature = action.temperature;
-            // console.log(newState.temperature);
+            console.log(newState.temperature);
             return newState;
         }
         default:
