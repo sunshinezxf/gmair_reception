@@ -212,7 +212,7 @@ class PersonAdjust extends Component{
                 <NavBar
                     mode="light"
                     icon={<Icon type="left" />}
-                    onLeftClick={() => {history.goBack();}}
+                    onLeftClick={() => {window.location.href="/personal/information"}}
                 >信息修改</NavBar>
                 <div className="setting_gap" style={setting_gap}></div>
                 <div className="setting_content" style={setting_content}>
