@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Icon, NavBar, Modal,Toast} from 'antd-mobile'
+import {Icon, NavBar, Modal, Toast} from 'antd-mobile'
 import {message} from 'antd';
 
 import {Button, Col, Form, FormControl, FormGroup, Label} from 'react-bootstrap'
@@ -103,8 +103,8 @@ class MachineDetail extends React.Component {
         this.read_bind = this.read_bind.bind(this);
         this.check_qrcode = this.check_qrcode.bind(this);
         this.check_control_option = this.check_control_option.bind(this);
-        this.drop_out_window=this.drop_out_window.bind(this);
-        this.picture_on_click=this.picture_on_click.bind(this);
+        this.drop_out_window = this.drop_out_window.bind(this);
+        this.picture_on_click = this.picture_on_click.bind(this);
         this.state = {
             bind_name: '',
             qrcode: '',
@@ -297,23 +297,23 @@ class MachineDetail extends React.Component {
         window.wx.closeWindow();
     }
 
-    picture_on_click(){
+    picture_on_click() {
         Toast.loading('加载中...', 2);
-        consumerservice.profile().then(response=>{
-            if(response.responseCode==="RESPONSE_OK"){
-                operation_service.push_picture(this.state.qrcode).then(response=>{
-                    if(response.responseCode==="RESPONSE_OK"){
+        consumerservice.profile().then(response => {
+            if (response.responseCode === "RESPONSE_OK") {
+                operation_service.push_picture(this.state.qrcode).then(response => {
+                    if (response.responseCode === "RESPONSE_OK") {
                         alert('生成成功', '图片将在几秒内推送到公众号聊天窗口，可前往查看', [
                             {text: '下次再说',},
-                            {text: '立即前往', onPress:this.drop_out_window},
+                            {text: '立即前往', onPress: this.drop_out_window},
                         ])
                     }
-                    else{
-                        message.error("图片生成失败",1);
+                    else {
+                        message.error("图片生成失败", 1);
                     }
                 })
-            }else{
-                message.error("推送失败,未绑定微信号",1);
+            } else {
+                message.error("推送失败,未绑定微信号", 1);
             }
         })
 
@@ -370,7 +370,7 @@ class MachineDetail extends React.Component {
                         </div>
                     ]}
                     onLeftClick={() => {
-                        history.goBack();
+                        window.location.href = "/machine/list";
                     }}
                 >{this.state.bind_name}</NavBar>
                 <div style={gmair_machine_index}>

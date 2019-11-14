@@ -18,6 +18,7 @@ class MachineOperation extends Component {
             mode: 0,
         }
     }
+
     init_config = () => {
         let url = window.location.href;
         if (util.is_weixin()) {
@@ -49,25 +50,25 @@ class MachineOperation extends Component {
         })
         let qrcode = this.props.match.params.qrcode;
         this.props.qrcodeStore(qrcode);
-        consumerservice.can_operate(qrcode).then(response=>{
-            if(response.responseCode!=="RESPONSE_OK"){
-                window.location.href="/machine/list";
+        consumerservice.can_operate(qrcode).then(response => {
+            if (response.responseCode !== "RESPONSE_OK") {
+                window.location.href = "/machine/list";
             }
         })
-        operation_service.obtain_timing_status(qrcode).then(response=>{
-            if(response.responseCode==="RESPONSE_OK"){
-                if(response.data[0].status){
+        operation_service.obtain_timing_status(qrcode).then(response => {
+            if (response.responseCode === "RESPONSE_OK") {
+                if (response.data[0].status) {
                     this.props.expandTiming();
                     this.props.switchOn();
                 }
-                response=response.data[0];
-                this.props.componentIn(response.startTime.hour,response.startTime.minute,response.endTime.hour,
-                    response.endTime.minute,operation_service.format_time(response.startTime.hour,response.startTime.minute),
-                    operation_service.format_time(response.endTime.hour,response.endTime.minute));
+                response = response.data[0];
+                this.props.componentIn(response.startTime.hour, response.startTime.minute, response.endTime.hour,
+                    response.endTime.minute, operation_service.format_time(response.startTime.hour, response.startTime.minute),
+                    operation_service.format_time(response.endTime.hour, response.endTime.minute));
             }
         })
-        machine_service.obtain_bind_info(qrcode).then(response=>{
-            if(response.responseCode==="RESPONSE_OK"){
+        machine_service.obtain_bind_info(qrcode).then(response => {
+            if (response.responseCode === "RESPONSE_OK") {
                 this.props.inputUsername(response.data[0].bindName);
             }
         })
@@ -86,7 +87,9 @@ class MachineOperation extends Component {
                     <NavBar
                         mode="light"
                         leftContent={[<Icon key="return" type="left"/>]}
-                        onLeftClick={() => {history.goBack();}}
+                        onLeftClick={() => {
+                            history.goBack();
+                        }}
                     >新风设置</NavBar>
                     {this.state.mode === 0 &&
                     <SettingSelect qrcode={this.props.qrcode}/>
