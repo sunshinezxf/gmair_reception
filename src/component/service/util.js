@@ -55,6 +55,25 @@ function tell_pm2_5_desc(value) {
     return '严重污染';
 }
 
+function tell_pm2_5_color(value) {
+    if (value >= 0 && value <= 35) {
+        return '#00CC66';
+    }
+    if (value > 35 && value <= 75) {
+        return '#CC9900';
+    }
+    if(value > 75 && value <= 115) {
+        return '#FF9966';
+    }
+    if(value > 115 && value <= 150) {
+        return '#FF0066';
+    }
+    if(value > 150 && value <= 250) {
+        return '#990099';
+    }
+    return '#996666';
+}
+
 function tell_mode(value, mode_list) {
     return mode_list[value].operator;
 }
@@ -75,5 +94,5 @@ function format(timestamp) {
 }
 
 export const util = {
-    is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc, format
+    is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc, format,tell_pm2_5_color
 }

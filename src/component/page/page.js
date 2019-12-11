@@ -16,6 +16,7 @@ import QRCodeGen from '../qrcode/generate'
 import DeviceOperation from '../../containers/machine/operation'
 import FanContent from '../fan/fanContent'
 import PersonAdjust from '../personal/person_adjust'
+import FreshPanel from '../../containers/fresh/fresh_panel'
 
 const gmair_page = {
     width: `100%`,
@@ -38,6 +39,7 @@ class Page extends React.Component {
                 <Route path="/init/:qrcode" component={DeviceInit}/>
                 <Route exact path="/machine/list" component={MachineList}/>
                 <Route path='/machine/detail/:qrcode' component={MachineDetail}/>
+                <Route path='/fresh/detail/:qrcode' component={FreshPanel}/>
                 <Route exact path="/network/config" component={NetworkConfig}/>
                 <Route exact path="/personal/information" component={Person}/>
                 <Route exact path="/personal/adjust" component={PersonAdjust}/>
