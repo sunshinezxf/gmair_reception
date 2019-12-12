@@ -94,6 +94,7 @@ class PersonAdjust extends Component{
             json['children'] = province_children
             list.push(json)
         }
+        console.log(list)
         this.setState({
             area_list:list
         })

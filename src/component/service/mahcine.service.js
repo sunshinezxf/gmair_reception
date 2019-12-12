@@ -13,7 +13,6 @@ function check_exist(qrcode) {
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'};
     })
-
 }
 
 function check_exist_bind(qrcode) {

@@ -11,7 +11,7 @@ class ControlItem extends Component{
     }
 
     componentDidMount(){
-        console.log(this.props.src)
+        // console.log(this.props.src)
     }
 
     render() {
@@ -35,6 +35,15 @@ class ControlItem extends Component{
             fontSize: '1.5em'
         }
 
+        const icon_style2={
+            flex:3,
+            display: 'flex',
+            justifyContent:'flex-end',
+            alignItems: 'flex-end',
+            fontSize: '1.5em',
+            color:'#888888'
+        }
+
         const text_style={
             fontSize:'1.3rem',
             color: 'black',
@@ -46,7 +55,7 @@ class ControlItem extends Component{
 
         return (
             <div style={item_style}>
-                <div style={icon_style}><i className={this.props.src} aria-hidden="true"></i></div>
+                <div style={this.props.open?icon_style:icon_style2}><i className={this.props.src} aria-hidden="true"></i></div>
                 <div style={text_style}>{this.props.text}</div>
             </div>
         );
