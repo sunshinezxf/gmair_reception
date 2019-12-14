@@ -15,7 +15,7 @@ function configuration(url) {
 
 function openid() {
     let openid = localStorage.getItem('openid');
-    if(openid == null || openid == undefined || openid === '') {
+    if (openid == null || openid === '') {
         return null;
     }
     return openid;
@@ -34,4 +34,4 @@ function openidbycode(code) {
 
 export const wechatservice = {
     configuration, openid, openidbycode
-}
+};

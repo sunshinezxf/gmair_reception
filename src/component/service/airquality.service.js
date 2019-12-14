@@ -38,4 +38,4 @@ function obtain_city_pm2_5_weekly(city_id) {
 
 export const airquality_service = {
     config_default_outdoor, obtain_city_pm2_5_weekly, obtain_latest_aqi
-}
+};

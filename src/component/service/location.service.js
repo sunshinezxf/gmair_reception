@@ -63,4 +63,4 @@ function acquire_city_id(code) {
 
 export const locationservice = {
     acquire_city_id, city_profile, list_province, list_city, list_district, tell_location
-}
+};

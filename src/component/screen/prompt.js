@@ -24,7 +24,7 @@ class ScreenPrompt extends React.Component {
         if (this.state.show) {
             return (
                 <Alert bsStyle="danger" onDismiss={this.handleDismiss}>
-                    <span><i className='fa fa-bell-o'></i></span>滤网更换提醒
+                    <span><i className='fa fa-bell-o'/></span>滤网更换提醒
                 </Alert>
             );
         }

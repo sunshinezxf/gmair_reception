@@ -1,7 +1,5 @@
 import React from 'react'
 
-import MachineItem from './machineitem'
-
 import {wechatservice} from "../service/wechat.service";
 import {machine_service} from "../service/mahcine.service";
 import {util} from "../service/util";
@@ -9,14 +7,16 @@ import DeviceScan from "./devicescan";
 
 import '../../antd-mobile.css';
 
-import {PullToRefresh, SwipeAction} from 'antd-mobile';
+
+import {Card, PullToRefresh, WhiteSpace, WingBlank} from 'antd-mobile';
 import Navigation from "../navigation/navigation";
+import DeviceItem from "./deviceitem.js";
 
 const machine_item_gap = {
     marginTop: `1rem`
 };
 
-class MachineList extends React.Component {
+class DeviceList extends React.Component {
     constructor(props) {
         super(props);
         this.unbind = this.unbind.bind(this);
@@ -67,7 +67,7 @@ class MachineList extends React.Component {
                     }
                 });
             }
-        })
+        });
     };
 
     share = (code_value) => {
@@ -98,7 +98,6 @@ class MachineList extends React.Component {
                 this.setState({machine_list: [], loading: false})
             } else {
                 // window.location.href = '/login';
-                return;
             }
         });
     }
@@ -118,6 +117,22 @@ class MachineList extends React.Component {
         setTimeout(() => {
             this.setState({loading: false});
         }, 1000);
+        this.setState({
+            machine_list: [
+                {
+                    codeValue: "12",
+                    location: "XXXXX的卧室",
+                    bindName: "果麦新风机"
+                },
+                {
+                    codeValue: "123",
+                    location: "XXXX的客厅",
+                    bindName: "果麦冷暖风扇"
+                }
+            ],
+            loading: false
+        })
+
     };
 
     scan_qrcode = () => {
@@ -145,36 +160,34 @@ class MachineList extends React.Component {
         let machine_list = this.state.machine_list;
         let that = this;
         let element = machine_list.map(function (item) {
+            console.log("render" + item.bindName);
             return (
                 <div key={item.codeValue}>
-                    <SwipeAction autoClose left={[
-                        {
-                            text: '删除',
-                            style: {backgroundColor: '#F4333C', color: 'white'},
-                            onPress: () => {
-                                that.unbind(item.codeValue);
-                            }
-                        }
-                    ]} right={
-                        item.ownership === 'SHARE' ?
-                            '' :
-                            [{
-                                text: '分享',
-                                style: {backgroundColor: '#108ee9', color: 'white'},
-                                onPress: () => {
-                                    that.share(item.codeValue);
-                                },
-                            }]
+                    <WingBlank size="lg">
+                        <WhiteSpace size="lg"/>
+                        <Card>
+                            <Card.Header title={item.location}/>
+                            <DeviceItem qrcode={item.codeValue} name={item.bindName}/>
+                            {/*<div className={cardbody}>*/}
+                            {/*    <image src={item.pic}/>*/}
+                            {/*    <div>*/}
+                            {/*        <div className={device-name}>{item.bindName}</div>*/}
+                            {/*        <div>*/}
 
-                    }>
-                        <MachineItem qrcode={item.codeValue} name={item.bindName}/>
-                    </SwipeAction>
-                    <div style={machine_item_gap}/>
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+                        </Card>
+                        <WhiteSpace size="lg"/>
+                    </WingBlank>
                 </div>
+
             )
         });
+
         return (
             <div>
+                {/*{element}*/}
                 <PullToRefresh refreshing={this.state.loading} onRefresh={this.refresh_list}>
                     {!this.state.loading && element}
                     {!this.state.loading &&
@@ -190,4 +203,4 @@ class MachineList extends React.Component {
     }
 }
 
-export default MachineList;
+export default DeviceList;

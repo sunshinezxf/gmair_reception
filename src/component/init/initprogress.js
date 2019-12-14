@@ -7,7 +7,7 @@ import Fade from 'react-reveal/Fade';
 const progress_area = {
     width: `90%`,
     margin: `3rem 5% 3rem 5%`
-}
+};
 
 class InitProgress extends React.Component {
     constructor(props) {
@@ -44,7 +44,7 @@ class InitProgress extends React.Component {
         return (
             <div style={progress_area}>
                 <div>{this.state.percent < 100 ? '设备初始化中' : '设备初始化完成'}</div>
-                <ProgressBar active={this.state.percent < 100 ? true : false} now={this.state.percent}></ProgressBar>
+                <ProgressBar active={this.state.percent < 100} now={this.state.percent}/>
                 {this.state.show_steps >= 1 ? <Fade right>正在获取设备配置</Fade> : ''}
                 {this.state.show_steps >= 2 ? <Fade right>正在搜集用户设备注册信息</Fade> : ''}
                 {this.state.show_steps >= 3 ? <Fade right>正在检查设备联网状态</Fade> : ''}

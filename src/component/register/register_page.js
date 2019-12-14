@@ -21,18 +21,18 @@ const gmair_register_page = {
     width: `100%`,
     height: `100%`,
     backgroundSize: `100% 100%`
-}
+};
 
 const logo = {
     height: `6rem`,
     width: `14rem`
-}
+};
 
 const white_icon = {
     color: `white`,
     backgroundColor: `transparent`,
     border: `unset`
-}
+};
 
 const transparent_input = {
     backgroundColor: `transparent`,
@@ -41,24 +41,24 @@ const transparent_input = {
     borderBottom: `1px solid #FFFFFF`,
     boxShadow: `unset`,
     width: `100%`
-}
+};
 
 const help_text = {
     color: `#FFFFFF`,
     marginLeft: `1.45rem`
-}
+};
 
 const password_btn = {
     color: `#00AEEF`,
     opacity: `0.75`
-}
+};
 
 const register_btn = {
     color: `#00AEEF`,
     fontSize: `1.4rem`,
     backgroundColor: `#FFFFFF`,
     textAlign: `center`
-}
+};
 
 class RegisterPage extends React.Component {
     constructor(props, context) {
@@ -78,7 +78,7 @@ class RegisterPage extends React.Component {
             ready2send: false,
             ready2reg: false,
             mode: 'register'
-        }
+        };
 
         this.read_username = this.read_username.bind(this);
         this.read_mobile = this.read_mobile.bind(this);
@@ -111,7 +111,7 @@ class RegisterPage extends React.Component {
         } else {
             alert("seems that you are not in wechat")
         }
-    }
+    };
 
     componentDidMount() {
         locationservice.tell_location().then(response => {
@@ -153,9 +153,9 @@ class RegisterPage extends React.Component {
         if (pattern.test(this.state.mobile) === true) {
             //check whether the phone number is occupied by existing user
             consumerservice.exist(this.state.mobile).then(response => {
-                if (response.responseCode == 'RESPONSE_NULL') {
+                if (response.responseCode === 'RESPONSE_NULL') {
                     this.setState({ready2send: true, mobile_confirmed: true}, this.validate);
-                } else if (response.responseCode == 'RESPONSE_OK') {
+                } else if (response.responseCode === 'RESPONSE_OK') {
                     //the mobile phone number has already been registered
                     this.setState({
                         mobile_desc: '此手机号已注册，可直接登录。',
@@ -170,7 +170,7 @@ class RegisterPage extends React.Component {
         } else {
             this.setState({ready2send: false, mobile_desc: ''}, this.validate);
         }
-    }
+    };
 
     validate_code = () => {
         let expected_code = this.state.expected_password;
@@ -180,42 +180,42 @@ class RegisterPage extends React.Component {
         } else {
             this.setState({code_confirmed: false}, this.validate);
         }
-    }
+    };
 
     validate = () => {
-        if (String(this.state.mode) == 'register') {
-            if (this.state.username !== '' && this.state.mobile_confirmed == true && this.state.code_confirmed == true && this.state.address !== '') {
+        if (String(this.state.mode) === 'register') {
+            if (this.state.username !== '' && this.state.mobile_confirmed === true && this.state.code_confirmed === true && this.state.address !== '') {
                 this.setState({ready2reg: true});
 
             } else {
                 this.setState({ready2reg: false});
             }
         }
-        if (String(this.state.mode) == 'login') {
-            if (this.state.mobile_confirmed == true && this.state.code_confirmed == true) {
+        if (String(this.state.mode) === 'login') {
+            if (this.state.mobile_confirmed === true && this.state.code_confirmed === true) {
                 this.setState({ready2reg: true});
 
             } else {
                 this.setState({ready2reg: false});
             }
         }
-    }
+    };
 
     read_username = (e) => {
         this.setState({username: e.target.value}, this.validate);
-    }
+    };
 
     read_mobile = (e) => {
         this.setState({mobile: e.target.value}, this.validate_mobile);
-    }
+    };
 
     read_password = (e) => {
         this.setState({password: e.target.value}, this.validate_code);
-    }
+    };
 
     read_address = (e) => {
         this.setState({address: e.target.value}, this.validate);
-    }
+    };
 
     send_code = () => {
         consumerservice.request_register_code(this.state.mobile).then(response => {
@@ -233,80 +233,85 @@ class RegisterPage extends React.Component {
                 }, 1000);
             }
         });
-    }
+    };
 
     register = () => {
         this.setState({ready2send: false, ready2reg: false});
-        if (String(this.state.mode) == 'register') {
+        if (String(this.state.mode) === 'register') {
             consumerservice.register(this.state.openid, this.state.username, this.state.mobile, this.state.password, this.state.address_province, this.state.address_city, this.state.address).then(response => {
                 if (response.responseCode === 'RESPONSE_OK') {
                     window.location.href = '/login'
                 }
             });
         }
-        if (String(this.state.mode) == 'login') {
+        if (String(this.state.mode) === 'login') {
             consumerservice.login(this.state.mobile, this.state.password).then(response => {
                 if (response.responseCode === 'RESPONSE_OK') {
                     window.location.href = '/machine/list'
                 }
             });
         }
-    }
+    };
 
     render() {
         return (
             <div style={gmair_register_page}>
                 <div className="gmair_logo">
-                    <img src={gmair_white} style={logo} alt="GMAIR_LOGO"></img>
+                    <img src={gmair_white} style={logo} alt="GMAIR_LOGO"/>
                 </div>
-                <Slogan></Slogan>
+                <Slogan/>
                 <div className="gmair_register_area">
                     {this.state.mode === 'register' &&
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span
-                                className="glyphicon glyphicon-user"></span></InputGroup.Addon>
+                            <InputGroup.Addon style={white_icon}>
+                                <span className="glyphicon glyphicon-user"/>
+                            </InputGroup.Addon>
                             <FormControl type="text" placeholder='请输入姓名' style={transparent_input}
-                                         value={this.state.username} onChange={this.read_username}></FormControl>
+                                         value={this.state.username} onChange={this.read_username}/>
                         </InputGroup>
                     </FormGroup>
                     }
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span
-                                className="glyphicon glyphicon-phone"></span></InputGroup.Addon>
+                            <InputGroup.Addon style={white_icon}>
+                                <span className="glyphicon glyphicon-phone"/>
+                            </InputGroup.Addon>
                             <FormControl type="tel" placeholder='请输入手机号码' style={transparent_input}
-                                         value={this.state.mobile} onChange={this.read_mobile}></FormControl>
+                                         value={this.state.mobile} onChange={this.read_mobile}/>
                         </InputGroup>
                         <HelpBlock style={help_text}>{this.state.mobile_desc}</HelpBlock>
                     </FormGroup>
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span
-                                className="glyphicon glyphicon-lock"></span></InputGroup.Addon>
+                            <InputGroup.Addon style={white_icon}>
+                                <span className="glyphicon glyphicon-lock"/>
+                            </InputGroup.Addon>
                             <FormControl type="password" placeholder='请输入动态验证码' style={transparent_input}
-                                         value={this.state.password} onChange={this.read_password}></FormControl>
-                            <InputGroup.Addon><Button style={password_btn} disabled={!this.state.ready2send}
-                                                      onClick={this.send_code}>{this.state.verification_text}</Button></InputGroup.Addon>
+                                         value={this.state.password} onChange={this.read_password}/>
+                            <InputGroup.Addon>
+                                <Button style={password_btn} disabled={!this.state.ready2send}
+                                        onClick={this.send_code}>{this.state.verification_text}</Button>
+                            </InputGroup.Addon>
                         </InputGroup>
                     </FormGroup>
                     {this.state.mode === 'register' &&
                     <FormGroup>
                         <InputGroup>
-                            <InputGroup.Addon style={white_icon}><span
-                                className="glyphicon glyphicon-map-marker"></span></InputGroup.Addon>
+                            <InputGroup.Addon style={white_icon}>
+                                <span className="glyphicon glyphicon-map-marker"/></InputGroup.Addon>
                             <FormControl type="text" placeholder='请输入地址' style={transparent_input}
-                                         value={this.state.address} onChange={this.read_address}></FormControl>
+                                         value={this.state.address} onChange={this.read_address}/>
                         </InputGroup>
                     </FormGroup>
                     }
                 </div>
                 <div className="gmair_register_btn">
-                    {String(this.state.mode) == 'register' &&
+                    {String(this.state.mode) === 'register' &&
                     <Button block style={register_btn} disabled={!this.state.ready2reg}
                             onClick={this.register}>注&nbsp;册</Button>
                     }
-                    {String(this.state.mode) == 'login' &&
+                    {String(this.state.mode) === 'login' &&
                     <Button block style={register_btn} disabled={!this.state.ready2reg}
                             onClick={this.register}>登&nbsp;录</Button>
                     }

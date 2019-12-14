@@ -1,6 +1,6 @@
 import React from 'react';
 import {Tag, Badge} from 'antd';
-
+import './deviceitem.css'
 import {machine_service} from "../service/mahcine.service";
 
 import {util} from "../service/util";
@@ -73,7 +73,8 @@ const gmair_machine_desc_item = {
     float: `left`
 };
 
-class MachineItem extends React.Component {
+
+class DeviceItem extends React.Component {
 
     constructor(props) {
         super(props);
@@ -185,64 +186,91 @@ class MachineItem extends React.Component {
     }
 
     render() {
-        let url = '/machine/detail/' + this.props.qrcode;
 
         return (
-            <div style={gmair_machine_item} onClick={this.state.online ? () => {
-            } : this.config_network}>
-                <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>
-                    {this.state.online === true ? util.format_pm2_5(this.state.pm2_5) :
-                        <span><i className='fa fa-unlink' style={gmair_icon_active}/></span>}
+            <div className="device-item">
+                <img className="device-pic" src="https://ytools.xyz/WX20191106-111248.png"/>
+                <div className="device-intro">
+                    <div className="device-name"> 果麦新风机</div>
+                    <div className="device-status">
+                        <div className="device-num">000</div>
+                        <div className="device-unit">档</div>
+                        <div className="device-lable">PM2.5 优</div>
+                    </div>
+                    <div className="device-tag">
+                        <div><i className='fa fa-unlink'/> 420</div>
+                        <div><i className='fa fa-unlink'/> 420</div>
+                        <div><i className='fa fa-unlink'/> 420</div>
+                    </div>
                 </div>
-                <div style={gmair_machine_operation}>
-                    {this.state.online === true ?
-                        <MachinePower power={this.state.power_status} operation={this.power_operate}/> : ''}
-                    <div style={gmair_pm2_5_attr}>{this.state.online === true ? 'ug/m³' : '离线'}</div>
+                <div className="device-power">
+                    <i className="glyphicon glyphicon-off "/>
+                    <div className="device-open">已关闭</div>
                 </div>
-                <div style={gmair_machine_index} onClick={() => {
-                    window.location.href = url
-                }}>
-                    {
-                        this.state.model_name === "" ?
-                            <div style={gmair_machine_name}>{this.props.name}</div>
-                            :
-                            <div style={gmair_machine_name}>{this.props.name}<Tag style={{
-                                marginLeft: '0.8rem',
-                                color: '#58595B',
-                                fontWeight: 'normal'
-                            }}>{this.state.model_name}</Tag></div>
-                    }
-
-                    {
-                        this.state.online === true ?
-                            <div style={gmair_machine_desc}>
-                        <span style={gmair_machine_desc_item}>
-                            <span style={gmair_icon_active} className={this.state.power_status === 'on' ? 'spin' : ''}>
-                                <i className='fa fa-superpowers'/>
-                            </span>
-                            <span>&nbsp;{this.state.volume}m³/h</span>
-                        </span>
-                                <span style={gmair_machine_desc_item}>
-                            <span style={gmair_icon_active}>
-                                <i className='fa fa-thermometer'/>
-                            </span>
-                            <span>&nbsp;{this.state.temp}°C</span>
-                        </span>
-                                <span style={gmair_machine_desc_item}>
-                            <span style={gmair_icon_active}>
-                                <i className='glyphicon glyphicon-tint'/>
-                            </span>
-                            <span>&nbsp;{this.state.humid}%</span>
-                        </span>
-                            </div>
-                            :
-                            <div style={gmair_machine_desc}>
-                                <span>设备已离线，待重新接入</span>
-                            </div>
-                    }
-                </div>
+                {/*<div className="device-power"></div>*/}
+                {/*<MachinePower className="device-power"/>*/}
             </div>
-        )
+        );
+
+
+        // let url = '/machine/detail/' + this.props.qrcode;
+        //
+        // return (
+        //     <div style={gmair_machine_item} onClick={this.state.online ? () => {
+        //     } : this.config_network}>
+        //         <div style={gmair_machine_pm2_5} className='gmair_machine_item_pm2_5'>
+        //             {this.state.online === true ? util.format_pm2_5(this.state.pm2_5) :
+        //                 <span><i className='fa fa-unlink' style={gmair_icon_active}/></span>}
+        //         </div>
+        //         <div style={gmair_machine_operation}>
+        //             {this.state.online === true ?
+        //                 <MachinePower power={this.state.power_status} operation={this.power_operate}/> : ''}
+        //             <div style={gmair_pm2_5_attr}>{this.state.online === true ? 'ug/m³' : '离线'}</div>
+        //         </div>
+        //         <div style={gmair_machine_index} onClick={() => {
+        //             window.location.href = url
+        //         }}>
+        //             {
+        //                 this.state.model_name === "" ?
+        //                     <div style={gmair_machine_name}>{this.props.name}</div>
+        //                     :
+        //                     <div style={gmair_machine_name}>{this.props.name}<Tag style={{
+        //                         marginLeft: '0.8rem',
+        //                         color: '#58595B',
+        //                         fontWeight: 'normal'
+        //                     }}>{this.state.model_name}</Tag></div>
+        //             }
+        //
+        //             {
+        //                 this.state.online === true ?
+        //                     <div style={gmair_machine_desc}>
+        //                 <span style={gmair_machine_desc_item}>
+        //                     <span style={gmair_icon_active} className={this.state.power_status === 'on' ? 'spin' : ''}>
+        //                         <i className='fa fa-superpowers'/>
+        //                     </span>
+        //                     <span>&nbsp;{this.state.volume}m³/h</span>
+        //                 </span>
+        //                         <span style={gmair_machine_desc_item}>
+        //                     <span style={gmair_icon_active}>
+        //                         <i className='fa fa-thermometer'/>
+        //                     </span>
+        //                     <span>&nbsp;{this.state.temp}°C</span>
+        //                 </span>
+        //                         <span style={gmair_machine_desc_item}>
+        //                     <span style={gmair_icon_active}>
+        //                         <i className='glyphicon glyphicon-tint'/>
+        //                     </span>
+        //                     <span>&nbsp;{this.state.humid}%</span>
+        //                 </span>
+        //                     </div>
+        //                     :
+        //                     <div style={gmair_machine_desc}>
+        //                         <span>设备已离线，待重新接入</span>
+        //                     </div>
+        //             }
+        //         </div>
+        //     </div>
+        // )
     }
 }
 
@@ -284,4 +312,4 @@ class MachinePower extends React.Component {
     }
 }
 
-export default MachineItem;
+export default DeviceItem;

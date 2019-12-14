@@ -8,12 +8,12 @@ const footer_area = {
     height:`3rem`,
     marginTop: `1.5rem`,
     background: `transparent`
-}
+};
 
 const footer_text = {
     color: `#FFFFFF`,
     textDecoration: `underline`
-}
+};
 
 
 class Footer extends React.Component {

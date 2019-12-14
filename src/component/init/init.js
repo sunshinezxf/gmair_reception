@@ -15,7 +15,7 @@ const gmair_init_page = {
     width: `100%`,
     height: `100%`,
     backgroundColor: `#F3F3F3`
-}
+};
 
 const gmair_device_name = {
     padding: `5rem 0 1rem 0`,
@@ -25,14 +25,14 @@ const gmair_device_name = {
     opacity: `0.75`,
     border: `solid #00AEEF`,
     fontSize: `1.6rem`
-}
+};
 
 const gmair_device_name_text = {
     color: `white`,
     letterSpacing: `0.05rem`,
     fontFamily: `FZLanTingKanHei-R-GBK`,
     fontWeight: `lighter`
-}
+};
 
 const gmair_device_item = {
     color: `#00AEEF`,
@@ -48,12 +48,12 @@ const gmair_device_name_arc = {
     height: `4rem`,
     width: `100%`,
     opacity: `0.75`
-}
+};
 
 const gmair_device_content = {
     width: `90%`,
     margin: `10rem 5% 0rem 5%`
-}
+};
 
 const transparent_input = {
     backgroundColor: `#F3F3F3`,
@@ -62,13 +62,13 @@ const transparent_input = {
     borderBottom: `1px solid #C9C9C9`,
     boxShadow: `unset`,
     width: `100%`
-}
+};
 
 const gmair_confirm_btn = {
     width: `85%`,
     margin: `5rem 7.5% 0 7.5%`,
     textAlign: `center`
-}
+};
 
 class DeviceInit extends React.Component {
     constructor(props) {
@@ -118,7 +118,7 @@ class DeviceInit extends React.Component {
         } else {
             alert("seems that you are not in wechat")
         }
-    }
+    };
 
     componentDidMount() {
         if (util.is_weixin()) {
@@ -131,7 +131,7 @@ class DeviceInit extends React.Component {
             window.location.href = '/login';
         }
         let qrcode = this.props.match.params.qrcode;
-        this.setState({qrcode: qrcode})
+        this.setState({qrcode: qrcode});
         // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
         //     var vConsole = new window.VConsole();
         // })
@@ -142,7 +142,7 @@ class DeviceInit extends React.Component {
             }
             if (response.responseCode === 'RESPONSE_NULL') {
                 //qrcode not exist
-                this.setState({not_exist: true})
+                this.setState({not_exist: true});
                 return;
             }
             //check whether the qrcode is already binded with the current customer
@@ -164,14 +164,14 @@ class DeviceInit extends React.Component {
 
     confirm_init = () => {
         this.setState({show_progress: true});
-    }
+    };
 
     submit_init = () => {
         let qrcode = this.state.qrcode;
         this.setState({progress_finished: true});
         machine_service.confirm_init(this.state.qrcode, this.state.bind_name).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
-                this.setState({init_failed: false})
+                this.setState({init_failed: false});
                 //check whether the machine is online
                 machine_service.check_online(this.state.qrcode).then(response => {
                     if (response.responseCode === 'RESPONSE_OK') {
@@ -195,11 +195,11 @@ class DeviceInit extends React.Component {
                 this.setState({init_failed: true});
             }
         })
-    }
+    };
 
     read_name = (e) => {
         this.setState({bind_name: e.target.value}, this.validate_name);
-    }
+    };
 
     validate_name = () => {
         let bind_name = this.state.bind_name;
@@ -214,19 +214,19 @@ class DeviceInit extends React.Component {
                 }
             });
         }
-    }
+    };
 
     close_window = () => {
         window.wx.closeWindow();
-    }
+    };
 
     config_network = () => {
         window.location.href = '/network/config';
-    }
+    };
 
     device_list = () => {
         window.location.href = '/machine/list';
-    }
+    };
 
     render() {
         let not_exist_name_arc =
@@ -234,19 +234,19 @@ class DeviceInit extends React.Component {
                 <Alert bsStyle="info">
                     二维码信息（{this.state.qrcode}）似乎存在问题，请您与工作人员联系，以进行确认。
                 </Alert>
-            </div>
+            </div>;
         let alreay_occupied_name_arc =
             <div style={gmair_device_content}>
                 <Alert bsStyle="info">
                     设备（{this.state.qrcode}）已被初始化过，您无需再次配置，请进行确认。
                 </Alert>
-            </div>
+            </div>;
         let init_content =
             <div style={gmair_device_content}>
                 <FormGroup>
                     <ControlLabel>
-                        <div style={gmair_device_item}><span><i
-                            className='glyphicon glyphicon-pencil'></i></span> &nbsp;设备名称
+                        <div style={gmair_device_item}><span>
+                            <i className='glyphicon glyphicon-pencil'/></span> &nbsp;设备名称
                         </div>
                     </ControlLabel>
                     <FormControl style={transparent_input} type="text" placeholder="请输入设备别名"
@@ -254,8 +254,8 @@ class DeviceInit extends React.Component {
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel>
-                        <div style={gmair_device_item}><span><i
-                            className='glyphicon glyphicon-tags'></i></span> &nbsp;设备型号
+                        <div style={gmair_device_item}><span>
+                            <i className='glyphicon glyphicon-tags'/></span> &nbsp;设备型号
                         </div>
                     </ControlLabel>
                     <FormControl style={transparent_input} type="text" value={this.state.model_code}
@@ -267,14 +267,14 @@ class DeviceInit extends React.Component {
             <div style={gmair_init_page}>
                 <div style={gmair_device_name}>
                     <div><span style={gmair_device_name_text}><i
-                        className='glyphicon glyphicon-home'></i>&nbsp;设备初始化</span></div>
+                        className='glyphicon glyphicon-home'/>&nbsp;设备初始化</span></div>
                 </div>
                 {
                     this.state.show_progress ?
                         <InitProgress init={this.submit_init}/>
                         :
                         <div>
-                            <div style={gmair_device_name_arc}></div>
+                            <div style={gmair_device_name_arc}/>
                             {this.state.not_exist ? not_exist_name_arc : ''}
                             {this.state.already_occupied ? alreay_occupied_name_arc : ''}
                             {this.state.not_exist || this.state.already_occupied ? '' : init_content}

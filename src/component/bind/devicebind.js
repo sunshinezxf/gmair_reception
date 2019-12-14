@@ -10,7 +10,7 @@ const gmair_init_page = {
     width: `100%`,
     height: `100%`,
     backgroundColor: `#F3F3F3`
-}
+};
 
 const gmair_device_name = {
     padding: `5rem 0 1rem 0`,
@@ -20,21 +20,21 @@ const gmair_device_name = {
     opacity: `0.75`,
     border: `solid #00AEEF`,
     fontSize: `1.6rem`
-}
+};
 
 const gmair_device_name_text = {
     color: `white`,
     letterSpacing: `0.05rem`,
     fontFamily: `FZLanTingKanHei-R-GBK`,
     fontWeight: `lighter`
-}
+};
 
 const gmair_device_item = {
     color: `#00AEEF`,
     letterSpacing: `0.05rem`,
     fontFamily: `FZLanTingKanHei-R-GBK`,
     fontWeight: `lighter`
-}
+};
 
 const gmair_device_name_arc = {
     backgroundColor: `#00AEEF`,
@@ -43,12 +43,12 @@ const gmair_device_name_arc = {
     height: `4rem`,
     width: `100%`,
     opacity: `0.75`
-}
+};
 
 const gmair_device_content = {
     width: `90%`,
     margin: `10rem 5% 0rem 5%`
-}
+};
 
 const transparent_input = {
     backgroundColor: `#F3F3F3`,
@@ -57,18 +57,18 @@ const transparent_input = {
     borderBottom: `1px solid #C9C9C9`,
     boxShadow: `unset`,
     width: `100%`
-}
+};
 
 const gmair_confirm_btn = {
     width: `85%`,
     margin: `5rem 7.5% 0 7.5%`,
     textAlign: `center`
-}
+};
 
 const code_area = {
     width: `100%`,
     textAlign: `center`
-}
+};
 
 class DeviceBind extends React.Component {
     constructor(props) {
@@ -109,20 +109,20 @@ class DeviceBind extends React.Component {
         } else {
             alert("seems that you are not in wechat")
         }
-    }
+    };
 
     confirm_bind = () => {
         machine_service.gain_share(this.state.qrcode, this.state.bind_name).then(response => {
-            console.log(response)
+            console.log(response);
             if (response.responseCode === 'RESPONSE_OK') {
                 window.location.href = '/machine/list'
             }
         })
-    }
+    };
 
     machine_list = () => {
         window.location.href = '/machine/list'
-    }
+    };
 
     validate_name = () => {
         let bind_name = this.state.bind_name;
@@ -137,7 +137,7 @@ class DeviceBind extends React.Component {
                 }
             });
         }
-    }
+    };
 
     componentDidMount() {
         if (util.is_weixin()) {
@@ -164,24 +164,25 @@ class DeviceBind extends React.Component {
 
     read_name = (e) => {
         this.setState({bind_name: e.target.value}, this.validate_name);
-    }
+    };
 
     render() {
         return (
             <div style={gmair_init_page}>
                 <div style={gmair_device_name}>
-                    <div><span style={gmair_device_name_text}><i
-                        className='glyphicon glyphicon-home'></i>&nbsp;设备关联</span></div>
+                    <div><span style={gmair_device_name_text}>
+                        <i className='glyphicon glyphicon-home'/>&nbsp;设备关联</span>
+                    </div>
                 </div>
-                <div style={gmair_device_name_arc}></div>
+                <div style={gmair_device_name_arc}/>
                 <div style={gmair_device_content}>
                     {this.state.already_bind ?
                         ''
                         :
                         <FormGroup>
                             <ControlLabel>
-                                <div style={gmair_device_item}><span><i
-                                    className='glyphicon glyphicon-pencil'></i></span> &nbsp;设备名称
+                                <div style={gmair_device_item}><span>
+                                    <i className='glyphicon glyphicon-pencil'/></span> &nbsp;设备名称
                                 </div>
                             </ControlLabel>
                             <FormControl style={transparent_input} type="text" placeholder="请输入设备别名"
@@ -190,8 +191,8 @@ class DeviceBind extends React.Component {
                     }
                     <FormGroup>
                         <ControlLabel>
-                            <div style={gmair_device_item}><span><i
-                                className='fa fa-tag'></i></span> &nbsp;设备二维码
+                            <div style={gmair_device_item}><span>
+                                <i className='fa fa-tag'/></span> &nbsp;设备二维码
                             </div>
                             <div style={code_area}>
                                 {this.state.qrcode}

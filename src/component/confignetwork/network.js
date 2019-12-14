@@ -13,18 +13,18 @@ const gmair_network_page = {
     height: `100%`,
     backgroundSize: `100% 100%`,
     backgroundColor: `#F3F3F3`
-}
+};
 
 const wifi_logo_area = {
     width: `100%`,
     padding: `6.5rem 0 1.5rem 0`,
     textAlign: `center`
-}
+};
 
 const logo = {
     height: `12.5rem`,
     width: `12.5rem`
-}
+};
 
 const wifi_prompt_area = {
     width: `100%`,
@@ -138,7 +138,7 @@ class NetworkConfig extends React.Component {
         return (
             <div style={gmair_network_page}>
                 <div style={wifi_logo_area}>
-                    <img src={wifi_config} style={logo} alt="WIFI_CONFIG"></img>
+                    <img src={wifi_config} style={logo} alt="WIFI_CONFIG"/>
                 </div>
                 {
                     this.state.show_config_button ?
@@ -150,8 +150,8 @@ class NetworkConfig extends React.Component {
                         :
                         <div style={wifi_prompt_area}>
                             <div style={wifi_prompt_item}>
-                                {new String(this.state.config_result) == 'RESPONSE_OK' ? '网络配置成功' : ''}
-                                {new String(this.state.config_result) == 'RESPONSE_NULL' ? '网络配置未完成' : ''}
+                                {String(this.state.config_result) === 'RESPONSE_OK' ? '网络配置成功' : ''}
+                                {String(this.state.config_result) === 'RESPONSE_NULL' ? '网络配置未完成' : ''}
                             </div>
                         </div>
                 }
