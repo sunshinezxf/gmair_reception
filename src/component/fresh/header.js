@@ -53,13 +53,10 @@ class FreshHeader extends Component{
             machine_status.power_status = true
         }
         this.props.changeMachineStatus(machine_status);
-        this.setState({
-
-        })
     }
 
     render() {
-        // console.log(this.props)
+        console.log(this.props)
         return (
                 <div className="fresh_header_bg">
                     <img src={fresh_header_image} width="100%"/>

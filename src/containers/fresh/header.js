@@ -6,7 +6,7 @@ import {changeMachineStatus} from '../../actions/fresh.action'
 function mapStateToProps(state) {
     return {
         qrcode:state.fresh_reducer.qrcode,
-        // online:state.fresh_reducer.online,
+        online:state.fresh_reducer.online,
         machine_status:state.fresh_reducer.machine_status,
     }
 }

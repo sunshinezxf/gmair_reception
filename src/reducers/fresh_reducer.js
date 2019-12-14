@@ -3,6 +3,7 @@ import {QRCODE_CHANGE,MACHINE_CHANGE,MACHINE_STATUS_CHANGE,WORK_MODE_LIST,
 } from '../actions/fresh.action';
 const initialState={
     qrcode:'',
+    online:'',
     machine:'',
     machine_status:'',
     heat_mode_list:'',
@@ -10,9 +11,14 @@ const initialState={
     co2_is_present:false,
     lock_is_present:false,
     location:{province_id: '110000', province: '北京', city_id: '110101', city: '东城'},
-    city_air:''
+    city_air:'',
+    volume:'',
+    work_mode:'',
+    light:'',
+    heat:'',
 }
 const fresh_reducer = (state = initialState , action )=>{
+    // console.log(action);
     switch(action.type){
         case QRCODE_CHANGE:
             return Object.assign({},state,{
@@ -24,7 +30,12 @@ const fresh_reducer = (state = initialState , action )=>{
             })
         case MACHINE_STATUS_CHANGE:
             return Object.assign({},state,{
-                machine_status:action.machine_status
+                machine_status:action.machine_status,
+                online:action.machine_status.power_status,
+                volume:action.machine_status.volume,
+                work_mode:action.machine_status.work_mode,
+                light:action.machine_status.light,
+                heat:action.machine_status.heat,
             })
         case HEAT_MODE_LIST:
             return Object.assign({},state,{

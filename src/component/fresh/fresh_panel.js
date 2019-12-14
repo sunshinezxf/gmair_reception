@@ -18,8 +18,6 @@ const alert = Modal.alert;
 class FreshPanel extends Component{
     constructor(props) {
         super(props);
-        let qrcode = this.props.match.params.qrcode;
-        this.props.changeQrcode(qrcode)
         this.state = {
             // bind_name: '',
             // online: false,
@@ -47,6 +45,8 @@ class FreshPanel extends Component{
         this.read_bind = this.read_bind.bind(this);
         this.check_qrcode = this.check_qrcode.bind(this);
         this.check_control_option = this.check_control_option.bind(this);
+        let qrcode = this.props.match.params.qrcode;
+        this.props.changeQrcode(qrcode);
     }
 
     read_bind = (e) => {
@@ -187,6 +187,11 @@ class FreshPanel extends Component{
         })
     }
 
+    componentWillMount(){
+        let qrcode = this.props.match.params.qrcode;
+        this.check_qrcode(qrcode);
+    }
+
     componentDidMount() {
         // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
         //     var vConsole = new window.VConsole();
@@ -196,7 +201,6 @@ class FreshPanel extends Component{
         })
         let qrcode = this.props.match.params.qrcode;
         this.props.changeQrcode(qrcode)
-        this.check_qrcode(qrcode);
         this.getLocation(qrcode);
         //获取设备名称
         // machine_service.obtain_bind_info(qrcode).then(response => {

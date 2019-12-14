@@ -8,8 +8,14 @@ import {
 function mapStateToProps(state) {
     return {
         qrcode:state.fresh_reducer.qrcode,
+        online:state.fresh_reducer.online,
         machine_status:state.fresh_reducer.machine_status,
+        volume:state.fresh_reducer.volume,
+        work_mode:state.fresh_reducer.work_mode,
+        light:state.fresh_reducer.light,
         machine:state.fresh_reducer.machine,
+        heat_mode_list:state.fresh_reducer.heat_mode_list,
+        heat:state.fresh_reducer.heat,
     }
 }
 

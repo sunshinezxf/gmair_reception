@@ -11,6 +11,7 @@ function mapStateToProps(state) {
         city_air:state.fresh_reducer.city_air,
         location:state.fresh_reducer.location,
         machine_status:state.fresh_reducer.machine_status,
+        volume:state.fresh_reducer.volume,
         co2_is_present:state.fresh_reducer.co2_is_present,
     }
 }

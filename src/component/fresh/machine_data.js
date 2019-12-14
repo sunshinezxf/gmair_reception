@@ -144,7 +144,7 @@ class MachineData extends Component{
                         </div>
                         <div className="airquality_row">
                             <div className="airquality_name"><i className='fa fa-recycle fa-fw'></i></div>
-                            <div className="airquality_value">{this.props.machine_status.volume}m<sup>3</sup>/h</div>
+                            <div className="airquality_value">{this.props.volume}m<sup>3</sup>/h</div>
                         </div>
                     </div>
                 </div>

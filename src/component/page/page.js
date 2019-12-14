@@ -17,6 +17,7 @@ import DeviceOperation from '../../containers/machine/operation'
 import FanContent from '../fan/fanContent'
 import PersonAdjust from '../personal/person_adjust'
 import FreshPanel from '../../containers/fresh/fresh_panel'
+import DeviceList from '../machine/devicelist'
 
 const gmair_page = {
     width: `100%`,
@@ -38,6 +39,7 @@ class Page extends React.Component {
                 <Route exact path="/register" component={Register}/>
                 <Route path="/init/:qrcode" component={DeviceInit}/>
                 <Route exact path="/machine/list" component={MachineList}/>
+                <Route exact path="/device/list" component={DeviceList}/>
                 <Route path='/machine/detail/:qrcode' component={MachineDetail}/>
                 <Route path='/fresh/detail/:qrcode' component={FreshPanel}/>
                 <Route exact path="/network/config" component={NetworkConfig}/>
