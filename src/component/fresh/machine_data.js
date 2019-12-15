@@ -11,7 +11,7 @@ class MachineData extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            area_list:[]
+            area_list:[],
         };
         this.citySelect=this.citySelect.bind(this);
         this.areaChange=this.areaChange.bind(this);
@@ -81,7 +81,7 @@ class MachineData extends Component{
     }
 
     render() {
-        console.log(this.props)
+        console.log(this.props.pm2_5)
         const tag_div_style={
             display:'flex',
             alignItems:'center',
@@ -124,14 +124,14 @@ class MachineData extends Component{
                 <div className="operation_show">
                     <div className="operation_left">
                         <div style={{width:'180px',height:'160px'}}>
-                            <RingData value={this.props.machine_status.pm2_5}/>
+                            <RingData value={this.props.pm2_5}/>
                         </div>
                     </div>
                     <div className="operation_right">
                         {this.props.co2_is_present&&
                         <div className="airquality_row">
                             <div className="airquality_name">CO<sub>2</sub></div>
-                            <div className="airquality_value">471ppm</div>
+                            <div className="airquality_value">{this.props.co2}ppm</div>
                         </div>
                         }
                         <div className="airquality_row">

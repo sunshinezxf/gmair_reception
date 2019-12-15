@@ -16,6 +16,9 @@ const initialState={
     work_mode:'',
     light:'',
     heat:'',
+    lock:'',
+    pm2_5:0,
+    co2:'',
 }
 const fresh_reducer = (state = initialState , action )=>{
     // console.log(action);
@@ -36,6 +39,9 @@ const fresh_reducer = (state = initialState , action )=>{
                 work_mode:action.machine_status.work_mode,
                 light:action.machine_status.light,
                 heat:action.machine_status.heat,
+                lock:action.machine_status.lock,
+                pm2_5:action.machine_status.pm2_5,
+                co2:action.machine_status.co2,
             })
         case HEAT_MODE_LIST:
             return Object.assign({},state,{

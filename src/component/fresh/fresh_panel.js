@@ -2,55 +2,23 @@ import React,{Component} from 'react';
 import FreshHeader from '../../containers/fresh/header'
 import OperationPanel from '../../containers/fresh/operation_panel';
 import MachineData from '../../containers/fresh/machine_data';
-import Chart from '../machine/pm2_5charts'
+import PM2_5Charts from './pm2_5charts'
 import {util} from "../service/util";
 import {wechatservice} from "../service/wechat.service";
 import {machine_service} from "../service/mahcine.service";
-import {Toast,Modal} from "antd-mobile";
-import {consumerservice} from "../service/consumer.service";
-import {operation_service} from "../service/operation.service";
-import {message} from "antd";
 import './fresh.css'
 import {locationservice} from "../service/location.service";
 import {airquality_service} from "../service/airquality.service";
-
-const alert = Modal.alert;
 class FreshPanel extends Component{
     constructor(props) {
         super(props);
-        this.state = {
-            // bind_name: '',
-            // online: false,
-            // pm2_5: 0,
-            // volume: 0,
-            // temp: 0,
-            // humid: 0,
-            // power_status: 'off',
-            // work_mode: 'manual',
-            // heat_mode: 0,
-            // light: 0,
-            // lock: 0,
-            // co2: 0,
-            // edit_machine_name: false,
-        }
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
-        this.operate_local_power = this.operate_local_power.bind(this);
-        this.operate_local_volume = this.operate_local_volume.bind(this);
-        this.operate_local_mode = this.operate_local_mode.bind(this);
-        this.operate_local_light = this.operate_local_light.bind(this);
-        this.operate_local_heat = this.operate_local_heat.bind(this);
-        this.operate_local_lock = this.operate_local_lock.bind(this);
         this.edit_operation = this.edit_operation.bind(this);
         this.confirm_bind_name = this.confirm_bind_name.bind(this);
-        this.read_bind = this.read_bind.bind(this);
         this.check_qrcode = this.check_qrcode.bind(this);
         this.check_control_option = this.check_control_option.bind(this);
         let qrcode = this.props.match.params.qrcode;
         this.props.changeQrcode(qrcode);
-    }
-
-    read_bind = (e) => {
-        this.setState({bind_name: e.target.value});
     }
 
     edit_operation = () => {
@@ -62,30 +30,6 @@ class FreshPanel extends Component{
             console.log(JSON.stringify(response))
         })
         this.edit_operation();
-    }
-
-    operate_local_power = (power) => {
-        this.setState({power_status: power});
-    }
-
-    operate_local_volume = (volume) => {
-        this.setState({volume: volume});
-    }
-
-    operate_local_mode = (mode) => {
-        this.setState({work_mode: mode})
-    }
-
-    operate_local_light = (light) => {
-        this.setState({light: light});
-    }
-
-    operate_local_heat = (heat) => {
-        this.setState({heat_mode: heat});
-    }
-
-    operate_local_lock = (lock) => {
-        this.setState({lock: lock});
     }
 
     init_config = () => {
@@ -282,8 +226,8 @@ class FreshPanel extends Component{
                 <div className="separate_div"></div>
                 <OperationPanel/>
                 <div className="separate_div"></div>
-                <div className="operation_panel">
-                    {/*<Chart qrcode={this.props.qrcode}/>*/}
+                <div className="operation_panel_2">
+                    <PM2_5Charts qrcode={this.props.match.params.qrcode}/>
                 </div>
             </div>
         );

@@ -6,20 +6,10 @@ import {util} from "../service/util";
 class RingData extends Component{
     constructor(props) {
         super(props);
-        this.state={
-            value:0
-        }
-    }
-
-    componentDidMount(){
-        let value = this.props.value!=undefined?this.props.value:0;
-        this.setState({
-            value:value
-        })
     }
 
     render() {
-        let value = this.state.value;
+        let value = util.isRealNum(this.props.value)?this.props.value:0;
         let dataArr = [{
             value: value,
             name: util.tell_pm2_5_desc(value)

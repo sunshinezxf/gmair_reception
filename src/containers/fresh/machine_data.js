@@ -13,6 +13,8 @@ function mapStateToProps(state) {
         machine_status:state.fresh_reducer.machine_status,
         volume:state.fresh_reducer.volume,
         co2_is_present:state.fresh_reducer.co2_is_present,
+        pm2_5:state.fresh_reducer.pm2_5,
+        co2:state.fresh_reducer.co2,
     }
 }
 

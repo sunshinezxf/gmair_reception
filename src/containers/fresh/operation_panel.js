@@ -16,6 +16,8 @@ function mapStateToProps(state) {
         machine:state.fresh_reducer.machine,
         heat_mode_list:state.fresh_reducer.heat_mode_list,
         heat:state.fresh_reducer.heat,
+        lock:state.fresh_reducer.lock,
+        lock_is_present:state.fresh_reducer.lock_is_present,
     }
 }
 

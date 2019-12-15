@@ -66,6 +66,14 @@
 .separate_div_2{
     height: 1.5rem;
 }
+.operation_panel_1{
+    background: #f2f2f2;
+    padding:1.5rem;
+}
+.operation_panel_2{
+    background: #f2f2f2;
+    padding:1.5rem 1.5rem 0 1.5rem;
+}
 .operation_panel{
     background: #f2f2f2;
     padding:1.5rem;
@@ -103,5 +111,5 @@
     flex: 1;
 }
 .airquality_value{
-    flex: 1;
+    flex: 1.5;
 }
