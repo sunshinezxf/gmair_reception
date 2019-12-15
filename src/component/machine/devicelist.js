@@ -11,11 +11,7 @@ import '../../antd-mobile.css';
 import {Card, PullToRefresh, SwipeAction, WhiteSpace, WingBlank} from 'antd-mobile';
 import Navigation from "../navigation/navigation";
 import DeviceItem from "./deviceitem.js";
-import MachineItem from "./machineitem";
-
-const machine_item_gap = {
-    marginTop: `1rem`
-};
+import FanItem from "./fanitem";
 
 class DeviceList extends React.Component {
     constructor(props) {
@@ -77,6 +73,7 @@ class DeviceList extends React.Component {
 
     componentDidMount() {
         let access_token = localStorage.getItem('access_token');
+        localStorage.setItem("access_token",'8f13ee79-f98f-479a-88f2-183100c39b74')
         if (access_token === undefined || access_token === null || access_token === '') {
             window.location.href = '/login';
             return;
@@ -91,7 +88,8 @@ class DeviceList extends React.Component {
         }
         //load machine list
         this.setState({loading: true});
-        machine_service.obtain_machine_list().then(response => {
+        machine_service.obtain_device_list().then(response => {
+            console.log(response)
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({machine_list: response.data, loading: false})
             } else if (response.responseCode === 'RESPONSE_NULL') {
@@ -104,7 +102,7 @@ class DeviceList extends React.Component {
 
     refresh_list = () => {
         this.setState({loading: true});
-        machine_service.obtain_machine_list().then(response => {
+        machine_service.obtain_device_list().then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({machine_list: response.data})
             } else if (response.responseCode === 'RESPONSE_NULL') {
@@ -117,22 +115,6 @@ class DeviceList extends React.Component {
         setTimeout(() => {
             this.setState({loading: false});
         }, 1000);
-        this.setState({
-            machine_list: [
-                {
-                    codeValue: "12",
-                    location: "XXXXX的卧室",
-                    bindName: "果麦新风机"
-                },
-                {
-                    codeValue: "123",
-                    location: "XXXX的客厅",
-                    bindName: "果麦冷暖风扇"
-                }
-            ],
-            loading: false
-        })
-
     };
 
     scan_qrcode = () => {
@@ -189,7 +171,8 @@ class DeviceList extends React.Component {
                             }>
                                 <Card.Header title={item.bindName}/>
                                 <Card.Body>
-                                    <DeviceItem qrcode={item.codeValue} name={item.bindName}/>
+                                    <FanItem/>
+                                    {/*<DeviceItem url={item.modelThumbnail} qrcode={item.codeValue} goods_name={item.goodsName} model_name={item.modelName}/>*/}
                                 </Card.Body>
                             </SwipeAction>
                         </Card>

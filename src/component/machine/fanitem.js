@@ -18,14 +18,7 @@ class FanItem extends React.Component {
         this.state = {
             online: false,
             qrcode: '',
-            pm2_5: '',
-            volume: '',
-            temp: '',
-            humid: '',
             power_status: 'off',
-            work_mode: '',
-            lock_status: 'off',
-            model_name: '',
         };
         this.power_operate = this.power_operate.bind(this);
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
@@ -63,27 +56,12 @@ class FanItem extends React.Component {
             }
             //machine offline
             if (response.responseCode === 'RESPONSE_NULL') {
-                this.setState({online: false});
+                this.setState({online: true});
             }
             if (response.responseCode === 'RESPONSE_ERROR') {
                 this.setState({online: false});
             }
         });
-    };
-
-    obtain_model_name = (qrcode) => {
-        machine_service.check_exist(qrcode).then(response => {
-            if (response.responseCode === "RESPONSE_OK") {
-                let modelId = response.data[0].modelId;
-                machine_service.obtain_model(modelId).then(response => {
-                    if (response.responseCode === "RESPONSE_OK") {
-                        this.setState({
-                            model_name: response.data[0].modelName
-                        })
-                    }
-                })
-            }
-        })
     };
 
     config_network = () => {
@@ -94,7 +72,6 @@ class FanItem extends React.Component {
         let qrcode = this.props.qrcode;
         this.setState({qrcode: qrcode});
         this.obtain_machine_status(qrcode);
-        this.obtain_model_name(qrcode);
         setInterval(() => {
             this.obtain_machine_status(qrcode);
         }, 10000);
@@ -104,6 +81,7 @@ class FanItem extends React.Component {
 
         let url = '/machine/detail/' + this.props.qrcode;
 
+        let mode = 'hot'
         return (
             <div onClick={this.state.online ? () => {
             } : this.config_network}>
@@ -116,9 +94,9 @@ class FanItem extends React.Component {
                     }}>
                         <div className="device-name"> {this.props.name+this.state.model_name}</div>
                         {this.state.online === true ? <div className="device-status">
-                                <div className="device-num">2</div>
+                                <div className="device-num" style={{color:util.tell_fan_color(mode)}}>2</div>
                                 <div className="device-unit">档</div>
-                                <div className="device-label"><Tag>冷风</Tag></div>
+                                <div className="device-label"><Tag color={util.tell_fan_color(mode)}>冷风</Tag></div>
                             </div>:
                             <span>设备已离线，点击重新接入</span>}
                     </div>

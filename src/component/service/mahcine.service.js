@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const machine_service_url = 'http://172.19.168.14:8017/reception/machine';
+const machine_service_url = 'https://microservice.gmair.net/reception/machine';
+// const machine_service_url = 'http://172.19.168.14:8017/reception/machine';
 
 function check_exist(qrcode) {
     let access_token = localStorage.getItem("access_token");

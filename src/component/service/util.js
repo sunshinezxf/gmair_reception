@@ -110,6 +110,13 @@ function isRealNum(val){
     }
 }
 
+function tell_fan_color(value) {
+    if (value==="hot") {
+        return '#ff9966';
+    }
+    return '#40b9f2';
+}
+
 export const util = {
-    is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc, format,tell_pm2_5_color,isRealNum
+    is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc, format,tell_pm2_5_color,isRealNum,tell_fan_color
 }

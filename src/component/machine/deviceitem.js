@@ -25,7 +25,6 @@ class DeviceItem extends React.Component {
             power_status: 'off',
             work_mode: '',
             lock_status: 'off',
-            model_name: '',
         };
         this.power_operate = this.power_operate.bind(this);
         this.obtain_machine_status = this.obtain_machine_status.bind(this);
@@ -65,7 +64,8 @@ class DeviceItem extends React.Component {
     };
 
     obtain_machine_status = (qrcode) => {
-        machine_service.obtain_machine_status(qrcode).then(response => {
+        machine_service.obtain_machine_new_status(qrcode).then(response => {
+            console.log(response)
             //machine online
             if (response.responseCode === 'RESPONSE_OK') {
                 let information = response.data;
@@ -93,21 +93,6 @@ class DeviceItem extends React.Component {
         });
     };
 
-    obtain_model_name = (qrcode) => {
-        machine_service.check_exist(qrcode).then(response => {
-            if (response.responseCode === "RESPONSE_OK") {
-                let modelId = response.data[0].modelId;
-                machine_service.obtain_model(modelId).then(response => {
-                    if (response.responseCode === "RESPONSE_OK") {
-                        this.setState({
-                            model_name: response.data[0].modelName
-                        })
-                    }
-                })
-            }
-        })
-    };
-
     config_network = () => {
         window.location.href = '/network/config';
     };
@@ -116,14 +101,13 @@ class DeviceItem extends React.Component {
         let qrcode = this.props.qrcode;
         this.setState({qrcode: qrcode});
         this.obtain_machine_status(qrcode);
-        this.obtain_model_name(qrcode);
         setInterval(() => {
             this.obtain_machine_status(qrcode);
         }, 10000);
     }
 
     render() {
-
+        console.log(this.props)
         let url = '/machine/detail/' + this.props.qrcode;
 
         return (
@@ -131,12 +115,12 @@ class DeviceItem extends React.Component {
             } : this.config_network}>
                 <div className="device-item">
                     <div className="device-pic">
-                        <img src="https://ytools.xyz/WX20191106-111248.png" width="60px" height="60px"/>
+                        <img src={this.props.url} width="60px" height="60px"/>
                     </div>
                     <div className="device-intro" onClick={() => {
                         window.location.href = url
                     }}>
-                        <div className="device-name"> {this.props.name+this.state.model_name}</div>
+                        <div className="device-name"> {this.props.goods_name+this.props.model_name}</div>
                         {this.state.online === true ? <div className="device-status">
                             <div className="device-num" style={{color:util.tell_pm2_5_color(this.state.pm2_5)}}>{util.format_pm2_5(this.state.pm2_5)}</div>
                             <div className="device-unit">ug/m<sup>3</sup></div>
