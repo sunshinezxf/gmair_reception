@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const machine_service_url = 'https://microservice.gmair.net/reception/machine';
+const machine_service_url = 'http://172.19.168.14:8017/reception/machine';
 
 function check_exist(qrcode) {
     let access_token = localStorage.getItem("access_token");
@@ -79,6 +79,16 @@ function obtain_machine_list() {
 function obtain_machine_status(qrcode) {
     let access_token = localStorage.getItem('access_token');
     let machine_status_url = machine_service_url + '/info/probe?access_token=' + access_token + '&qrcode=' + qrcode;
+    return axios.get(machine_status_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to obtain machine status'};
+    })
+}
+
+function obtain_machine_new_status(qrcode){
+    let access_token = localStorage.getItem('access_token');
+    let machine_status_url = machine_service_url + '/running/status?access_token=' + access_token + '&qrcode=' + qrcode;
     return axios.get(machine_status_url).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -279,6 +289,7 @@ export const machine_service = {
     obtain_current_city,
     obtain_machine_list,
     obtain_machine_status,
+    obtain_machine_new_status,
     obtain_model,
     obtain_pm2_5_weekly,
     obtain_volume_range,

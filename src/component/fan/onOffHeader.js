@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import 'antd/dist/antd.css'
 import on_off_bg from '../../material/bg/gmair_bg.jpg';
 import power_img from '../../material/icon/power.png';
@@ -42,18 +42,24 @@ const on_off_text = {
     color: `white`
 }
 
-const OnOffHeader = (props)=>{
-    return(
-        <div style={on_off_header}>
-            <img src={on_off_bg} style={on_off_bg_style}></img>
-            <div style={controller_container_style}>
-                <div style={power_icon_container_style}>
-                    <img src={power_img} style={power_icon_style}></img>
+class OnOffHeader extends Component {
+    constructor(props) {
+        super(props);
+        console.log(props);
+    }
+    render() { 
+        return ( 
+            <div style={on_off_header}>
+                <img src={on_off_bg} style={on_off_bg_style}></img>
+                <div style={controller_container_style}>
+                    <div style={power_icon_container_style}>
+                        <img src={power_img} style={power_icon_style}></img>
+                    </div>
+                    <div style={on_off_text}>已开启</div>
                 </div>
-                <div style={on_off_text}>已开启</div>
             </div>
-        </div>
-    )
+        );
+    }
 }
-
+ 
 export default OnOffHeader;
