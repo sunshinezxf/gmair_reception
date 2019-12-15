@@ -8,9 +8,10 @@ import DeviceScan from "./devicescan";
 import '../../antd-mobile.css';
 
 
-import {Card, PullToRefresh, WhiteSpace, WingBlank} from 'antd-mobile';
+import {Card, PullToRefresh, SwipeAction, WhiteSpace, WingBlank} from 'antd-mobile';
 import Navigation from "../navigation/navigation";
 import DeviceItem from "./deviceitem.js";
+import MachineItem from "./machineitem";
 
 const machine_item_gap = {
     marginTop: `1rem`
@@ -76,7 +77,6 @@ class DeviceList extends React.Component {
 
     componentDidMount() {
         let access_token = localStorage.getItem('access_token');
-
         if (access_token === undefined || access_token === null || access_token === '') {
             window.location.href = '/login';
             return;
@@ -159,34 +159,49 @@ class DeviceList extends React.Component {
     render() {
         let machine_list = this.state.machine_list;
         let that = this;
+        console.log(machine_list)
         let element = machine_list.map(function (item) {
-            console.log("render" + item.bindName);
+            // console.log("render" + item.bindName);
             return (
                 <div key={item.codeValue}>
-                    <WingBlank size="lg">
-                        <WhiteSpace size="lg"/>
+                    <WingBlank size="md">
+                        <WhiteSpace size="md"/>
                         <Card>
-                            <Card.Header title={item.location}/>
-                            <DeviceItem qrcode={item.codeValue} name={item.bindName}/>
-                            {/*<div className={cardbody}>*/}
-                            {/*    <image src={item.pic}/>*/}
-                            {/*    <div>*/}
-                            {/*        <div className={device-name}>{item.bindName}</div>*/}
-                            {/*        <div>*/}
+                            <SwipeAction autoClose left={[
+                                {
+                                    text: '删除',
+                                    style: {backgroundColor: '#F4333C', color: 'white'},
+                                    onPress: () => {
+                                        that.unbind(item.codeValue);
+                                    }
+                                }
+                            ]} right={
+                                item.ownership === 'SHARE' ?
+                                    '' :
+                                    [{
+                                        text: '分享',
+                                        style: {backgroundColor: '#108ee9', color: 'white'},
+                                        onPress: () => {
+                                            that.share(item.codeValue);
+                                        },
+                                    }]
 
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
+                            }>
+                                <Card.Header title={item.bindName}/>
+                                <Card.Body>
+                                    <DeviceItem qrcode={item.codeValue} name={item.bindName}/>
+                                </Card.Body>
+                            </SwipeAction>
                         </Card>
-                        <WhiteSpace size="lg"/>
                     </WingBlank>
+
                 </div>
 
             )
         });
 
         return (
-            <div>
+            <div style={{background:'#f2f2f2',minHeight:window.innerHeight}}>
                 {/*{element}*/}
                 <PullToRefresh refreshing={this.state.loading} onRefresh={this.refresh_list}>
                     {!this.state.loading && element}

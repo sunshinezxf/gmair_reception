@@ -1,23 +1,25 @@
 /*设备样式*/
 .device-item {
     display: flex;
-    flex-direction: row;
 }
 
 /*设备图片*/
 .device-pic {
-    flex-grow: 1;
-    width: 5rem;
-    margin: 0.7rem 1rem 0.7rem 0.7rem;
+    display: flex;
+    flex: 1;
+    /*justify-content: center;*/
+    align-items: center;
+    /*border: 1px solid dodgerblue;*/
 }
 
 /*设备开关*/
 .device-power {
     display: flex;
     flex-direction: column;
-    flex-grow: 2;
-    justify-content: space-around;
+    flex: 1;
+    justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .device-power i {
@@ -26,31 +28,33 @@
 
 /*设备是否打开*/
 .device-open {
-
+    margin-top: 0.3rem ;
+    font-size: 1.3rem;
 }
 
 /*设备名称*/
 .device-intro {
-    flex-grow: 3;
+    flex: 3;
     display: flex;
     flex-direction: column;
 }
 
 /*设备名称*/
 .device-name {
-
+    flex: 1;
 }
 
 /*设备状态信息*/
 .device-status {
     display: flex;
+    flex: 3;
     flex-direction: row;
     align-items: flex-end;
 }
 
 /*设备数值*/
 .device-num {
-    font-size: 6rem;
+    font-size: 4rem;
     margin-right: 0.5rem;
 }
 
@@ -58,10 +62,11 @@
 .device-unit {
     margin-right: 0.5rem;
     margin-bottom: 0.7rem;
+    /*font-size: 0.8rem;*/
 }
 
 /*设备标签*/
-.device-lable {
+.device-label {
     margin-bottom: 0.7rem;
     margin-right: 0.5rem;
 }
@@ -69,7 +74,10 @@
 /*设备底部三个小图标*/
 .device-tag {
     display: flex;
+    flex: 1;
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
+    margin-top: 5px;
 }
 

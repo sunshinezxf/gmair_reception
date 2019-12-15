@@ -11,7 +11,7 @@ const gmair_machine_power = {
     fontWeight: `lighter`
 };
 
-class DeviceItem extends React.Component {
+class FanItem extends React.Component {
 
     constructor(props) {
         super(props);
@@ -40,28 +40,6 @@ class DeviceItem extends React.Component {
             this.setState({power_status: 'on'});
             machine_service.operate(this.props.qrcode, 'power', 'on');
         }
-    };
-
-    light_operate = () => {
-
-    };
-
-    lock_operate = () => {
-        if (this.state.lock_status === 'on') {
-            this.setState({lock_status: 'off'});
-            machine_service.operate(this.state.qrcode, 'lock', 'off');
-        } else {
-            this.setState({lock_status: 'on'});
-            machine_service.operate(this.state.qrcode, 'lock', 'on');
-        }
-    };
-
-    mode_operate = (mode) => {
-        if (this.state.work_mode === mode) {
-            return;
-        }
-        this.setState({work_mode: mode});
-        machine_service.operate(this.state.qrcode, 'mode', mode);
     };
 
     obtain_machine_status = (qrcode) => {
@@ -138,16 +116,11 @@ class DeviceItem extends React.Component {
                     }}>
                         <div className="device-name"> {this.props.name+this.state.model_name}</div>
                         {this.state.online === true ? <div className="device-status">
-                            <div className="device-num" style={{color:util.tell_pm2_5_color(this.state.pm2_5)}}>{util.format_pm2_5(this.state.pm2_5)}</div>
-                            <div className="device-unit">ug/m<sup>3</sup></div>
-                            <div className="device-label"><Tag color={util.tell_pm2_5_color(this.state.pm2_5)}>PM2.5{util.tell_pm2_5_desc(this.state.pm2_5)}</Tag></div>
-                        </div>:
+                                <div className="device-num">2</div>
+                                <div className="device-unit">档</div>
+                                <div className="device-label"><Tag>冷风</Tag></div>
+                            </div>:
                             <span>设备已离线，点击重新接入</span>}
-                        {/*<div className="device-tag">*/}
-                        {/*<div><i className='fa fa-recycle'></i>&nbsp;420m<sup>3</sup>/h</div>*/}
-                        {/*<div><i className='fa fa-thermometer'/>&nbsp;21°C</div>*/}
-                        {/*<div><i className='glyphicon glyphicon-tint'/>&nbsp;45%</div>*/}
-                        {/*</div>*/}
                     </div>
                     <div className="device-power">
                         {this.state.online === true ?
@@ -159,14 +132,7 @@ class DeviceItem extends React.Component {
                                 }</div>
                             </div> : <Icon style={gmair_icon_inactive} type="disconnect" />}
                     </div>
-                    {/*<div className="device-power"></div>*/}
-                    {/*<MachinePower className="device-power"/>*/}
                 </div>
-                {/*<div className="device-tag">*/}
-                    {/*<div><i className='fa fa-recycle'></i>&nbsp;420m<sup>3</sup>/h</div>*/}
-                    {/*<div><i className='fa fa-thermometer'/>&nbsp;21°C</div>*/}
-                    {/*<div><i className='glyphicon glyphicon-tint'/>&nbsp;45%</div>*/}
-                {/*</div>*/}
             </div>
 
         );
@@ -181,4 +147,4 @@ const gmair_icon_active = {
     color: `#00A2E9`
 };
 
-export default DeviceItem;
+export default FanItem;

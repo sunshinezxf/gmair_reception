@@ -1,0 +1,15 @@
+.am-card-header {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    padding: 6px 15px;
+}
+.am-card-body {
+    position: relative;
+    border-top: 1PX solid #ddd;
+    padding: 10px 6px 6px;
+    font-size: 15px;
+    color: #333;
+    min-height: 40px;
+    flex: 1 1;
+}
