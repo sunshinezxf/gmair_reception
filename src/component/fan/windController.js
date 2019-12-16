@@ -112,11 +112,11 @@ class WindController extends Component {
                     <div className='block-title'>风量控制</div>
                     <div className='wind-level-selector icon-wrapper'>
                         <Slider className={`cold-wind-level-selector ${this.props.heat===0?'active':null}`} 
-                            marks={cold_wind_levels} defaultValue={0} step={null} tooltipVisible={false} max={80}
+                            marks={cold_wind_levels} defaultValue={0} step={null} tooltipVisible={false} max={8}
                             value={this.props.volume} onChange={this.local_cold_wind} onAfterChange={this.cold_wind}/>
                         <Slider className={`hot-wind-level-selector ${this.props.heat===1?'active':null}`} 
-                            marks={hot_wind_levels} defaultValue={10} step={null} tooltipVisible={false} max={30}
-                            value={this.props.heat*10} onChange={this.props.local_hot_wind} onAfterChange={this.hot_wind}/>
+                            marks={hot_wind_levels} defaultValue={1} step={null} tooltipVisible={false} max={4} min={1}
+                            value={this.props.heat} onChange={this.local_hot_wind} onAfterChange={this.hot_wind}/>
                         <img src={wind_img} className='wind-icon'></img>
                     </div>
                 </div>
@@ -151,7 +151,7 @@ class WindController extends Component {
     cold_wind = (e) =>{
         console.log(e)
         this.local_cold_wind(e)
-        machine_service.volume(this.props.qrcode, e/10+1);
+        machine_service.volume(this.props.qrcode, e+1);
     }
 
     //在拖动过程中改变前端风速volume，不给后端发送数据，减少多余请求
@@ -171,14 +171,14 @@ class WindController extends Component {
 
     hot_wind = (e) =>{
         this.local_hot_wind(e)
-        console.log(this.props.heat_mode_list[e/10]);
-        machine_service.operate(this.props.qrcode, 'heat', this.props.heat_mode_list[e/10]);
+        console.log(this.props.heat_mode_list[e]);
+        machine_service.operate(this.props.qrcode, 'heat', this.props.heat_mode_list[e]);
     }
 
     local_hot_wind = (e) =>{
         let machine_status = this.props.machine_status;
-        console.log(this.props.heat_mode_list[e/10]);
-        machine_status.heat = e/10;
+        console.log(this.props.heat_mode_list[e]);
+        machine_status.heat = e;
         this.props.changeMachineStatus(machine_status);
     }
 
