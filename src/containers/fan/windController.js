@@ -24,6 +24,8 @@ function mapStateToProps(state) {
         target_temperature:state.wind_reducer.target_temperature,
         temperature:state.wind_reducer.temperature,
         work_mode_list:state.wind_reducer.work_mode_list,
+        machine_status:state.wind_reducer.machine_status,
+        heat_mode_list:state.wind_reducer.heat_mode_list
     }
 }
 
