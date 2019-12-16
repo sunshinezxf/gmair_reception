@@ -73,7 +73,7 @@ class DeviceList extends React.Component {
 
     componentDidMount() {
         let access_token = localStorage.getItem('access_token');
-        localStorage.setItem("access_token",'8f13ee79-f98f-479a-88f2-183100c39b74')
+        localStorage.setItem("access_token",'73e3c9b3-184d-4ce1-8079-e91018b18e6b')
         if (access_token === undefined || access_token === null || access_token === '') {
             window.location.href = '/login';
             return;
@@ -171,8 +171,12 @@ class DeviceList extends React.Component {
                             }>
                                 <Card.Header title={item.bindName}/>
                                 <Card.Body>
-                                    <FanItem/>
-                                    {/*<DeviceItem url={item.modelThumbnail} qrcode={item.codeValue} goods_name={item.goodsName} model_name={item.modelName}/>*/}
+                                    {item.goodsId==="GUO20180607ggxi8a96"&&
+                                    <DeviceItem url={item.modelThumbnail} qrcode={item.codeValue} goods_name={item.goodsName} model_name={item.modelName}/>
+                                    }
+                                    {item.goodsId==="GUO20191208249y7f32"&&
+                                    <FanItem url={item.modelThumbnail} qrcode={item.codeValue} goods_name={item.goodsName} model_name={item.modelName}/>
+                                    }
                                 </Card.Body>
                             </SwipeAction>
                         </Card>
