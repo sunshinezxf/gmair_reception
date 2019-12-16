@@ -31,7 +31,7 @@ class FanItem extends React.Component {
     };
 
     obtain_machine_status = (qrcode) => {
-        machine_service.obtain_machine_status(qrcode).then(response => {
+        machine_service.obtain_machine_new_status(qrcode).then(response => {
             //machine online
             if (response.responseCode === 'RESPONSE_OK') {
                 let information = response.data;
