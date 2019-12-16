@@ -1,7 +1,7 @@
 //wind_reducer
 import {
     CLICK_Wind, COLD_WIND_LEVEL_CHANGE, HOT_WIND_LEVEL_CHANGE, SELECT_WIND_TYPE, SETTING_TIME, SELECT_TIME,SELECT_TEMPERATURE,
-    QRCODE_CHANGE,MACHINE_STATUS_CHANGE,WORK_MODE_LIST
+    QRCODE_CHANGE,MACHINE_STATUS_CHANGE,WORK_MODE_LIST,HEAT_MODE_LIST
 } from '../actions/wind.action';
 
 const initialState={
@@ -15,13 +15,14 @@ const initialState={
     machine_status: {power_status:false,volume:3,work_mode:0,sweep:false,heat:0,countdown:60,target_temperature:25,temperature:20},
     power_status:false,
     volume:'',
-    work_mode:'',
+    work_mode:0,
     sweep:false,
     heat:0,
     countdown:'',
     target_temperature:'',
     temperature:'',
-    work_mode_list: ['test1','test2']
+    work_mode_list: ['normal','pure','sleep','strong'],
+    heat_mode_list: ['off','slight','warm','hot','torrid']
 }
 const wind_reducer = (state = initialState , action )=>{
     switch(action.type){
@@ -88,6 +89,10 @@ const wind_reducer = (state = initialState , action )=>{
             return Object.assign({},state,{
                 work_mode_list:action.work_mode_list
             });
+        case HEAT_MODE_LIST:
+            return Object.assign({},state,{
+                heat_mode_list: action.heat_mode_list
+            })
         default:
             return state;
     }

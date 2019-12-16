@@ -3,8 +3,10 @@ import fanContent from '../../component/fan/fanContent';
 import {
     changeMachineStatus,
     changeModeList,
-    changeQrcode
+    changeQrcode,
+    changeHeatList
 } from "../../actions/wind.action";
+
 
 
 //映射Redux state到组件的属性
@@ -13,6 +15,7 @@ function mapStateToProps(state) {
         qrcode:state.wind_reducer.qrcode,
         machine_status:state.wind_reducer.machine_status,
         work_mode_list:state.wind_reducer.work_mode_list,
+        heat_mode_list:state.wind_reducer.heat_mode_list,
     }
 }
 
@@ -22,6 +25,8 @@ function mapDispatchToProps(dispatch){
         changeQrcode:(qrcode)=>dispatch(changeQrcode(qrcode)),
         changeMachineStatus:(machine_status)=>dispatch(changeMachineStatus(machine_status)),
         changeModeList:(work_mode_list)=>dispatch(changeModeList(work_mode_list)),
+        changeHeatList:(heat_mode_list)=>dispatch(changeHeatList(heat_mode_list)),
+
     }
 }
 

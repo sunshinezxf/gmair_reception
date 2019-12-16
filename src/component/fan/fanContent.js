@@ -52,7 +52,7 @@ class FanContent extends Component{
                 let info = response.data[0];
                 this.check_control_option(info.modelId)
             } else {
-                window.location.href = '/machine/list'
+                // window.location.href = '/machine/list'
             }
         })
     }
@@ -63,6 +63,18 @@ class FanContent extends Component{
                 let control_list = response.data;
                 for (let i = 0; i < control_list.length; i++) {
                     let item = control_list[i];
+                    if (item.optionComponent === 'heat') {
+                        let action_list = item.actions;
+                        let heat_list = [];
+                        for (let index in action_list) {
+                            let action_item = action_list[index];
+                            heat_list[action_item.commandValue] = {
+                                name: action_item.actionName,
+                                operator: action_item.actionOperator
+                            }
+                        }
+                        this.props.changeHeatList(heat_list)
+                    }
                     if (item.optionComponent === 'mode') {
                         let action_list = item.actions;
                         let mode_list = [];

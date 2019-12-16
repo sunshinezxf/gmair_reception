@@ -8,6 +8,7 @@ export const SELECT_TEMPERATURE = 'SELECT_TEMPERATURE'
 export const QRCODE_CHANGE = "QRCODE_CHANGE";
 export const MACHINE_STATUS_CHANGE = "MACHINE_STATUS_CHANGE";
 export const WORK_MODE_LIST = "WORK_MODE_LIST";
+export const HEAT_MODE_LIST = "HEAT_MODE_LIST";
 
 
 export const clickWindAction = (windTemperature)=>({
@@ -63,5 +64,12 @@ export function changeModeList(work_mode_list) {
     return {
         type:WORK_MODE_LIST,
         work_mode_list:work_mode_list
+    }
+}
+
+export function changeHeatList(heat_mode_list) {
+    return {
+        type:HEAT_MODE_LIST,
+        heat_mode_list:heat_mode_list,
     }
 }
