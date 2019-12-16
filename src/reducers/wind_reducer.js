@@ -12,7 +12,7 @@ const initialState={
     isSettingTime:false,
     time:null,
     qrcode:'',
-    machine_status: '',
+    machine_status: {power_status:false,volume:3,work_mode:0,sweep:false,heat:0,countdown:60,target_temperature:25,temperature:20},
     power_status:false,
     volume:'',
     work_mode:'',
@@ -21,7 +21,7 @@ const initialState={
     countdown:'',
     target_temperature:'',
     temperature:'',
-    work_mode_list: []
+    work_mode_list: ['test1','test2']
 }
 const wind_reducer = (state = initialState , action )=>{
     switch(action.type){
