@@ -73,7 +73,7 @@ class DeviceList extends React.Component {
 
     componentDidMount() {
         let access_token = localStorage.getItem('access_token');
-        localStorage.setItem("access_token",'73e3c9b3-184d-4ce1-8079-e91018b18e6b')
+        // localStorage.setItem("access_token",'73e3c9b3-184d-4ce1-8079-e91018b18e6b')
         if (access_token === undefined || access_token === null || access_token === '') {
             window.location.href = '/login';
             return;
