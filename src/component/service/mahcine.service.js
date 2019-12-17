@@ -138,6 +138,34 @@ function light(qrcode, value) {
     })
 }
 
+function temp(qrcode, value) {
+    let access_token = localStorage.getItem('access_token');
+    let temp_operation_url = machine_service_url + '/config/temp';
+    let form = new FormData();
+    form.append('access_token', access_token);
+    form.append('qrcode', qrcode);
+    form.append('temp', value);
+    return axios.post(temp_operation_url, form).then(response => {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to config machine temp'};
+    })
+}
+
+function timing(qrcode, value) {
+    let access_token = localStorage.getItem('access_token');
+    let timing_operation_url = machine_service_url + '/config/timing';
+    let form = new FormData();
+    form.append('access_token', access_token);
+    form.append('qrcode', qrcode);
+    form.append('timing', value);
+    return axios.post(timing_operation_url, form).then(response => {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to config machine timing'};
+    })
+}
+
 function unbind(qrcode) {
     let access_token = localStorage.getItem('access_token');
     let unbind_url = machine_service_url + '/consumer/qrcode/unbind';
@@ -309,5 +337,7 @@ export const machine_service = {
     probe_component,
     unbind,
     volume,
-    obtain_device_list
+    obtain_device_list,
+    temp,
+    timing
 }

@@ -22,7 +22,7 @@ const initialState={
     target_temperature:'',
     temperature:'',
     work_mode_list: ['normal','pure','sleep','strong'],
-    heat_mode_list: ['off','slight','warm','hot','torrid']
+    heat_mode_list: [],
 }
 const wind_reducer = (state = initialState , action )=>{
     switch(action.type){

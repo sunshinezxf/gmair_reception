@@ -23,6 +23,10 @@ class WindController extends Component {
         this.local_hot_wind = this.local_hot_wind.bind(this);
         this.wind_hot_click = this.wind_hot_click.bind(this);
         this.mode_operate = this.mode_operate.bind(this);
+        this.local_temperature_change = this.local_temperature_change.bind(this);
+        this.temperature_change = this.temperature_change.bind(this);
+        this.timing_wind = this.timing_wind.bind(this);
+        this.sweep_wind = this.sweep_wind.bind(this);
     }
 
     render() {
@@ -112,7 +116,7 @@ class WindController extends Component {
                     <div className='block-title'>风量控制</div>
                     <div className='wind-level-selector icon-wrapper'>
                         <Slider className={`cold-wind-level-selector ${this.props.heat===0?'active':null}`}
-                            marks={cold_wind_levels} defaultValue={0} step={null} tooltipVisible={false} max={8}
+                            marks={cold_wind_levels} defaultValue={1} step={null} tooltipVisible={false} max={9} min={1}
                             value={this.props.volume} onChange={this.local_cold_wind} onAfterChange={this.cold_wind}/>
                         <Slider className={`hot-wind-level-selector ${this.props.heat!==0?'active':null}`}
                             marks={hot_wind_levels} defaultValue={1} step={null} tooltipVisible={false} max={4} min={1}
@@ -126,12 +130,17 @@ class WindController extends Component {
                         {getTypeList(wind_types,wind_types_imgs)}
                     </div>
                 </div>
+                {this.props.heat!==0&&
                 <div className={`temperature-container ${this.props.isSettingTime?'active':null}`}>
-                    <div className='block-title'>温度设置</div>
+                    <div className='block-title block-title-2'>
+                        <div className="block-title-left">温度设置</div>
+                        <div className="block-title-right">当前温度：{this.props.target_temperature}℃</div>
+                    </div>
                     <Slider className={`temperature-selector`}
                             defaultValue={0} tipFormatter={(value)=>`${value}℃`} max={30} marks={{0:'0℃',30:'30℃'}}
-                            value={this.props.temperature} onChange={this.props.setTemperature}/>
+                            value={this.props.temperature} onChange={this.local_temperature_change} onAfterChange={this.temperature_change}/>
                 </div>
+                }
                 {/* <div className={`time-container ${this.props.isSettingTime?'active':null}`}>
                     <DatePicker
                         mode="time"
@@ -151,7 +160,7 @@ class WindController extends Component {
     cold_wind = (e) =>{
         console.log(e)
         this.local_cold_wind(e)
-        machine_service.volume(this.props.qrcode, e+1);
+        machine_service.volume(this.props.qrcode, e);
     }
 
     //在拖动过程中改变前端风速volume，不给后端发送数据，减少多余请求
@@ -166,13 +175,13 @@ class WindController extends Component {
         machine_status.heat = 0;
         this.props.changeMachineStatus(machine_status);
         machine_service.volume(this.props.qrcode,this.props.volume)
-        machine_service.operate(this.props.qrcode, 'heat', this.props.heat_mode_list[0]);
+        machine_service.operate(this.props.qrcode, 'heat', this.props.heat_mode_list[0].operator);
     }
 
     hot_wind = (e) =>{
         this.local_hot_wind(e)
         console.log(this.props.heat_mode_list[e]);
-        machine_service.operate(this.props.qrcode, 'heat', this.props.heat_mode_list[e]);
+        machine_service.operate(this.props.qrcode, 'heat', this.props.heat_mode_list[e].operator);
     }
 
     local_hot_wind = (e) =>{
@@ -187,7 +196,7 @@ class WindController extends Component {
         console.log(this.props);
         machine_status.heat = 1;
         this.props.changeMachineStatus(machine_status);
-        machine_service.operate(this.props.qrcode, 'heat', this.props.heat_mode_list[1]);
+        machine_service.operate(this.props.qrcode, 'heat', this.props.heat_mode_list[1].operator);
     }
 
     //模式选择
@@ -206,6 +215,36 @@ class WindController extends Component {
 
     light = (light) => {
         machine_service.light(this.props.qrcode, light);
+    }
+
+    local_temperature_change = (e) => {
+        let machine_status = this.props.machine_status;
+        machine_status.temperature = e;
+        this.props.changeMachineStatus(machine_status);
+    }
+
+    //温度变化，发送请求
+    temperature_change = (e) => {
+        this.local_temperature_change(e);
+        machine_service.temp(this.props.qrcode,e);
+    }
+
+    //将时间(分钟)传入，发送请求
+    timing_wind = (e) =>{
+        machine_service.timing(this.props.qrcode,e)
+    }
+
+    //开启、关闭扫风
+    sweep_wind = () =>{
+        let machine_status = this.props.machine_status;
+        if(machine_status.sweep){
+            machine_service.operate(this.props.qrcode, 'sweep', 'off');
+            machine_status.sweep = false
+        }else {
+            machine_service.operate(this.props.qrcode, 'sweep', 'on');
+            machine_status.sweep = true
+        }
+        this.props.changeMachineStatus(machine_status);
     }
 }
 

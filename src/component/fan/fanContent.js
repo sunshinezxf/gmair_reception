@@ -98,6 +98,7 @@ class FanContent extends Component{
             if (response.responseCode === 'RESPONSE_OK') {
                 let information = response.data;
                 information['power_status'] = information.power===1
+                information['sweep'] = information.sweep===1
                 information['work_mode'] = util.tell_mode(information.mode, this.props.work_mode_list)
                 this.props.changeMachineStatus(information);
             }
@@ -117,7 +118,7 @@ class FanContent extends Component{
 
     render(){
         return (
-            <div>
+            <div style={{width:'100%',overflowX:'hidden'}}>
                 <OnOffHeader></OnOffHeader>
                 <WindController></WindController>
             </div>

@@ -4,12 +4,18 @@
 }
 
 .wind-container>div{
-    margin-bottom: 2rem;
+    padding-bottom: 2rem;
 }
 
 .wind-container .block-title{
     font-size: 1.6rem;
     margin-bottom: 0.5rem;
+}
+
+.block-title-2{
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
 }
 
 .wind-temperature-container{
@@ -80,7 +86,7 @@
     border:1px solid #57a49f;
     border-radius:5px;
 }
-  
+
 .icon-wrapper .wind-icon {
     position: absolute;
     /* top: -2px; */
@@ -146,8 +152,8 @@
 }
 
 .temperature-container{
-    padding: 1rem 1rem;
-    background-color: white;
+    padding: 0 1rem;
+    background: #f8f8f8;
 }
 
 .show-time-tag{
@@ -158,4 +164,7 @@
     left: 0;
     right: 0;
     top: 0.5rem;
+}
+.temperature-selector{
+    margin: 2rem 3rem;
 }
