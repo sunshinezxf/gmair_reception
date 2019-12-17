@@ -4,6 +4,7 @@ import WindController from '../../containers/fan/windController'
 import {machine_service} from '../service/mahcine.service'
 import {util} from "../service/util";
 import {wechatservice} from "../service/wechat.service";
+import './windController.css'
 
 class FanContent extends Component{
     constructor(props){
@@ -118,7 +119,7 @@ class FanContent extends Component{
 
     render(){
         return (
-            <div style={{width:'100%',overflowX:'hidden'}}>
+            <div className="user_select_disable" style={{width:'100%',overflowX:'hidden'}}>
                 <OnOffHeader></OnOffHeader>
                 <WindController></WindController>
             </div>

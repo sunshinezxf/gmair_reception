@@ -219,7 +219,7 @@ class FreshPanel extends Component{
     render() {
         // console.log(this.props.qrcode)
         return (
-            <div>
+            <div className="user_select_disable">
                 <FreshHeader/>
                 <div className="separate_div"></div>
                 <MachineData/>

@@ -105,22 +105,20 @@ class MachineData extends Component{
         }
         return (
             <div className="operation_panel">
-                <div style={tag_div_style}>
-                    <div style={aqi_item_1} onClick={this.citySelect}>空气&nbsp;&nbsp;<Tag color="#00A2E9">{this.props.location.city}</Tag></div>
-                    <div style={aqi_item_2}><span style={item_text}>AQI</span>&nbsp;&nbsp;{this.props.city_air.aqi}</div>
-                    <div style={aqi_item_3}><span style={item_text}>PM2.5</span>&nbsp;&nbsp;{this.props.city_air.pm2_5}</div>
-                </div>
-                <div style={{display:'none'}}>
-                    <Picker
-                        data={this.state.area_list}
-                        title="城市选择"
-                        cols={2}
-                        // cascade={false}
-                        onChange={this.areaChange}
-                    >
-                        <List.Item arrow="horizontal" id="click_div">省市区选择</List.Item>
-                    </Picker>
-                </div>
+
+                <Picker
+                    data={this.state.area_list}
+                    title="城市选择"
+                    cols={2}
+                    // cascade={false}
+                    onChange={this.areaChange}
+                >
+                    <div style={tag_div_style}>
+                        <div style={aqi_item_1}>空气&nbsp;&nbsp;<Tag color="#00A2E9">{this.props.location.city}</Tag></div>
+                        <div style={aqi_item_2}><span style={item_text}>AQI</span>&nbsp;&nbsp;{this.props.city_air.aqi}</div>
+                        <div style={aqi_item_3}><span style={item_text}>PM2.5</span>&nbsp;&nbsp;{this.props.city_air.pm2_5}</div>
+                    </div>
+                </Picker>
                 <div className="operation_show">
                     <div className="operation_left">
                         <div style={{width:'180px',height:'160px'}}>

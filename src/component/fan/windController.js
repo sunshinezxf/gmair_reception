@@ -47,8 +47,7 @@ class WindController extends Component {
                 </div>
             );
             const getTimeTag = (wind_types_img) => {
-                let nowTime = new Date(this.props.time);
-                if (!util.isRealNum(this.props.countdown)&&this.props.countdown===0) {
+                if (!util.isRealNum(this.props.countdown)||this.props.countdown===0||this.props.countdown==="") {
                     return (
                         <img src={wind_types_img}
                              className='wind-type-icon'></img>

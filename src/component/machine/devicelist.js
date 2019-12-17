@@ -12,6 +12,7 @@ import {Card, PullToRefresh, SwipeAction, WhiteSpace, WingBlank} from 'antd-mobi
 import Navigation from "../navigation/navigation";
 import DeviceItem from "./deviceitem.js";
 import FanItem from "./fanitem";
+import './devicelist.css'
 
 class DeviceList extends React.Component {
     constructor(props) {
@@ -187,9 +188,9 @@ class DeviceList extends React.Component {
         });
 
         return (
-            <div style={{background:'#f2f2f2',minHeight:window.innerHeight}}>
+            <div className="user_select_disable" style={{background:'#f2f2f2',minHeight:window.innerHeight}}>
                 {/*{element}*/}
-                <PullToRefresh refreshing={this.state.loading} onRefresh={this.refresh_list}>
+                <PullToRefresh refreshing={this.state.loading} onRefresh={this.refresh_list} distanceToRefresh={60}>
                     {!this.state.loading && element}
                     {!this.state.loading &&
                     <DeviceScan scan={this.scan_qrcode}/>
