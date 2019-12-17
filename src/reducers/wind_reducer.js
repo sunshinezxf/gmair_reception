@@ -12,7 +12,7 @@ const initialState={
     isSettingTime:false,
     time:null,
     qrcode:'',
-    machine_status: {power_status:false,volume:3,work_mode:0,sweep:false,heat:0,countdown:60,target_temperature:25,temperature:20},
+    machine_status: {power_status:false,volume:'',work_mode:'normal',sweep:false,heat:0,countdown:'',target_temperature:25,temperature:20},
     power_status:false,
     volume:'',
     work_mode:'normal',

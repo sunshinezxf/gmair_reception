@@ -38,8 +38,8 @@ class Page extends React.Component {
                 <Route exact path="/login" component={LoginPage}/>
                 <Route exact path="/register" component={Register}/>
                 <Route path="/init/:qrcode" component={DeviceInit}/>
-                <Route exact path="/machine/list" component={MachineList}/>
-                <Route exact path="/device/list" component={DeviceList}/>
+                <Route exact path="/machine/list" component={DeviceList}/>
+                {/*<Route exact path="/device/list" component={DeviceList}/>*/}
                 <Route path='/machine/detail/:qrcode' component={MachineDetail}/>
                 <Route path='/fresh/detail/:qrcode' component={FreshPanel}/>
                 <Route exact path="/network/config" component={NetworkConfig}/>

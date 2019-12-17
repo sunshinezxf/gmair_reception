@@ -68,7 +68,7 @@ class FanItem extends React.Component {
 
     render() {
 
-        let url = '/machine/detail/' + this.props.qrcode;
+        let url = '/fan/detail/' + this.props.qrcode;
 
         let mode = this.state.heat===0?'cold':'hot';
         let volume = this.state.heat===0?this.state.volume:this.state.heat;
@@ -86,7 +86,7 @@ class FanItem extends React.Component {
                         {this.state.online === true ? <div className="device-status">
                                 <div className="device-num" style={{color:util.tell_fan_color(mode)}}>{volume}</div>
                                 <div className="device-unit">档</div>
-                                <div className="device-label"><Tag color={util.tell_fan_color(mode)}>冷风</Tag></div>
+                                <div className="device-label"><Tag color={util.tell_fan_color(mode)}>{this.props.heat===0?'冷风':'热风'}</Tag></div>
                             </div>:
                             <span>设备已离线，点击重新接入</span>}
                     </div>

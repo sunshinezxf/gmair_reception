@@ -15,7 +15,7 @@ const initialState={
     volume:'',
     work_mode:'',
     light:'',
-    heat:'',
+    heat:0,
     lock:'',
     pm2_5:0,
     co2:'',

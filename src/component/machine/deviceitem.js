@@ -108,7 +108,7 @@ class DeviceItem extends React.Component {
 
     render() {
         console.log(this.props)
-        let url = '/machine/detail/' + this.props.qrcode;
+        let url = '/device/detail/' + this.props.qrcode;
 
         return (
             <div onClick={this.state.online ? () => {

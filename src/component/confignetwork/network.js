@@ -144,7 +144,7 @@ class NetworkConfig extends React.Component {
                     this.state.show_config_button ?
                         <div style={wifi_prompt_area}>
                             <div style={wifi_prompt_item}>1.确定手机已连接Wi-Fi(2.4G网络)</div>
-                            <div style={wifi_prompt_item}>2.请长按设备上的配置键(即辅热)按钮</div>
+                            <div style={wifi_prompt_item}>2.请长按设备上的配置键(辅热/电源)按钮</div>
                             <div style={wifi_prompt_item}>3.请等待Wi-Fi配置指示灯闪烁后松开</div>
                         </div>
                         :

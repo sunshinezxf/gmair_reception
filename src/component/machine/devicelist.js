@@ -54,7 +54,7 @@ class DeviceList extends React.Component {
     unbind = (code_value) => {
         machine_service.unbind(code_value).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
-                machine_service.obtain_machine_list().then(response => {
+                machine_service.obtain_device_list().then(response => {
                     if (response.responseCode === 'RESPONSE_OK') {
                         this.setState({machine_list: response.data, loading: false})
                     } else if (response.responseCode === 'RESPONSE_NULL') {
@@ -95,7 +95,7 @@ class DeviceList extends React.Component {
             } else if (response.responseCode === 'RESPONSE_NULL') {
                 this.setState({machine_list: [], loading: false})
             } else {
-                // window.location.href = '/login';
+                window.location.href = '/login';
             }
         });
     }

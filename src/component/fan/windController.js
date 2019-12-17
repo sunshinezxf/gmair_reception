@@ -48,7 +48,7 @@ class WindController extends Component {
             );
             const getTimeTag = (wind_types_img) => {
                 let nowTime = new Date(this.props.time);
-                if (!util.isRealNum(this.props.countdown)) {
+                if (!util.isRealNum(this.props.countdown)&&this.props.countdown===0) {
                     return (
                         <img src={wind_types_img}
                              className='wind-type-icon'></img>
@@ -91,7 +91,7 @@ class WindController extends Component {
                     windTypeNode =
                         <div key={i}
                              className={`wind-type-container ${this.props.windType === wind_types[i] ? 'active' : null}`}>
-                            <Picker data={timing_levels} cols={1} className="forss" onChange={this.timing_wind}>
+                            <Picker data={timing_levels} cols={1} className="forss" disabled={!this.props.power_status} onChange={this.timing_wind}>
                                 <CustomChildren>
                                     <div className='wind-type-icon-container'>
                                         {getTimeTag(wind_types_imgs[wind_types[i].operator])}
