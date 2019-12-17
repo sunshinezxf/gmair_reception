@@ -74,16 +74,16 @@ class OnOffHeader extends Component {
         // controller_container_style.backgroundColor=this.props.machine_status.power_status?`rgb(7, 179, 243)`:`#cccccc`;
     }
 
-    render() { 
-        return ( 
+    render() {
+        return (
             <div style={on_off_header}>
                 <img src={on_off_bg} style={on_off_bg_style}></img>
-                <div style={this.props.power_status?controller_container_on_style:controller_container_off_style} 
+                <div style={this.props.power_status?controller_container_on_style:controller_container_off_style}
                     onClick={this.power_click}>
                     <div style={power_icon_container_style}>
                         <img src={power_img} style={power_icon_style}></img>
                     </div>
-                    <div style={on_off_text}>已开启</div>
+                    <div style={on_off_text}>{this.props.power_status?'已开启':'已关闭'}</div>
                 </div>
             </div>
         );
@@ -103,5 +103,5 @@ class OnOffHeader extends Component {
         this.props.changeMachineStatus(machine_status);
     }
 }
- 
+
 export default OnOffHeader;

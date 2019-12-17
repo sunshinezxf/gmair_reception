@@ -166,8 +166,6 @@ class OperationPanel extends Component{
         const current_volume = {
             width: `40%`,
             float: `left`,
-            width: `40%`,
-            float: `left`
         }
 
         const max_volume = {
