@@ -4,7 +4,26 @@ import sleep_wind_img from '../../material/icon/sleep-wind.png'
 import shake_wind_img from '../../material/icon/shake-wind.png'
 import buzzer_wind_img from '../../material/icon/buzzer-wind.png'
 import time_wind_img from '../../material/icon/time-wind.png'
+import wind_img from '../../material/icon/wind.png'
 
-export const wind_types = ['舒适风','强劲风','睡眠风','摇头','蜂鸣器','倒计时'];
+export const default_wind_types = [
+    {
+        operator: 'shake',
+        name: '摇头',
+    }, {
+        operator: 'timing',
+        name: '定时',
+    }];
 
-export const wind_types_imgs = [comfotable_wind_img,strong_wind_img,sleep_wind_img,shake_wind_img,buzzer_wind_img,time_wind_img];
+// export const wind_types_imgs = [comfotable_wind_img,strong_wind_img,sleep_wind_img,shake_wind_img,buzzer_wind_img,time_wind_img];
+
+export const wind_types_imgs = {
+    normal: wind_img,
+    pure: comfotable_wind_img,
+    sleep: sleep_wind_img,
+    strong: strong_wind_img,
+    shake: shake_wind_img,
+    timing: time_wind_img,
+}
+
+

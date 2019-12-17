@@ -15,13 +15,13 @@ const initialState={
     machine_status: {power_status:false,volume:3,work_mode:0,sweep:false,heat:0,countdown:60,target_temperature:25,temperature:20},
     power_status:false,
     volume:'',
-    work_mode:0,
+    work_mode:'normal',
     sweep:false,
     heat:0,
     countdown:'',
     target_temperature:'',
     temperature:'',
-    work_mode_list: ['normal','pure','sleep','strong'],
+    work_mode_list: [],
     heat_mode_list: [],
 }
 const wind_reducer = (state = initialState , action )=>{

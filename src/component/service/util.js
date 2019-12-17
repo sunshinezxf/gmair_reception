@@ -78,6 +78,14 @@ function tell_mode(value, mode_list) {
     return mode_list[value].operator;
 }
 
+function tell_mode_value(mode, mode_list) {
+    for(let i = 0; i < mode_list.length; i ++) {
+        if(mode == mode_list[i].operator)
+            return i;
+    }
+    return -1;
+}
+
 function tell_heat_value(heat, heat_mode_list) {
     for(let i = 0; i < heat_mode_list.length; i ++) {
         if(heat == heat_mode_list[i].operator)
@@ -118,5 +126,6 @@ function tell_fan_color(value) {
 }
 
 export const util = {
-    is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc, format,tell_pm2_5_color,isRealNum,tell_fan_color
+    is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc,
+    format,tell_pm2_5_color,isRealNum,tell_fan_color,tell_mode_value
 }
