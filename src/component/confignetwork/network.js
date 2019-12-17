@@ -7,6 +7,7 @@ import {Button} from 'react-bootstrap'
 import {util} from '../service/util.js'
 
 import {wechatservice} from "../service/wechat.service";
+import '../fresh/fresh.css'
 
 const gmair_network_page = {
     width: `100%`,
@@ -136,7 +137,7 @@ class NetworkConfig extends React.Component {
 
     render() {
         return (
-            <div style={gmair_network_page}>
+            <div style={gmair_network_page} className="user_select_disable">
                 <div style={wifi_logo_area}>
                     <img src={wifi_config} style={logo} alt="WIFI_CONFIG"/>
                 </div>
