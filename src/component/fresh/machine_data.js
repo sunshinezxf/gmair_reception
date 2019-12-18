@@ -67,23 +67,49 @@ class MachineData extends Component{
     }
 
     areaChange(e){
-        airquality_service.config_default_outdoor(this.props.qrcode, e[1]).then(response => {
-            if (response.responseCode === 'RESPONSE_OK') {
-                locationservice.city_profile(e[1]).then(response => {
-                    let location = this.props.location;
-                    location.city = response.data[0].cityName
-                    location.city_id = e[1]
-                    location.province_id = response.data[0].provinceId
-                    location.province = ''
-                    this.props.changeLocation(location)
-                    this.obtain_aqi(e[1]);
-                    this.obtain_weekly_data(e[1]);
-                    this.setState({
+        let city_id="";
+        if(e.length<=2){
+            city_id = e[1]
+            airquality_service.config_default_outdoor(this.props.qrcode, city_id).then(response => {
+                if (response.responseCode === 'RESPONSE_OK') {
+                    console.log(response)
+                    locationservice.city_profile(city_id).then(response => {
+                        console.log(response)
+                        let location = this.props.location;
+                        location.city = response.data[0].cityName
+                        location.city_id = city_id
+                        location.province_id = response.data[0].provinceId
+                        location.province = ''
+                        this.props.changeLocation(location)
+                        this.obtain_aqi(city_id);
+                        this.obtain_weekly_data(city_id);
+                        this.setState({
 
+                        })
                     })
-                })
-            }
-        })
+                }
+            })
+        }else {
+            city_id = e[2];
+            airquality_service.config_default_outdoor(this.props.qrcode, city_id).then(response => {
+                if (response.responseCode === 'RESPONSE_OK') {
+                    locationservice.district_profile(city_id).then(response => {
+                        let location = this.props.location;
+                        location.province_id = e[0];
+                        location.province = '';
+                        location.city = response.data[0].districtName;
+                        location.city_id = city_id
+                        this.props.changeLocation(location);
+                        this.obtain_aqi(city_id);
+                        this.obtain_weekly_data(city_id);
+                        this.setState({
+
+                        })
+                    })
+                }
+            })
+        }
+
     }
 
     store_outdoor_data = (response) => {

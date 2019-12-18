@@ -164,7 +164,6 @@ class FreshPanel extends Component{
             if (response.responseCode === 'RESPONSE_OK') {
                 let city_id = this.props.location.city_id
                 if (new String(response.data[0].cityId) != 'null') {
-                    this.setState({city_id: response.data[0].cityId});
                     city_id = response.data[0].cityId;
                 }
                 locationservice.city_profile(city_id).then(response => {
@@ -175,8 +174,20 @@ class FreshPanel extends Component{
                         location.province_id = response.data[0].provinceId;
                         location.city_id = city_id;
                         this.props.changeLocation(location)
+                    } else {
+                        locationservice.district_profile(city_id).then(response => {
+                            console.log(response)
+                            if (response.responseCode === "RESPONSE_OK") {
+                                let location = this.props.location;
+                                location.province_id = '';
+                                location.province = '';
+                                location.city = response.data[0].districtName;
+                                location.city_id = city_id;
+                                this.props.changeLocation(location);
+                            }
+                        })
                     }
-                    this.obtain_aqi(city_id)
+                    this.obtain_aqi(city_id);
                 })
             }
             if (response.responseCode === 'RESPONSE_NULL') {

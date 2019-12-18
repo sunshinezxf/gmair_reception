@@ -51,6 +51,17 @@ function city_profile(city_id) {
 
 }
 
+function district_profile(districtId) {
+    let access_token = localStorage.getItem('access_token');
+    let url = location_url + '/probe/district?access_token=' + access_token + '&districtId=' + districtId;
+    return axios.get(url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+
+}
+
 function acquire_city_id(code) {
     let access_token = localStorage.getItem('access_token');
     let city_url = location_url + '/probe/cityId?access_token=' + access_token + '&code=' + code;
@@ -71,5 +82,5 @@ function get_city_list() {
 }
 
 export const locationservice = {
-    acquire_city_id, city_profile, list_province, list_city, list_district, tell_location,get_city_list
+    acquire_city_id, city_profile, list_province, list_city, list_district, tell_location,get_city_list,district_profile
 };
