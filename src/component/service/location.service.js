@@ -61,6 +61,15 @@ function acquire_city_id(code) {
     })
 }
 
+function get_city_list() {
+    let url = "https://microservice.gmair.net/location/overview";
+    return axios.get(url).then(response=>{
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    })
+}
+
 export const locationservice = {
-    acquire_city_id, city_profile, list_province, list_city, list_district, tell_location
+    acquire_city_id, city_profile, list_province, list_city, list_district, tell_location,get_city_list
 };

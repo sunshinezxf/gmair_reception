@@ -44,7 +44,7 @@ class FreshHeader extends Component{
 
     power_click(){
         let machine_status = this.props.machine_status;
-        console.log(machine_status)
+        // console.log(machine_status)
         if(machine_status.power_status){
             machine_service.operate(this.props.qrcode, 'power', 'off');
             machine_status.power_status = false
@@ -56,7 +56,7 @@ class FreshHeader extends Component{
     }
 
     render() {
-        console.log(this.props)
+        // console.log(this.props)
         return (
                 <div className="fresh_header_bg">
                     <img src={fresh_header_image} width="100%"/>

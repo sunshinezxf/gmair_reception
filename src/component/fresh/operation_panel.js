@@ -45,7 +45,7 @@ class OperationPanel extends Component{
     //获取基本风量区间和屏显范围
     init_control_option = (modelId) => {
         machine_service.obtain_volume_range(modelId).then(response => {
-            console.log(response)
+            // console.log(response)
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({min_volume: response.data[0].minVolume, max_volume: response.data[0].maxVolume})
             }
@@ -64,7 +64,7 @@ class OperationPanel extends Component{
     //电源点击
     power_click(){
         let machine_status = this.props.machine_status;
-        console.log(machine_status)
+        // console.log(machine_status)
         if(machine_status.power_status){
             machine_service.operate(this.props.qrcode, 'power', 'off');
             machine_status.power_status = false
@@ -153,13 +153,13 @@ class OperationPanel extends Component{
 
         const config_panel_area = {
             height: `4.5rem`,
-            margin: `3rem 7.5% 0rem 7.5%`
+            margin: `3rem 15% 0rem 15%`
         }
 
         const min_volume = {
-            marginLeft: `7.5%`,
+            // marginLeft: `7.5%`,
             textAlign: `left`,
-            width: `22.5%`,
+            width: `30%`,
             float: `left`
         }
 
@@ -169,15 +169,15 @@ class OperationPanel extends Component{
         }
 
         const max_volume = {
-            marginRight: `7.5%`,
+            // marginRight: `7.5%`,
             textAlign: `right`,
-            width: `22.5%`,
+            width: `30%`,
             float: `left`
         }
 
         const volume_area = {
-            marginBottom: `2rem`,
-            height: `2rem`
+            margin: `0 0 2rem 5rem`,
+            height: `2rem`,
         }
 
         const mode_operation_area = {
@@ -185,7 +185,7 @@ class OperationPanel extends Component{
             margin: `1rem 7.5%`,
             textAlign: `center`
         }
-        console.log(this.props)
+        // console.log(this.props)
         let heat_mode_list = this.props.heat_mode_list;
         let operation_list = heat_mode_list?heat_mode_list.map((item, index) => {
             return (<Button type={this.props.heat == index ? 'primary' : 'ghost'} inline size="small"
@@ -224,19 +224,28 @@ class OperationPanel extends Component{
                         <ControlItem src="fa fa-power-off" text="电源" open={this.props.online}/>
                     </div>
                     <div className="operation_panel_item" onClick={this.speed_panel}>
-                        <ControlItem src="fa fa-recycle" text="风量" open={this.props.online}/>
+                        <ControlItem src="fa fa-recycle" text="风量" open={this.props.online&&this.props.volume!==0}/>
                         <Modal popup visible={this.state.show_volume} animationType="slide-up">
-                            <div style={area_desc}>风量调节</div>
-                            <Slider style={config_panel_area} defaultValue={this.props.volume}
-                                    value={this.props.volume}
-                                    min={this.state.min_volume} max={this.state.max_volume}
-                                    onChange={this.local_volume}
-                                    onAfterChange={this.volume}
-                            />
-                            <div style={volume_area}>
-                                <div style={min_volume}>{this.state.min_volume}</div>
-                                <div style={current_volume}>{this.props.volume}</div>
-                                <div style={max_volume}>{this.state.max_volume}</div>
+                            <div className="modal_panel">
+                                <div className="slider_panel">
+                                    <div className="slider_text">风量调节</div>
+                                    <div className="slider_div">
+                                        <Slider className="slider" defaultValue={this.props.volume}
+                                                value={this.props.volume}
+                                                min={this.state.min_volume} max={this.state.max_volume}
+                                                onChange={this.local_volume}
+                                                onAfterChange={this.volume}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="slider_panel_2">
+                                    <div className="slider_text"></div>
+                                    <div className="slider_div_2">
+                                        <div style={min_volume}>{this.state.min_volume}</div>
+                                        <div style={current_volume}>{this.props.volume}</div>
+                                        <div style={max_volume}>{this.state.max_volume}</div>
+                                    </div>
+                                </div>
                             </div>
                         </Modal>
                     </div>
@@ -275,24 +284,33 @@ class OperationPanel extends Component{
                 <div className="separate_div_2"></div>
                 <div className="operation_panel_row">
                     <div className="operation_panel_item" onClick={this.light_panel}>
-                        <ControlItem src="fa fa-desktop" text="屏显" open={this.props.online}/>
+                        <ControlItem src="fa fa-desktop" text="屏显" open={this.props.online&&this.props.light!==0}/>
                         <Modal popup visible={this.state.show_light} animationType="slide-up">
-                            <div style={area_desc}>亮度调节</div>
-                            <Slider style={config_panel_area} defaultValue={this.props.light}
-                                    value={this.props.light}
-                                    min={this.state.min_light} max={this.state.max_light}
-                                    step={this.state.step}
-                                    onChange={(e) => {
-                                        this.local_light(e);
-                                    }}
-                                    onAfterChange={(e) => {
-                                        this.light(e);
-                                    }}
-                            />
-                            <div style={volume_area}>
-                                <div style={min_volume}>暗</div>
-                                <div style={current_volume}>{this.props.light}</div>
-                                <div style={max_volume}>亮</div>
+                            <div className="modal_panel">
+                                <div className="slider_panel">
+                                    <div className="slider_text">亮度调节</div>
+                                    <div className="slider_div">
+                                        <Slider className="slider" defaultValue={this.props.light}
+                                                value={this.props.light}
+                                                min={this.state.min_light} max={this.state.max_light}
+                                                step={this.state.step}
+                                                onChange={(e) => {
+                                                    this.local_light(e);
+                                                }}
+                                                onAfterChange={(e) => {
+                                                    this.light(e);
+                                                }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="slider_panel_2">
+                                    <div className="slider_text"></div>
+                                    <div className="slider_div_2">
+                                        <div style={min_volume}>暗</div>
+                                        <div style={current_volume}>{this.props.light}</div>
+                                        <div style={max_volume}>亮</div>
+                                    </div>
+                                </div>
                             </div>
                         </Modal>
                     </div>

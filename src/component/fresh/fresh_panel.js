@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import FreshHeader from '../../containers/fresh/header'
 import OperationPanel from '../../containers/fresh/operation_panel';
 import MachineData from '../../containers/fresh/machine_data';
-import PM2_5Charts from './pm2_5charts'
+import PM2_5Charts from '../../containers/fresh/chart'
 import {util} from "../service/util";
 import {wechatservice} from "../service/wechat.service";
 import {machine_service} from "../service/mahcine.service";

@@ -6,6 +6,7 @@ import {List, Picker} from "antd-mobile";
 import './fresh.css'
 import {locationservice} from "../service/location.service";
 import {airquality_service} from "../service/airquality.service";
+import {util} from "../service/util";
 
 class MachineData extends Component{
     constructor(props) {
@@ -18,7 +19,14 @@ class MachineData extends Component{
     }
 
     componentDidMount(){
-        this.adjust_area();
+        // this.adjust_area();
+        locationservice.get_city_list().then(response=>{
+            if(response.responseCode==="RESPONSE_OK"){
+                this.setState({
+                    area_list:response.data
+                })
+            }
+        })
     }
 
     adjust_area(){
@@ -40,6 +48,7 @@ class MachineData extends Component{
                             }
                             json['children'] = city_list
                             area_list.push(json)
+                            // console.log(area_list)
                             this.setState({
                                 area_list:area_list
                             })
@@ -67,10 +76,53 @@ class MachineData extends Component{
                     location.province_id = response.data[0].provinceId
                     location.province = ''
                     this.props.changeLocation(location)
+                    this.obtain_aqi(e[1]);
+                    this.obtain_weekly_data(e[1]);
                     this.setState({
 
                     })
                 })
+            }
+        })
+    }
+
+    store_outdoor_data = (response) => {
+        let data = response.data;
+        let axis = [];
+        let outdoor = [];
+        for (let i = 0; i < data.length; i++) {
+            axis.push(util.format(data[i].createTime));
+            outdoor.push(Math.round(data[i].pm25));
+        }
+        this.props.changeOutdoorData(axis,outdoor);
+        // this.setState({date: axis, outdoor: outdoor});
+    }
+
+    obtain_weekly_data = (city_id) => {
+        airquality_service.obtain_city_pm2_5_weekly(city_id).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                this.store_outdoor_data(response);
+            }
+            if (response.responseCode === 'RESPONSE_NULL') {
+                locationservice.city_profile(city_id).then(response => {
+                    if (response.responseCode === 'RESPONSE_OK') {
+                        let province_id = response.data[0].provinceId;
+                        airquality_service.obtain_city_pm2_5_weekly(province_id).then(response => {
+                            this.store_outdoor_data(response);
+                        })
+                    }
+                })
+            }
+        })
+    }
+
+    //获取城市气候详情
+    obtain_aqi = (city_id) => {
+        airquality_service.obtain_latest_aqi(city_id).then(response => {
+            // console.log(response)
+            if (response.responseCode === 'RESPONSE_OK') {
+                let air = response.data[0];
+                this.props.changeCityAir(air)
             }
         })
     }
@@ -81,7 +133,7 @@ class MachineData extends Component{
     }
 
     render() {
-        console.log(this.props.pm2_5)
+        // console.log(this.props.pm2_5)
         const tag_div_style={
             display:'flex',
             alignItems:'center',

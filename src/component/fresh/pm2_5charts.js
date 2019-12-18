@@ -31,7 +31,8 @@ class PM2_5Charts extends React.Component {
             axis.push(util.format(data[i].createTime));
             outdoor.push(Math.round(data[i].pm25));
         }
-        this.setState({date: axis, outdoor: outdoor});
+        this.props.changeOutdoorData(axis,outdoor);
+        // this.setState({date: axis, outdoor: outdoor});
     }
 
     obtain_weekly_data = (city_id) => {
@@ -116,7 +117,7 @@ class PM2_5Charts extends React.Component {
                 fontStyle: 'oblique',
                 type: 'category',
                 boundaryGap: false,
-                data: this.state.date
+                data: this.props.date
             },
             tooltip: {
                 trigger: 'item'
@@ -189,7 +190,7 @@ class PM2_5Charts extends React.Component {
                 {
                     name: '室外',
                     type: 'line',
-                    data: this.state.outdoor,
+                    data: this.props.outdoor,
                     symbol: 'emptyCircle',
                     symbolSize: 10,
                     smooth: false,

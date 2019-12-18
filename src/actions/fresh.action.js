@@ -7,6 +7,7 @@ export const CO2_IS_PRESENT = "CO2_IS_PRESENT";
 export const LOCK_IS_PRESENT = "LOCK_IS_PRESENT";
 export const LOCATION_CHANGE = "LOCATION_CHANGE";
 export const CITY_AIR_CHANGE = "CITY_AIR_CHANGE";
+export const OUTDOOR_DATA_CHANGE = "OUTDOOR_DATA_CHANGE";
 
 export function changeQrcode(qrcode) {
     return {
@@ -67,5 +68,13 @@ export function changeCityAir(city_air) {
     return {
         type:CITY_AIR_CHANGE,
         city_air:city_air
+    }
+}
+
+export function changeOutdoorData(axis,outdoor) {
+    return {
+        type:OUTDOOR_DATA_CHANGE,
+        axis:axis,
+        outdoor:outdoor,
     }
 }

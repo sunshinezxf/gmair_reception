@@ -1,7 +1,7 @@
 import connect from "react-redux/es/connect/connect";
 import MachineData from '../../component/fresh/machine_data';
 import {
-    changeLocation
+    changeLocation,changeCityAir,changeOutdoorData
 } from "../../actions/fresh.action";
 
 //映射Redux state到组件的属性
@@ -22,6 +22,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
     return{
         changeLocation:(location)=>dispatch(changeLocation(location)),
+        changeCityAir:(air)=>dispatch(changeCityAir(air)),
+        changeOutdoorData:(axis,outdoor)=>dispatch(changeOutdoorData(axis,outdoor)),
     }
 }
 

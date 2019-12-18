@@ -1,5 +1,6 @@
 import {QRCODE_CHANGE,MACHINE_CHANGE,MACHINE_STATUS_CHANGE,WORK_MODE_LIST,
     HEAT_MODE_LIST,CO2_IS_PRESENT,LOCK_IS_PRESENT,LOCATION_CHANGE,CITY_AIR_CHANGE,
+    OUTDOOR_DATA_CHANGE
 } from '../actions/fresh.action';
 const initialState={
     qrcode:'',
@@ -19,6 +20,8 @@ const initialState={
     lock:'',
     pm2_5:0,
     co2:'',
+    outdoor:[],
+    axis:[]
 }
 const fresh_reducer = (state = initialState , action )=>{
     // console.log(action);
@@ -66,6 +69,11 @@ const fresh_reducer = (state = initialState , action )=>{
         case CITY_AIR_CHANGE:
             return Object.assign({},state,{
                 city_air: action.city_air
+            });
+        case OUTDOOR_DATA_CHANGE:
+            return Object.assign({},state,{
+                outdoor:action.outdoor,
+                axis:action.axis,
             })
         default:
             return state
