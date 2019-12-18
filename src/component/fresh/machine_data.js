@@ -161,7 +161,7 @@ class MachineData extends Component{
                 <Picker
                     data={this.state.area_list}
                     title="城市选择"
-                    cols={2}
+                    cols={3}
                     // cascade={false}
                     onChange={this.areaChange}
                 >
