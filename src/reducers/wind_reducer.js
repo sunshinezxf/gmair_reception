@@ -12,7 +12,7 @@ const initialState={
     isSettingTime:false,
     time:null,
     qrcode:'',
-    machine_status: {power_status:false,volume:'',work_mode:'normal',sweep:false,heat:0,countdown:'',target_temperature:25,temperature:20},
+    machine_status: {power_status:false,volume:'',work_mode:'normal',sweep:false,heat:0,countdown:'',target_temperature:25,temperature:20,runtime:0},
     power_status:false,
     volume:'',
     work_mode:'normal',
@@ -23,6 +23,8 @@ const initialState={
     temperature:'',
     work_mode_list: [],
     heat_mode_list: [],
+    buzz:false,
+    runtime:0,
 }
 const wind_reducer = (state = initialState , action )=>{
     switch(action.type){
@@ -82,8 +84,10 @@ const wind_reducer = (state = initialState , action )=>{
                 sweep:action.machine_status.sweep,
                 heat:action.machine_status.heat,
                 countdown:action.machine_status.countdown,
+                runtime:action.machine_status.runtime,
                 target_temperature:action.machine_status.target_temperature,
                 temperature:action.machine_status.temperature,
+                buzz:action.machine_status.buzz,
             })
         case WORK_MODE_LIST:
             return Object.assign({},state,{

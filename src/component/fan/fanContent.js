@@ -100,6 +100,7 @@ class FanContent extends Component{
                 let information = response.data;
                 information['power_status'] = information.power===1
                 information['sweep'] = information.sweep===1
+                information['buzz'] = information.buzz===1
                 information['work_mode'] = util.tell_mode(information.mode, this.props.work_mode_list)
                 this.props.changeMachineStatus(information);
             }

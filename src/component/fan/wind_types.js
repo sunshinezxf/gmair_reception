@@ -10,6 +10,9 @@ export const default_wind_types = [
     {
         operator: 'shake',
         name: '摇头',
+    },{
+        operator: 'voice',
+        name: '蜂鸣器',
     }, {
         operator: 'timing',
         name: '定时',
@@ -23,6 +26,7 @@ export const wind_types_imgs = {
     sleep: sleep_wind_img,
     strong: strong_wind_img,
     shake: shake_wind_img,
+    voice:buzzer_wind_img,
     timing: time_wind_img,
 }
 

@@ -19,6 +19,10 @@ export const hot_wind_levels = {
 
 export const timing_levels = [
     {
+        label:'关闭',
+        value:0
+    },
+    {
         label:'0.5小时',
         value:30
     },{
