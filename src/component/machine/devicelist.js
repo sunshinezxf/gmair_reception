@@ -96,7 +96,7 @@ class DeviceList extends React.Component {
             } else if (response.responseCode === 'RESPONSE_NULL') {
                 this.setState({machine_list: [], loading: false})
             } else {
-                // window.location.href = '/login';
+                window.location.href = '/login';
             }
         });
     }
