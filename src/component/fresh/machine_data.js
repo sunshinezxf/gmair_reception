@@ -8,11 +8,12 @@ import {locationservice} from "../service/location.service";
 import {airquality_service} from "../service/airquality.service";
 import {util} from "../service/util";
 
+let area_list = []
 class MachineData extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            area_list:[],
+            // area_list:[],
         };
         this.citySelect=this.citySelect.bind(this);
         this.areaChange=this.areaChange.bind(this);
@@ -23,18 +24,19 @@ class MachineData extends Component{
         locationservice.get_city_list().then(response=>{
             if(response.responseCode==="RESPONSE_OK"){
                 this.setState({
-                    area_list:response.data
+                    // area_list:response.data
                 })
+                area_list = response.data
             }
         })
     }
 
     adjust_area(){
-        let area_list = []
+        // let list = []
         locationservice.list_province().then(response => {
             if(response.responseCode==="RESPONSE_OK"){
                 let province_list = response.data;
-                let area_list = []
+                let list = []
                 for(let i=0;i<province_list.length;i++){
                     locationservice.list_city(province_list[i].provinceId).then(response => {
                         if (response.responseCode === 'RESPONSE_OK') {
@@ -47,10 +49,12 @@ class MachineData extends Component{
                                 city_list[i]['value'] = city_list[i].cityId;
                             }
                             json['children'] = city_list
-                            area_list.push(json)
-                            // console.log(area_list)
+                            list.push(json)
+                            console.log(area_list)
+                            area_list = list
+                            console.log(list)
                             this.setState({
-                                area_list:area_list
+                                // area_list:area_list
                             })
                         }
                     })
@@ -60,7 +64,7 @@ class MachineData extends Component{
 
             }else {
                 this.setState({
-                    area_list:[]
+                    // area_list:[]
                 })
             }
         })
@@ -181,11 +185,13 @@ class MachineData extends Component{
         const item_text={
             color:'#00A2E9'
         }
+
+        // const area_list = this.state.area_list
         return (
             <div className="operation_panel">
 
                 <Picker
-                    data={this.state.area_list}
+                    data={area_list}
                     title="城市选择"
                     cols={3}
                     // cascade={false}
