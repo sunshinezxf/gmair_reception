@@ -125,7 +125,15 @@ function tell_fan_color(value) {
     return '#40b9f2';
 }
 
+function minuteFormatToTime(value) {
+    let result = "";
+    let hour = ('00'+parseInt(value/60)).slice(-2);
+    let minutes = ('00'+value%60).slice(-2);
+    result = hour+":"+minutes;
+    return result
+}
+
 export const util = {
     is_weixin, load_script, format_pm2_5, tell_mode, tell_heat_value, tell_pm2_5_desc,
-    format,tell_pm2_5_color,isRealNum,tell_fan_color,tell_mode_value
+    format,tell_pm2_5_color,isRealNum,tell_fan_color,tell_mode_value,minuteFormatToTime
 }

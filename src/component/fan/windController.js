@@ -59,7 +59,7 @@ class WindController extends Component {
                         <img src={wind_types_img}
                              className='wind-type-icon invisible'></img>
                         <div className='show-time-tag'>
-                            {this.props.runtime}
+                            {util.minuteFormatToTime(this.props.runtime)}
                         </div>
                     </Fragment>
 

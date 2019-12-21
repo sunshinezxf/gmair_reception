@@ -132,7 +132,7 @@
 }
 
 .wind-type-icon-container{
-    padding: 0 1.5rem 1rem;
+    padding: 0 1.65rem 1rem;
 }
 
 .wind-type-container .wind-type-icon{
@@ -159,12 +159,12 @@
 
 .show-time-tag{
     position: absolute;
-    font-size: 2rem;
+    font-size: 1.8rem;
     text-align: center;
     color: #1296db;
     left: 0;
     right: 0;
-    top: 0.7rem;
+    top: 1rem;
 }
 .temperature-selector{
     margin: 2rem 3rem;
