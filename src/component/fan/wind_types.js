@@ -2,9 +2,11 @@ import comfotable_wind_img from '../../material/icon/comfotable-wind.png'
 import strong_wind_img from '../../material/icon/strong-wind.png'
 import sleep_wind_img from '../../material/icon/sleep-wind.png'
 import shake_wind_img from '../../material/icon/shake-wind.png'
-import buzzer_wind_img from '../../material/icon/buzzer-wind.png'
+// import buzzer_wind_img from '../../material/icon/buzzer-wind.png'
 import time_wind_img from '../../material/icon/time-wind.png'
 import wind_img from '../../material/icon/wind.png'
+import voice_on from '../../material/icon/voiceon.png';
+import voice_off from '../../material/icon/voiceoff.png';
 
 export const default_wind_types = [
     {
@@ -26,7 +28,10 @@ export const wind_types_imgs = {
     sleep: sleep_wind_img,
     strong: strong_wind_img,
     shake: shake_wind_img,
-    voice:buzzer_wind_img,
+    voice:{
+        on:voice_on,
+        off:voice_off
+    },
     timing: time_wind_img,
 }
 

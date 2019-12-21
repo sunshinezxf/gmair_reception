@@ -75,6 +75,9 @@ function tell_pm2_5_color(value) {
 }
 
 function tell_mode(value, mode_list) {
+    if(mode_list[value]==undefined){
+        return null;
+    }
     return mode_list[value].operator;
 }
 

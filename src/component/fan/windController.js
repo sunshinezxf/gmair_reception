@@ -34,7 +34,10 @@ class WindController extends Component {
     render() {
         console.log(this.props)
         let temp = this.props.target_temperature
-        let temp_marks = util.isRealNum(temp) ? {0: '0℃', 15: temp + '℃', 30: '30℃'} : {0: '0℃', 30: '30℃'}
+        let temp_marks = {0: '0℃', 30: '30℃'}
+        if(util.isRealNum(temp)){
+            temp_marks[temp] = temp + '℃'
+        }
         let wind_types = this.props.work_mode_list.concat(default_wind_types);
 
         const getTypeList = (wind_types = [], wind_types_imgs = {}) => {
@@ -98,7 +101,7 @@ class WindController extends Component {
                         className={`wind-type-container ${this.props.buzz ? 'active' : null}`}
                         onClick={this.buzz_wind}>
                         <div className='wind-type-icon-container'>
-                            <img src={wind_types_imgs[wind_types[i].operator]} className={`wind-type-icon`}></img>
+                            <img src={this.props.buzz?wind_types_imgs[wind_types[i].operator].on:wind_types_imgs[wind_types[i].operator].off} className={`wind-type-icon`}></img>
                         </div>
                         <div className='wind-type-text'>{wind_types[i].name}</div>
                     </div>
