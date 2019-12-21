@@ -117,7 +117,7 @@ class PM2_5Charts extends React.Component {
                 fontStyle: 'oblique',
                 type: 'category',
                 boundaryGap: false,
-                data: this.props.date
+                data: this.props.axis
             },
             tooltip: {
                 trigger: 'item'
@@ -202,7 +202,7 @@ class PM2_5Charts extends React.Component {
             ]
         };
 
-
+        console.log(this.props)
         return (
             <div>
                 <ReactEcharts option={option} theme={'macarons'} notMerge/>
