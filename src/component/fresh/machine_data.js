@@ -7,68 +7,60 @@ import './fresh.css'
 import {locationservice} from "../service/location.service";
 import {airquality_service} from "../service/airquality.service";
 import {util} from "../service/util";
+import CityPicker from "./city_picker";
 
-let area_list = []
 class MachineData extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            // area_list:[],
+
         };
         this.citySelect=this.citySelect.bind(this);
         this.areaChange=this.areaChange.bind(this);
     }
 
     componentDidMount(){
-        // this.adjust_area();
-        locationservice.get_city_list().then(response=>{
-            if(response.responseCode==="RESPONSE_OK"){
-                this.setState({
-                    // area_list:response.data
-                })
-                area_list = response.data
-            }
-        })
+
     }
 
-    adjust_area(){
-        // let list = []
-        locationservice.list_province().then(response => {
-            if(response.responseCode==="RESPONSE_OK"){
-                let province_list = response.data;
-                let list = []
-                for(let i=0;i<province_list.length;i++){
-                    locationservice.list_city(province_list[i].provinceId).then(response => {
-                        if (response.responseCode === 'RESPONSE_OK') {
-                            let json = {}
-                            json['label'] = province_list[i].provinceName;
-                            json['value'] = province_list[i].provinceId;
-                            let city_list = response.data;
-                            for(let i=0;i<city_list.length;i++){
-                                city_list[i]['label'] = city_list[i].cityName;
-                                city_list[i]['value'] = city_list[i].cityId;
-                            }
-                            json['children'] = city_list
-                            list.push(json)
-                            console.log(area_list)
-                            area_list = list
-                            console.log(list)
-                            this.setState({
-                                // area_list:area_list
-                            })
-                        }
-                    })
-                }
-
-                // area_list.push(province_list);
-
-            }else {
-                this.setState({
-                    // area_list:[]
-                })
-            }
-        })
-    }
+    // adjust_area(){
+    //     // let list = []
+    //     locationservice.list_province().then(response => {
+    //         if(response.responseCode==="RESPONSE_OK"){
+    //             let province_list = response.data;
+    //             let list = []
+    //             for(let i=0;i<province_list.length;i++){
+    //                 locationservice.list_city(province_list[i].provinceId).then(response => {
+    //                     if (response.responseCode === 'RESPONSE_OK') {
+    //                         let json = {}
+    //                         json['label'] = province_list[i].provinceName;
+    //                         json['value'] = province_list[i].provinceId;
+    //                         let city_list = response.data;
+    //                         for(let i=0;i<city_list.length;i++){
+    //                             city_list[i]['label'] = city_list[i].cityName;
+    //                             city_list[i]['value'] = city_list[i].cityId;
+    //                         }
+    //                         json['children'] = city_list
+    //                         list.push(json)
+    //                         console.log(area_list)
+    //                         area_list = list
+    //                         console.log(list)
+    //                         this.setState({
+    //                             // area_list:area_list
+    //                         })
+    //                     }
+    //                 })
+    //             }
+    //
+    //             // area_list.push(province_list);
+    //
+    //         }else {
+    //             this.setState({
+    //                 // area_list:[]
+    //             })
+    //         }
+    //     })
+    // }
 
     areaChange(e){
         let city_id="";
@@ -186,23 +178,18 @@ class MachineData extends Component{
             color:'#00A2E9'
         }
 
-        // const area_list = this.state.area_list
         return (
             <div className="operation_panel">
 
-                <Picker
-                    data={area_list}
-                    title="城市选择"
-                    cols={3}
-                    // cascade={false}
-                    onChange={this.areaChange}
-                >
-                    <div style={tag_div_style}>
-                        <div style={aqi_item_1}>空气&nbsp;&nbsp;<Tag color="#00A2E9">{this.props.location.city}</Tag></div>
-                        <div style={aqi_item_2}><span style={item_text}>AQI</span>&nbsp;&nbsp;{this.props.city_air.aqi}</div>
-                        <div style={aqi_item_3}><span style={item_text}>PM2.5</span>&nbsp;&nbsp;{this.props.city_air.pm2_5}</div>
+                <div style={tag_div_style}>
+                    <div style={aqi_item_1}>
+                        <CityPicker city={this.props.location.city} areaChange={this.areaChange}/>
                     </div>
-                </Picker>
+                    {/*<div style={aqi_item_1}>空气&nbsp;&nbsp;<Tag color="#00A2E9">{this.props.location.city}</Tag></div>*/}
+                    <div style={aqi_item_2}><span style={item_text}>AQI</span>&nbsp;&nbsp;{this.props.city_air.aqi}</div>
+                    <div style={aqi_item_3}><span style={item_text}>PM2.5</span>&nbsp;&nbsp;{this.props.city_air.pm2_5}</div>
+                </div>
+
                 <div className="operation_show">
                     <div className="operation_left">
                         <div style={{width:'180px',height:'160px'}}>
