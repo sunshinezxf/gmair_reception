@@ -5,7 +5,8 @@ import scan from './scan.png'
 const scan_area = {
     width: `100%`,
     textAlign: `center`,
-    marginTop: `1.5rem`
+    marginTop: `1.5rem`,
+    marginBottom: `5.5rem`
 };
 
 const scan_style = {
