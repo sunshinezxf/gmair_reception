@@ -24,12 +24,12 @@
 }
 
 .device-power i {
-    font-size: 3rem;
+    font-size: 2.5rem;
 }
 
 /*设备是否打开*/
 .device-open {
-    margin-top: 0.3rem ;
+    margin-top: 1rem ;
     font-size: 1.3rem;
 }
 
@@ -81,5 +81,30 @@
     justify-content: space-around;
     align-items: center;
     margin-top: 5px;
+}
+
+.power_on{
+    width: 4rem;
+    height: 4rem;
+    background-color: #80d8ff;
+    border-radius:3rem;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap:wrap;
+    box-shadow:0 0 0.3rem 1rem rgba(7, 179, 243, 0.2);
+}
+.power_off{
+    width: 4rem;
+    height: 4rem;
+    /*background-color: #cccccc;*/
+    border-radius:3rem;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap:wrap;
+    /*box-shadow:0 0 0.3rem 1rem rgba(204, 204, 204 , 0.5);*/
 }
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import {Tag, Badge,Icon} from 'antd';
-import './deviceitem.css'
 import {machine_service} from "../service/mahcine.service";
 import {util} from "../service/util";
+import './deviceitem.css'
 
 const gmair_machine_power = {
     width: `4rem`,
@@ -136,8 +136,10 @@ class DeviceItem extends React.Component {
                     <div className="device-power">
                         {this.state.online === true ?
                             <div onClick={this.power_operate}>
-                                <i className='glyphicon glyphicon-off'
-                                   style={this.state.power_status === 'on' ? gmair_icon_active : gmair_icon_inactive}/>
+                                <div className={this.state.power_status === 'on'?'power_on':'power_off'}>
+                                    <i className='glyphicon glyphicon-off'
+                                       style={this.state.power_status === 'on' ? gmair_icon_active : gmair_icon_inactive}/>
+                                </div>
                                 <div className="device-open">{
                                     this.state.power_status === 'on'?'已开启':'已关闭'
                                 }</div>

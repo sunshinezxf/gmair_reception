@@ -26,7 +26,7 @@ const controller_container_on_style = {
     borderRadius:`3rem`,
     display: `flex`,
     flexWrap: `wrap`,
-    boxShadow: `0 0 0.3rem 1rem rgb(7, 179, 243, 0.2)`,
+    boxShadow: `0 0 0.3rem 1rem rgba(7, 179, 243, 0.2)`,
 }
 
 const controller_container_off_style = {

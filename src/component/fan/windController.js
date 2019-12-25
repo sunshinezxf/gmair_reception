@@ -101,7 +101,7 @@ class WindController extends Component {
                         className={`wind-type-container ${this.props.buzz ? 'active' : null}`}
                         onClick={this.buzz_wind}>
                         <div className='wind-type-icon-container'>
-                            <img src={this.props.buzz?wind_types_imgs[wind_types[i].operator].on:wind_types_imgs[wind_types[i].operator].off} className={`wind-type-icon`}></img>
+                            <img src={wind_types_imgs[wind_types[i].operator]} className={`wind-type-icon`}></img>
                         </div>
                         <div className='wind-type-text'>{wind_types[i].name}</div>
                     </div>
@@ -115,7 +115,7 @@ class WindController extends Component {
                                     <div className='wind-type-icon-container'>
                                         {getTimeTag(wind_types_imgs[wind_types[i].operator])}
                                     </div>
-                                    <div className='wind-type-text'>{wind_types[i].name}</div>
+                                    <div className='wind-type-text'>{!util.isRealNum(this.props.runtime)||this.props.runtime===0||this.props.runtime===""?wind_types[i].name:wind_types[i].click_name}</div>
                                 </CustomChildren>
                             </Picker>
 
@@ -172,7 +172,7 @@ class WindController extends Component {
                 <div className={`temperature-container ${this.props.isSettingTime ? 'active' : null}`}>
                     <div className='block-title block-title-2'>
                         <div className="block-title-left">温度设置</div>
-                        <div className="block-title-right">当前温度：{this.props.temperature}℃</div>
+                        <div className="block-title-right">当前室内温度：{this.props.temperature}℃</div>
                     </div>
                     <Slider className={`temperature-selector`}
                             defaultValue={0} tipFormatter={null} max={30} marks={temp_marks}
