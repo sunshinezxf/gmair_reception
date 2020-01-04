@@ -64,6 +64,9 @@ class MachineData extends Component{
 
     areaChange(e){
         let city_id="";
+        if(e==undefined){
+            return
+        }
         if(e.length<=2){
             city_id = e[1]
             airquality_service.config_default_outdoor(this.props.qrcode, city_id).then(response => {
