@@ -13,7 +13,15 @@ class CityPicker extends Component{
 
     }
 
+    componentWillMount(){
+        this.getCityList();
+    }
+
     componentDidMount(){
+        this.getCityList();
+    }
+
+    getCityList(){
         locationservice.get_city_list().then(response=>{
             if(response.responseCode==="RESPONSE_OK"){
                 this.setState({
@@ -24,7 +32,7 @@ class CityPicker extends Component{
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.city !== this.props.city
+        return nextProps.city !== this.props.city||nextState.area_list!==this.state.area_list;
     }
 
     areaChange(e){

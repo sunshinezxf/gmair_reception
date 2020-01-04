@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css'
-import on_off_bg from '../../material/bg/gmair_bg.jpg';
+import on_off_bg from '../../material/bg/fan_bg.png';
 import power_img from '../../material/icon/power.png';
 import {machine_service} from '../service/mahcine.service'
 
