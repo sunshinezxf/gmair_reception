@@ -6,7 +6,7 @@ import hot_img from '../../material/icon/hot.png'
 import hot_active_img from '../../material/icon/hot-active.png'
 import cold_img from '../../material/icon/cold.png'
 import wind_img from '../../material/icon/wind.png'
-import {default_wind_types, wind_types_imgs} from './wind_types'
+import {control_wind_types, default_wind_types, wind_types_imgs} from './wind_types'
 import {cold_wind_levels, hot_wind_levels, timing_levels} from './wind_levels'
 import {machine_service} from '../service/mahcine.service'
 import 'antd/dist/antd.css'
@@ -29,16 +29,28 @@ class WindController extends Component {
         this.timing_wind = this.timing_wind.bind(this);
         this.sweep_wind = this.sweep_wind.bind(this);
         this.buzz_wind = this.buzz_wind.bind(this);
+        this.uv_wind = this.uv_wind.bind(this);
     }
 
     render() {
+        console.log(this.props)
         let temp = this.props.target_temperature
         let temp_marks = {0: '0℃', 30: '30℃'}
         if (util.isRealNum(temp)) {
             temp_marks[temp] = temp + '℃'
         }
+        let control_list=this.props.control_list;
         let wind_types = this.props.work_mode_list.concat(default_wind_types);
-        console.log(JSON.stringify(wind_types))
+        let control_list_result=[];
+        if(control_list.length>0){
+            for (let i = 0;i<control_list.length;i++){
+                for (let j=0;j<control_wind_types.length;j++){
+                    if(control_list[i].optionComponent==control_wind_types[j].operator){
+                        wind_types.push(control_wind_types[j])
+                    }
+                }
+            }
+        }
 
         const getTypeList = (wind_types = [], wind_types_imgs = {}) => {
             const length = wind_types.length;
@@ -96,7 +108,7 @@ class WindController extends Component {
                         <div className='wind-type-text'>{wind_types[i].name}</div>
                     </div>
                 }
-                if (wind_types[i].operator == "voice") {
+                if (wind_types[i].operator == "buzz") {
                     windTypeNode = <div
                         className={`wind-type-container ${this.props.buzz ? 'active' : null}`}
                         onClick={this.buzz_wind}>
@@ -123,6 +135,16 @@ class WindController extends Component {
 
                         </div>
                 }
+                if (wind_types[i].operator == "uv") {
+                    windTypeNode = <div
+                        className={`wind-type-container ${this.props.uv ? 'active' : null}`}
+                        onClick={this.uv_wind}>
+                        <div className='wind-type-icon-container'>
+                            <img src={wind_types_imgs[wind_types[i].operator]} className={`wind-type-icon`}></img>
+                        </div>
+                        <div className='wind-type-text'>{wind_types[i].name}</div>
+                    </div>
+                }
                 typeList.push(windTypeNode);
             }
             for (let i = 0; i < 3; i++) {
@@ -130,9 +152,7 @@ class WindController extends Component {
             }
             return typeList;
         }
-
-        console.log("heat_list" + JSON.stringify(this.props.heat_mode_list));
-
+        // console.log(this.props)
         return (
 
             <div className='wind-container'>
@@ -325,6 +345,21 @@ class WindController extends Component {
             } else {
                 machine_service.operate(this.props.qrcode, 'buzz', 'on');
                 machine_status.buzz = true
+            }
+            this.props.changeMachineStatus(machine_status);
+        }
+    }
+
+    //开启、关闭紫外线
+    uv_wind = () => {
+        if (this.props.power_status) {
+            let machine_status = this.props.machine_status;
+            if (machine_status.uv) {
+                machine_service.operate(this.props.qrcode, 'uv', 'off');
+                machine_status.uv = false
+            } else {
+                machine_service.operate(this.props.qrcode, 'uv', 'on');
+                machine_status.uv = true
             }
             this.props.changeMachineStatus(machine_status);
         }

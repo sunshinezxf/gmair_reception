@@ -13,7 +13,8 @@ export const START_TIME_CHANGE="START_TIME_CHANGE";
 export const END_TIME_CHANGE="END_TIME_CHANGE";
 export const QRCODE_STORE="QRCODE_STORE";
 export const COMPONENT_IN="COMPONENT_IN";
-export const CLICK_Wind = 'clickWind'
+export const CLICK_Wind = 'clickWind';
+export const CONTROL_OPTION = 'CONTROL_OPTION';
 
 export function switchOn() {
     return {
@@ -109,3 +110,10 @@ export const clickWindAction = (windTemperature)=>({
     type:CLICK_Wind,
     windTemperature
 })
+
+export function changeControlList(control_list) {
+    return {
+        type:CONTROL_OPTION,
+        control_list:control_list,
+    }
+}

@@ -6,6 +6,7 @@ import {
     changeQrcode,
     changeHeatList
 } from "../../actions/wind.action";
+import {changeControlList} from "../../actions/operation.action";
 
 
 
@@ -26,6 +27,7 @@ function mapDispatchToProps(dispatch){
         changeMachineStatus:(machine_status)=>dispatch(changeMachineStatus(machine_status)),
         changeModeList:(work_mode_list)=>dispatch(changeModeList(work_mode_list)),
         changeHeatList:(heat_mode_list)=>dispatch(changeHeatList(heat_mode_list)),
+        changeControlList: (control_list) => dispatch(changeControlList(control_list)),
 
     }
 }

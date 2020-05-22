@@ -10,6 +10,7 @@ import {
     setTemperatureAction,
     changeMachineStatus
 } from "../../actions/wind.action";
+import {changeControlList} from "../../actions/operation.action";
 
 //映射Redux state到组件的属性
 function mapStateToProps(state) {
@@ -20,6 +21,7 @@ function mapStateToProps(state) {
         work_mode: state.wind_reducer.work_mode,
         sweep: state.wind_reducer.sweep,
         buzz: state.wind_reducer.buzz,
+        uv: state.wind_reducer.uv,
         heat: state.wind_reducer.heat,
         countdown: state.wind_reducer.countdown,
         runtime: state.wind_reducer.runtime,
@@ -27,7 +29,8 @@ function mapStateToProps(state) {
         temperature: state.wind_reducer.temperature,
         work_mode_list: state.wind_reducer.work_mode_list,
         machine_status: state.wind_reducer.machine_status,
-        heat_mode_list: state.wind_reducer.heat_mode_list
+        heat_mode_list: state.wind_reducer.heat_mode_list,
+        control_list:state.wind_reducer.control_list,
     }
 }
 

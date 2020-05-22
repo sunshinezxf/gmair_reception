@@ -54,6 +54,7 @@ class FanContent extends Component{
                 response = response.data[0];
                 let model_id = response.modelId;
                 machine_service.obtain_model(model_id).then(response => {
+                    console.log(response.data[0])
                     response = response.data[0]
                     let modelBg = response.modelBg;
                     this.setState({model_bg: modelBg});
@@ -70,6 +71,8 @@ class FanContent extends Component{
         machine_service.obtain_control_option(model_id).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 let control_list = response.data;
+                console.log(control_list)
+                this.props.changeControlList(control_list)
                 for (let i = 0; i < control_list.length; i++) {
                     let item = control_list[i];
                     if (item.optionComponent === 'heat') {
@@ -105,10 +108,12 @@ class FanContent extends Component{
     obtain_machine_status = (qrcode) => {
         machine_service.obtain_machine_new_status(qrcode).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
+                console.log(response)
                 let information = response.data;
                 information['power_status'] = information.power===1
                 information['sweep'] = information.sweep===1
                 information['buzz'] = information.buzz===1
+                information['uv'] = information.uv===1
                 information['work_mode'] = util.tell_mode(information.mode, this.props.work_mode_list)
                 this.props.changeMachineStatus(information);
             }
