@@ -11,7 +11,8 @@ class FanContent extends Component{
         super(props);
         this.check_qrcode = this.check_qrcode.bind(this);
         this.state = {
-
+            model_id: '',
+            model_bg: ''
         }
         let qrcode = this.props.match.params.qrcode;
         this.props.changeQrcode(qrcode);
@@ -50,8 +51,15 @@ class FanContent extends Component{
     check_qrcode = (qrcode) => {
         machine_service.check_exist(qrcode).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
-                let info = response.data[0];
-                this.check_control_option(info.modelId)
+                response = response.data[0];
+                let model_id = response.modelId;
+                machine_service.obtain_model(model_id).then(response => {
+                    response = response.data[0]
+                    let modelBg = response.modelBg;
+                    this.setState({model_bg: modelBg});
+                })
+                this.setState({model_id: model_id})
+                this.check_control_option(model_id)
             } else {
                 // window.location.href = '/machine/list'
             }
@@ -121,8 +129,8 @@ class FanContent extends Component{
     render(){
         return (
             <div className="user_select_disable" style={{width:'100%',overflowX:'hidden'}}>
-                <OnOffHeader></OnOffHeader>
-                <WindController></WindController>
+                <OnOffHeader model_id={this.state.model_id} model_bg={this.state.model_bg}></OnOffHeader>
+                <WindController model_id={this.state.model_id}></WindController>
             </div>
         )
     }

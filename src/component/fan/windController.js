@@ -32,13 +32,13 @@ class WindController extends Component {
     }
 
     render() {
-        console.log(this.props)
         let temp = this.props.target_temperature
         let temp_marks = {0: '0℃', 30: '30℃'}
-        if(util.isRealNum(temp)){
+        if (util.isRealNum(temp)) {
             temp_marks[temp] = temp + '℃'
         }
         let wind_types = this.props.work_mode_list.concat(default_wind_types);
+        console.log(JSON.stringify(wind_types))
 
         const getTypeList = (wind_types = [], wind_types_imgs = {}) => {
             const length = wind_types.length;
@@ -51,7 +51,7 @@ class WindController extends Component {
                 </div>
             );
             const getTimeTag = (wind_types_img) => {
-                if (!util.isRealNum(this.props.runtime)||this.props.runtime===0||this.props.runtime==="") {
+                if (!util.isRealNum(this.props.runtime) || this.props.runtime === 0 || this.props.runtime === "") {
                     return (
                         <img src={wind_types_img}
                              className='wind-type-icon'></img>
@@ -70,11 +70,11 @@ class WindController extends Component {
             }
             for (let i = 0; i < length; i++) {
                 let item = wind_types[i]
-                if(item==null){
+                if (item == null) {
                     continue;
                 }
                 let windTypeNode;
-                if(this.props.heat===0){
+                if (this.props.heat === 0) {
                     windTypeNode = <div
                         className={`wind-type-container ${this.props.work_mode === item.operator ? 'active' : null}`}
                         onClick={() => {
@@ -110,12 +110,14 @@ class WindController extends Component {
                     windTypeNode =
                         <div key={i}
                              className={`wind-type-container ${this.props.windType === wind_types[i] ? 'active' : null}`}>
-                            <Picker data={timing_levels} cols={1} className="forss" disabled={!this.props.power_status} onChange={this.timing_wind}>
+                            <Picker data={timing_levels} cols={1} className="forss" disabled={!this.props.power_status}
+                                    onChange={this.timing_wind}>
                                 <CustomChildren>
                                     <div className='wind-type-icon-container'>
                                         {getTimeTag(wind_types_imgs[wind_types[i].operator])}
                                     </div>
-                                    <div className='wind-type-text'>{!util.isRealNum(this.props.runtime)||this.props.runtime===0||this.props.runtime===""?wind_types[i].name:wind_types[i].click_name}</div>
+                                    <div
+                                        className='wind-type-text'>{!util.isRealNum(this.props.runtime) || this.props.runtime === 0 || this.props.runtime === "" ? wind_types[i].name : wind_types[i].click_name}</div>
                                 </CustomChildren>
                             </Picker>
 
@@ -129,9 +131,12 @@ class WindController extends Component {
             return typeList;
         }
 
+        console.log("heat_list" + JSON.stringify(this.props.heat_mode_list));
+
         return (
+
             <div className='wind-container'>
-                <div className='wind-temperature-container'>
+                {this.props.model_id==="MOD20191210iu8h6y78"&&<div className='wind-temperature-container'>
                     <div className={`wind-tag-container cold ${this.props.heat === 0 ? 'active' : null}`}
                          onClick={() => {
                              this.wind_cold_click('cold')
@@ -147,7 +152,13 @@ class WindController extends Component {
                         <img src={hot_active_img} className='wind-icon active'></img>
                         <div>热风</div>
                     </div>
-                </div>
+                </div>}
+                {this.props.model_id!=="MOD20191210iu8h6y78"&&<div className='wind-temperature-container'>
+                    <div className={`wind-tag-container-full cold ${this.props.heat === 0 ? 'active' : null}`}>
+                        <img src={cold_img} className='wind-icon'></img>
+                        <div>冷风</div>
+                    </div>
+                </div>}
                 <div className='wind-level-container'>
                     <div className='block-title'>风量控制</div>
                     <div className='wind-level-selector icon-wrapper'>
@@ -197,7 +208,7 @@ class WindController extends Component {
     //冷风量调节
     //最终改变前端风速volume，并且更新后端数据
     cold_wind = (e) => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             this.local_cold_wind(e)
             machine_service.volume(this.props.qrcode, e);
         }
@@ -205,7 +216,7 @@ class WindController extends Component {
 
     //在拖动过程中改变前端风速volume，不给后端发送数据，减少多余请求
     local_cold_wind = (e) => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             let machine_status = this.props.machine_status;
             machine_status.volume = e;
             this.props.changeMachineStatus(machine_status);
@@ -213,7 +224,7 @@ class WindController extends Component {
     }
 
     wind_cold_click = (w) => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             let machine_status = this.props.machine_status;
             machine_status.heat = 0;
             this.props.changeMachineStatus(machine_status);
@@ -223,7 +234,7 @@ class WindController extends Component {
     }
 
     hot_wind = (e) => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             this.local_hot_wind(e)
             console.log(this.props.heat_mode_list[e]);
             machine_service.operate(this.props.qrcode, 'heat', this.props.heat_mode_list[e].operator);
@@ -231,7 +242,7 @@ class WindController extends Component {
     }
 
     local_hot_wind = (e) => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             let machine_status = this.props.machine_status;
             console.log(this.props.heat_mode_list[e]);
             machine_status.heat = e;
@@ -240,7 +251,7 @@ class WindController extends Component {
     }
 
     wind_hot_click = (w) => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             let machine_status = this.props.machine_status;
             console.log(this.props);
             machine_status.heat = 1;
@@ -253,7 +264,7 @@ class WindController extends Component {
     //模式选择
     mode_operate = (e) => {
         console.log(e)
-        if(this.props.power_status){
+        if (this.props.power_status) {
             let machine_status = this.props.machine_status;
             machine_status.work_mode = e.operator;
             this.props.changeMachineStatus(machine_status);
@@ -262,7 +273,7 @@ class WindController extends Component {
     }
 
     local_temperature_change = (e) => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             let machine_status = this.props.machine_status;
             machine_status.target_temperature = e;
             this.props.changeMachineStatus(machine_status);
@@ -271,7 +282,7 @@ class WindController extends Component {
 
     //温度变化，发送请求
     temperature_change = (e) => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             this.local_temperature_change(e);
             machine_service.temp(this.props.qrcode, e);
         }
@@ -280,7 +291,7 @@ class WindController extends Component {
     //将时间(分钟)传入，发送请求
     timing_wind = (e) => {
         // console.log(e)
-        if(this.props.power_status){
+        if (this.props.power_status) {
             let machine_status = this.props.machine_status;
             machine_status.runtime = e[0];
             machine_status.countdown = e[0];
@@ -291,7 +302,7 @@ class WindController extends Component {
 
     //开启、关闭扫风
     sweep_wind = () => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             let machine_status = this.props.machine_status;
             if (machine_status.sweep) {
                 machine_service.operate(this.props.qrcode, 'sweep', 'off');
@@ -306,7 +317,7 @@ class WindController extends Component {
 
     //开启、关闭蜂鸣器
     buzz_wind = () => {
-        if(this.props.power_status){
+        if (this.props.power_status) {
             let machine_status = this.props.machine_status;
             if (machine_status.buzz) {
                 machine_service.operate(this.props.qrcode, 'buzz', 'off');

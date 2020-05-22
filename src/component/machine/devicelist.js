@@ -178,6 +178,9 @@ class DeviceList extends React.Component {
                                     {item.goodsId==="GUO20191208249y7f32"&&
                                     <FanItem url={item.modelThumbnail} qrcode={item.codeValue} goods_name={item.goodsName} model_name={item.modelName}/>
                                     }
+                                    {item.goodsId==="GUO202005228o5vuv18"&&
+                                    <FanItem url={item.modelThumbnail} qrcode={item.codeValue} goods_name={item.goodsName} model_name={item.modelName}/>
+                                    }
                                 </Card.Body>
                             </SwipeAction>
                         </Card>
