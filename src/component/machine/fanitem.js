@@ -83,9 +83,13 @@ class FanItem extends React.Component {
                         window.location.href = url
                     }}>
                         <div className="device-name"> {this.props.goods_name+this.props.model_name}</div>
-                        {this.state.online === true ? <div className="device-status">
+                        {this.state.online == true ? <div className="device-status">
+                                {!this.props.stepHide&&
                                 <div className="device-num" style={{color:util.tell_fan_color(mode)}}>{volume}</div>
+                                }
+                                {!this.props.stepHide&&
                                 <div className="device-unit">档</div>
+                                }
                                 <div className="device-label"><Tag color={util.tell_fan_color(mode)}>{this.state.heat===0?'冷风':'热风'}</Tag></div>
                             </div>:
                             <span>设备已离线，点击重新接入</span>}

@@ -174,8 +174,8 @@ class WindController extends Component {
                     </div>
                 </div>}
                 {this.props.model_id!=="MOD20191210iu8h6y78"&&<div className='wind-temperature-container'>
-                    <div className={`wind-tag-container-full cold ${this.props.heat === 0 ? 'active' : null}`}>
-                        <img src={cold_img} className='wind-icon'></img>
+                    <div className={`wind-tag-container-full cold active`}>
+                        <img src={wind_img} className='wind-icon'></img>
                         <div>冷风</div>
                     </div>
                 </div>}

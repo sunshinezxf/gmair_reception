@@ -48,6 +48,10 @@
     background: rgba(198, 234, 251, 0.8);
 }
 
+.wind-tag-container-full.cold.active{
+    background: rgba(198, 234, 251, 0.8);
+}
+
 .wind-tag-container.hot .active{
     display: none;
 }
