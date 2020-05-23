@@ -1,7 +1,18 @@
 import axios from 'axios';
 
-const operation_service_url = 'https://microservice.gmair.net/reception/machine';
+import createHistory from 'history/createHashHistory';
 
+axios.interceptors.response.use((response) => {
+    return response
+}, (err) => {
+    if (err.response.status == '401') {
+        const history = createHistory();
+        history.push('/login')
+    }
+    return Promise.reject(err)
+})
+
+const operation_service_url = 'https://microservice.gmair.net/reception/machine';
 
 //开启定时任务
 function start_timing(qrcode, startHour, startMinute, endHour, endMinute, status) {

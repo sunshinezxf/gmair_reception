@@ -1,5 +1,17 @@
 import axios from 'axios'
 
+import createHistory from 'history/createHashHistory';
+
+axios.interceptors.response.use((response) => {
+    return response
+}, (err) => {
+    if (err.response.status == '401') {
+        const history = createHistory();
+        history.push('/login')
+    }
+    return Promise.reject(err)
+})
+
 const airquality_url = 'https://microservice.gmair.net/reception/airquality';
 
 function config_default_outdoor(qrcode, city_id) {

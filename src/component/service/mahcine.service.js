@@ -1,5 +1,17 @@
 import axios from 'axios'
 
+import createHistory from 'history/createHashHistory';
+
+axios.interceptors.response.use((response) => {
+    return response
+}, (err) => {
+    if (err.response.status == '401') {
+        const history = createHistory();
+        history.push('/login')
+    }
+    return Promise.reject(err)
+})
+
 const machine_service_url = 'https://microservice.gmair.net/reception/machine';
 // const machine_service_url = 'http://172.19.168.14:8017/reception/machine';
 
