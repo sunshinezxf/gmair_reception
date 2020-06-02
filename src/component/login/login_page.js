@@ -73,7 +73,8 @@ class LoginPage extends React.Component {
             password: '',
             expected_password: '',
             ready2send: false,
-            ready2login: false
+            ready2login: false,
+            entry:""
         };
     }
 
@@ -133,6 +134,12 @@ class LoginPage extends React.Component {
     }
 
     componentDidMount() {
+        let entry = this.props.location.search.split("entry=")[1];
+        if(entry!=undefined){
+            this.setState({
+                entry:entry
+            })
+        }
         if (util.is_weixin()) {
             util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
                 this.init_config();
@@ -238,11 +245,20 @@ class LoginPage extends React.Component {
 
     login = () => {
         this.setState({ready2send: false, ready2login: false});
-        consumerservice.login(this.state.mobile, this.state.password).then(response => {
-            if (response.responseCode == 'RESPONSE_OK') {
-                window.location.href = '/machine/list';
-            }
-        });
+        if(this.state.entry=="xiaoai"){
+            consumerservice.authorizeLogin(this.state.mobile, this.state.password).then(response => {
+                if (response.responseCode == 'RESPONSE_OK') {
+
+                }
+            });
+        }else {
+            consumerservice.login(this.state.mobile, this.state.password).then(response => {
+                if (response.responseCode == 'RESPONSE_OK') {
+                    window.location.href = '/machine/list';
+                }
+            });
+        }
+
     }
 }
 

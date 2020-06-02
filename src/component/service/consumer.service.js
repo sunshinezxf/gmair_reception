@@ -169,7 +169,31 @@ function update_address(province,city,district,detail) {
     })
 }
 
+function authorizeLogin(username, code) {
+    let login_url = consumer_url + '/oauth/authorize';
+    let form = new FormData();
+    form.append('username', username);
+    form.append('password', code);
+    form.append('grant_type', 'authorization_code');
+    form.append('client_secret', '123456');
+    form.append('client_id', 'client_3');
+    form.append('scope', 'select');
+    return axios.post(login_url, form).then(response => {
+        if (response.status === 200) {
+            let access_token = response.data.access_token;
+            localStorage.setItem('access_token', access_token);
+            return {responseCode: 'RESPONSE_OK', data: access_token};
+        } else {
+
+        }
+
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    });
+}
+
 export const consumerservice = {
     bind_wechat, can_operate, request_login_code, request_register_code, login,
-    loginbyopenid, exist, register, profile, unbind_wechat,update_user,update_address
+    loginbyopenid, exist, register, profile, unbind_wechat,update_user,update_address,
+    authorizeLogin
 }
