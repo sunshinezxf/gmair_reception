@@ -265,14 +265,14 @@ class LoginPage extends React.Component {
                     window.location.href = url;
                 }
             });
-        } else  if (this.state.entry == "aligenie") {
+        } else if (this.state.entry == "aligenie") {
             consumerservice.login(this.state.mobile, this.state.password).then(response => {
                 if (response.responseCode == 'RESPONSE_OK') {
                     let url = "https://microservice.gmair.net/oauth/consumer/authorize?response_type=code&client_id=client_4&redirect_uri=https%3A%2F%2Fopen.bot.tmall.com%2Foauth%2Fcallback&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
                     window.location.href = url;
                 }
             });
-        } {
+        } else {
             consumerservice.login(this.state.mobile, this.state.password).then(response => {
                 if (response.responseCode == 'RESPONSE_OK') {
                     window.location.href = '/machine/list';
