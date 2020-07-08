@@ -430,16 +430,16 @@ class MachineDetail extends React.Component {
                     {/*<ScreenPrompt/>*/}
                     <Outdoor qrcode={this.props.match.params.qrcode} city={this.refresh_city}/>
                     <Operation qrcode={this.props.match.params.qrcode}
-                               power_status={this.state.power_status} operate_local_power={this.operate_local_power}
-                               volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}
-                               work_mode_list={this.state.work_mode_list} work_mode={this.state.work_mode}
-                               operate_local_mode={this.operate_local_mode}
-                               light={this.state.light} operate_local_light={this.operate_local_light}
-                               heat_mode_list={this.state.heat_mode_list} heat={this.state.heat_mode}
-                               operate_local_heat={this.operate_local_heat}
-                               lock_enabled={this.state.lock_is_present} lock={this.state.lock}
-                               operate_local_lock={this.operate_local_lock}
-                    />
+                                 power_status={this.state.power_status} operate_local_power={this.operate_local_power}
+                                 volume_value={this.state.volume} operate_local_volume={this.operate_local_volume}
+                                 work_mode_list={this.state.work_mode_list} work_mode={this.state.work_mode}
+                                 operate_local_mode={this.operate_local_mode}
+                                 light={this.state.light} operate_local_light={this.operate_local_light}
+                                 heat_mode_list={this.state.heat_mode_list} heat={this.state.heat_mode}
+                                 operate_local_heat={this.operate_local_heat}
+                                 lock_enabled={this.state.lock_is_present} lock={this.state.lock}
+                                 operate_local_lock={this.operate_local_lock}
+                />
                     <div style={charts_area}>
                         <PM2_5Charts qrcode={this.props.match.params.qrcode}/>
                     </div>

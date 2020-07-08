@@ -50,7 +50,8 @@ const login_btn = {
     color: `#00AEEF`,
     fontSize: `1.4rem`,
     backgroundColor: `#FFFFFF`,
-    textAlign: `center`
+    letterSpacing: `5px`,
+    textAlign: `center`,
 }
 
 
@@ -74,7 +75,8 @@ class LoginPage extends React.Component {
             expected_password: '',
             ready2send: false,
             ready2login: false,
-            entry:""
+            entry: '',
+            status: ''
         };
     }
 
@@ -134,11 +136,14 @@ class LoginPage extends React.Component {
     }
 
     componentDidMount() {
-        let entry = this.props.location.search.split("entry=")[1];
-        if(entry!=undefined){
+        let portal = this.props.match.params.portal;
+        if (portal !== undefined && portal !== null) {
             this.setState({
-                entry:entry
+                entry: portal
             })
+            // util.load_script("https://reception.gmair.net/plugin/vconsole.min.js", () => {
+            //     var vConsole = new window.VConsole();
+            // })
         }
         if (util.is_weixin()) {
             util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
@@ -163,6 +168,12 @@ class LoginPage extends React.Component {
     }
 
     render() {
+
+        let btn_message = "登录";
+        if (this.state.entry === "xiaoai") {
+            btn_message = "授权绑定";
+        }
+
         return (
             <div style={gmair_login_page}>
                 <div className="gmair_logo">
@@ -191,7 +202,7 @@ class LoginPage extends React.Component {
                 </div>
                 <div className="gmair_login_btn">
                     <Button block style={login_btn} onClick={this.login}
-                            disabled={!this.state.ready2login}>登&nbsp;录</Button>
+                            disabled={!this.state.ready2login}>{btn_message}</Button>
                 </div>
                 <Footer name="尚无账号，请点击注册" link="/register"/>
             </div>
@@ -245,13 +256,21 @@ class LoginPage extends React.Component {
 
     login = () => {
         this.setState({ready2send: false, ready2login: false});
-        if(this.state.entry=="xiaoai"){
-            consumerservice.authorizeLogin(this.state.mobile, this.state.password).then(response => {
+        if (this.state.entry == "xiaoai") {
+            consumerservice.login(this.state.mobile, this.state.password).then(response => {
                 if (response.responseCode == 'RESPONSE_OK') {
-
+                    let url = "https://microservice.gmair.net/oauth/consumer/authorize?response_type=code&client_id=client_3&redirect_uri=https%3A%2F%2Foauth-redirect.api.home.mi.com%2Fr%2F2147479194&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
+                    window.location.href = url;
                 }
             });
-        }else {
+        } else  if (this.state.entry == "aligenie") {
+            consumerservice.login(this.state.mobile, this.state.password).then(response => {
+                if (response.responseCode == 'RESPONSE_OK') {
+                    let url = "https://microservice.gmair.net/oauth/consumer/authorize?response_type=code&client_id=client_4&redirect_uri=https%3A%2F%2Fopen.bot.tmall.com%2Foauth%2Fcallback&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
+                    window.location.href = url;
+                }
+            });
+        } {
             consumerservice.login(this.state.mobile, this.state.password).then(response => {
                 if (response.responseCode == 'RESPONSE_OK') {
                     window.location.href = '/machine/list';

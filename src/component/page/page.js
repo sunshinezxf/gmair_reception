@@ -36,6 +36,7 @@ class Page extends React.Component {
                 <Route exact path="/" component={LoginPage}/>
                 <Route exact path="/index" component={LoginPage}/>
                 <Route exact path="/login" component={LoginPage}/>
+                <Route path="/authorize/:portal" component={LoginPage}/>
                 <Route exact path="/register" component={Register}/>
                 <Route path="/init/:qrcode" component={DeviceInit}/>
                 <Route exact path="/machine/list" component={DeviceList}/>
@@ -48,7 +49,7 @@ class Page extends React.Component {
                 <Route path="/machine/bind/:qrcode" component={DeviceBind}/>
                 <Route path="/wechat/bind" component={WechatBind}/>
                 <Route path="/machine/share/:qrcode" component={DeviceShare}/>
-                <Route path="/qrcode/generate" component={QRCodeGen} />
+                <Route path="/qrcode/generate" component={QRCodeGen}/>
                 <Route path="/machine/operation/:qrcode" component={DeviceOperation}/>
                 <Route path="/fan/detail/:qrcode" component={FanContent}/>
             </div>

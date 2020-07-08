@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React, {Component} from 'react';
 import OnOffHeader from '../../containers/fan/onOffHeaderController'
 import WindController from '../../containers/fan/windController'
 import {machine_service} from '../service/mahcine.service'
@@ -6,8 +6,8 @@ import {util} from "../service/util";
 import {wechatservice} from "../service/wechat.service";
 import './windController.css'
 
-class FanContent extends Component{
-    constructor(props){
+class FanContent extends Component {
+    constructor(props) {
         super(props);
         this.check_qrcode = this.check_qrcode.bind(this);
         this.state = {
@@ -43,7 +43,7 @@ class FanContent extends Component{
         }
     }
 
-    componentWillMount(){
+    componentWillMount() {
         let qrcode = this.props.match.params.qrcode;
         this.check_qrcode(qrcode);
     }
@@ -110,10 +110,10 @@ class FanContent extends Component{
             if (response.responseCode === 'RESPONSE_OK') {
                 console.log(response)
                 let information = response.data;
-                information['power_status'] = information.power===1
-                information['sweep'] = information.sweep===1
-                information['buzz'] = information.buzz===1
-                information['uv'] = information.uv===1
+                information['power_status'] = information.power === 1
+                information['sweep'] = information.sweep === 1
+                information['buzz'] = information.buzz === 1
+                information['uv'] = information.uv === 1
                 information['work_mode'] = util.tell_mode(information.mode, this.props.work_mode_list)
                 this.props.changeMachineStatus(information);
             }
@@ -131,9 +131,9 @@ class FanContent extends Component{
         }, 10000);
     }
 
-    render(){
+    render() {
         return (
-            <div className="user_select_disable" style={{width:'100%',overflowX:'hidden'}}>
+            <div className="user_select_disable" style={{width: '100%', overflowX: 'hidden'}}>
                 <OnOffHeader model_id={this.state.model_id} model_bg={this.state.model_bg}></OnOffHeader>
                 <WindController model_id={this.state.model_id}></WindController>
             </div>
