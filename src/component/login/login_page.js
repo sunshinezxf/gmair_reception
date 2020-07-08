@@ -173,7 +173,9 @@ class LoginPage extends React.Component {
         if (this.state.entry === "xiaoai") {
             btn_message = "授权绑定";
         }
-
+        if (this.state.entry === "aligenie") {
+            btn_message = "授权绑定";
+        }
         return (
             <div style={gmair_login_page}>
                 <div className="gmair_logo">
