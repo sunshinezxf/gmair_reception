@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-import createHistory from 'history/createHashHistory';
+//import createHistory from 'history/createHashHistory';
+import {createHashHistory} from 'history';
 
 axios.interceptors.response.use((response) => {
     return response
 }, (err) => {
     if (err.response.status == '401') {
-        const history = createHistory();
+       // const history = createHistory();
+       const history = createHashHistory();
         history.push('/login')
     }
     return Promise.reject(err)

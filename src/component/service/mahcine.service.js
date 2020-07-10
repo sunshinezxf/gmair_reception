@@ -1,13 +1,16 @@
 import axios from 'axios'
 
-import createHistory from 'history/createHashHistory';
+//import createHistory from 'history/createHashHistory';
+import {createHashHistory} from 'history';
+//const history = createHashHistory;
 
 axios.interceptors.response.use((response) => {
     return response
 }, (err) => {
-    if (err.response.status == '401') {
-        const history = createHistory();
-        history.push('/login')
+    if (err.response.status === '401') {
+       // const history = createHistory();
+        const history = createHashHistory();
+        history.push('/login') 
     }
     return Promise.reject(err)
 })
@@ -285,6 +288,7 @@ function obtain_bind_info(qrcode) {
     })
 }
 
+//绑定设备名称
 function config_bind_name(qrcode, bind_name) {
     let access_token = localStorage.getItem('access_token');
     let config_url = machine_service_url + '/modify/bind/name';
@@ -300,6 +304,64 @@ function config_bind_name(qrcode, bind_name) {
             description: 'Fail to fetch machine weekly pm2.5 for qrcode: ' + qrcode
         };
     })
+}
+
+//滤网清洗提醒是否开启
+function obtain_filter_isOpen(qrcode){
+  let access_token = localStorage.getItem('access_token');
+  let obtain_url = machine_service_url + '/filter/clean/isOpen?access_token=' + access_token + '&qrcode=' + qrcode;
+  return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to fetch filter isOpen for qrcode: ' + qrcode
+        };
+    })
+}
+
+//改变滤网清洗提醒状态
+function change_filter_status(qrcode,status){
+    let access_token = localStorage.getItem('access_token');
+    let filter_change_url = machine_service_url + '/filter/clean/change';
+    let form = new FormData();
+    form.append('cleanRemindStatus',status);
+    form.append('qrcode', qrcode);
+    form.append('access_token', access_token);
+    return axios.post(filter_change_url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to operate machine filter status'};
+    })
+}
+
+//滤网是否需要清洗
+function obtain_filter_isClean(qrcode) {  
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/filter/clean?access_token=' + access_token + '&qrcode=' + qrcode;
+  return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to fetch filter isClean for qrcode: ' + qrcode
+        };
+    })
+}
+
+//滤网确认清洗
+function confirm_filter_clean (qrcode) {  
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/filter/clean/confirm?access_token=' + access_token + '&qrcode=' + qrcode;
+  return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to confirm filter isClean for qrcode: ' + qrcode
+        };
+    })
+
 }
 
 function probe_component(model_id, component_name) {
@@ -345,11 +407,15 @@ export const machine_service = {
     obtain_pm2_5_weekly,
     obtain_volume_range,
     obtain_light_range,
+    obtain_filter_isOpen,
     operate,
     probe_component,
     unbind,
     volume,
     obtain_device_list,
     temp,
-    timing
+    timing,
+    change_filter_status,
+    obtain_filter_isClean,
+    confirm_filter_clean
 }

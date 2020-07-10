@@ -245,6 +245,7 @@ class MachineDetail extends React.Component {
                     }
                 })
                 machine_service.probe_component(info.modelId, 'LOCK').then(response => {
+                    console.log("lock" + JSON.stringify(response))
                     if (response.responseCode === 'RESPONSE_OK') {
                         this.setState({lock_is_present: true})
                     } else {

@@ -261,14 +261,20 @@ class LoginPage extends React.Component {
         if (this.state.entry == "xiaoai") {
             consumerservice.login(this.state.mobile, this.state.password).then(response => {
                 if (response.responseCode == 'RESPONSE_OK') {
-                    let url = "https://microservice.gmair.net/oauth/consumer/authorize?response_type=code&client_id=client_3&redirect_uri=https%3A%2F%2Foauth-redirect.api.home.mi.com%2Fr%2F2147479194&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
+                    let url = "https://microservice.gmair.net/oauth/consumer/authorize?" +
+                        "response_type=code&client_id=client_3&redirect_uri=https://oauth-redirect.api.home.mi.com/r/4453" +
+                        "&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
                     window.location.href = url;
                 }
             });
         } else if (this.state.entry == "aligenie") {
             consumerservice.login(this.state.mobile, this.state.password).then(response => {
                 if (response.responseCode == 'RESPONSE_OK') {
-                    let url = "https://microservice.gmair.net/oauth/consumer/authorize?response_type=code&client_id=client_4&redirect_uri=https%3A%2F%2Fopen.bot.tmall.com%2Foauth%2Fcallback&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
+                    let redirect_uri = new URLSearchParams(window.location.search).get("redirect_uri");
+                    let url = "https://microservice.gmair.net/oauth/consumer/authorize?" +
+                        "response_type=code&client_id=client_4&redirect_uri=" + encodeURIComponent(redirect_uri) +
+                        "&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
+                    console.log(url)
                     window.location.href = url;
                 }
             });

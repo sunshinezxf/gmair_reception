@@ -1,12 +1,13 @@
 //operation_reducer
-import {
+import { 
     SWITCH_ON, SWITCH_OFF, TIMING_EXPAND, START_MINUTE_CHANGE, START_HOUR_CHANGE, END_MINUTE_CHANGE,
     END_HOUR_CHANGE, MODAL_VISIBLE_CHANGE, EDIT_USERNAME, INPUT_USERNAME, USERNAME_OK_CLICK, START_TIME_CHANGE,
-    END_TIME_CHANGE, QRCODE_STORE, COMPONENT_IN, CLICK_Wind
+    END_TIME_CHANGE, QRCODE_STORE, COMPONENT_IN, CLICK_Wind,FILTER_SWITCH_ON,FILTER_SWITCH_OFF
 } from '../actions/operation.action';
 
 const initialState = {
     switch: false,
+    filterSwitch: true,
     expanded: false,
     start_hour: "21",
     end_hour: "9",
@@ -30,6 +31,18 @@ const operation_reducer = (state = initialState, action) => {
         case SWITCH_OFF: {
             return Object.assign({}, state, {
                 switch: false,
+            })
+        }
+       
+        case FILTER_SWITCH_ON:{
+            return Object.assign({},state,{
+                filterSwitch: true,
+            })
+        }
+
+        case FILTER_SWITCH_OFF:{
+            return Object.assign({},state,{
+               filterSwitch: false,               
             })
         }
         case TIMING_EXPAND: {

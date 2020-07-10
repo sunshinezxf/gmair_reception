@@ -1,6 +1,6 @@
 import connect from "react-redux/es/connect/connect";
 import OperationPanel from '../../component/fresh/operation_panel';
-import {
+import { 
     changeMachineStatus
 } from "../../actions/fresh.action";
 

@@ -1,5 +1,7 @@
 export const SWITCH_ON="SWITCH_ON";
 export const SWITCH_OFF="SWITCH_OFF";
+export const FILTER_SWITCH_ON="FILTER_SWITCH_ON";
+export const FILTER_SWITCH_OFF="FILTER_SWITCH_OFF";
 export const TIMING_EXPAND="TIMING_EXPAND";
 export const START_HOUR_CHANGE="START_HOUR_CHANGE";
 export const END_HOUR_CHANGE="END_HOUR_CHANGE";
@@ -24,6 +26,20 @@ export function switchOn() {
 export function switchOff() {
     return {
         type:SWITCH_OFF,
+      
+    }
+}
+
+export function filterSwitchOn(){
+    return {
+        type:FILTER_SWITCH_ON,
+    
+    }
+}
+export function filterSwitchOff(){
+    return {
+        type:FILTER_SWITCH_OFF,
+       
     }
 }
 export function expandTiming(){

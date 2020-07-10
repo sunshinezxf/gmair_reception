@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import ControlItem from './control_item';
-import './fresh.css'
+import './fresh.css';
 import {machine_service} from "../service/mahcine.service";
 import {Button, Modal, Slider} from "antd-mobile";
 
@@ -235,7 +235,7 @@ class OperationPanel extends Component{
                                                 min={this.state.min_volume} max={this.state.max_volume}
                                                 onChange={this.local_volume}
                                                 onAfterChange={this.volume}
-                                        />
+                                        /> 
                                     </div>
                                 </div>
                                 <div className="slider_panel_2">

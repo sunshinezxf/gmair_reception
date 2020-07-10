@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-// import SettingSelect from '../../containers/machine/operation';
 import SettingSelect from '../../containers/machine/settingSelect';
 import {NavBar, Icon} from 'antd-mobile';
 import {machine_service} from "../service/mahcine.service";
@@ -8,8 +7,9 @@ import {consumerservice} from "../service/consumer.service";
 import {util} from "../service/util";
 import {wechatservice} from "../service/wechat.service";
 import createHistory from 'history/createBrowserHistory'
-
 const history = createHistory();
+// import {createBrowserHistory} from 'history'
+// const history = createBrowserHistory();
 
 class MachineOperation extends Component {
     constructor(props) {
@@ -20,7 +20,7 @@ class MachineOperation extends Component {
     }
 
     init_config = () => {
-        let url = window.location.href;
+        let url = window.location.href; 
         if (util.is_weixin()) {
             wechatservice.configuration(url).then(response => {
                 if (response.responseCode === 'RESPONSE_OK') {
@@ -44,6 +44,7 @@ class MachineOperation extends Component {
         }
     }
 
+   
     componentDidMount() {
         util.load_script("https://res.wx.qq.com/open/js/jweixin-1.2.0.js", () => {
             this.init_config();
@@ -68,10 +69,12 @@ class MachineOperation extends Component {
             }
         })
         machine_service.obtain_bind_info(qrcode).then(response => {
+            console.log(response);
             if (response.responseCode === "RESPONSE_OK") {
                 this.props.inputUsername(response.data[0].bindName);
             }
         })
+
     }
 
     render() {
@@ -88,12 +91,13 @@ class MachineOperation extends Component {
                         mode="light"
                         leftContent={[<Icon key="return" type="left"/>]}
                         onLeftClick={() => {
-                            history.goBack();
+                           history.back();
                         }}
                     >新风设置</NavBar>
                     {this.state.mode === 0 &&
-                    <SettingSelect qrcode={this.props.qrcode}/>
+                        <SettingSelect qrcode={this.props.match.params.qrcode}/>
                     }
+                   
                 </div>
             </div>
         )
