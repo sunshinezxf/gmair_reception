@@ -227,6 +227,12 @@ class SettingSelect extends Component {
               <i className="fa fa-table" aria-hidden="true" />
               &nbsp;&nbsp;滤网提醒
             </span>
+          </div>
+          <div className="seperate_div" style={seperate_div} />
+          <div className="setting_item" style={setting_item}>
+            <span>
+              初滤网清洁
+            </span>
             <span style={{ float: `right` }}>
               <Switch
                 onChange={this.onfilterSwitch}

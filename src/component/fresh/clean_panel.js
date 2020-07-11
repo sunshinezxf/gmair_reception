@@ -61,7 +61,7 @@ export default class clean_panel extends Component {
     if (this.props.filterIsClean === "true") {
       alert("温馨提示", "初效率网建议每30日清洗一次", [
         { text: "取消", onPress: () => console.log("cancel") },
-        { text: "确认", onPress: () => {       
+        { text: "我已清洗", onPress: () => {
           machine_service.confirm_filter_clean(this.props.qrcode);
           this.changeFilterToNotClean();        
         } },
