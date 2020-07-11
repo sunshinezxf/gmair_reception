@@ -58,10 +58,10 @@ export default class clean_panel extends Component {
   confirmFilterClean = ()=>{
     let alert = Modal.alert;
     console.log(this.props.filterIsClean);
-    if (this.props.filterIsClean === "true") {
-      alert("温馨提示", "初效率网建议每30日清洗一次", [
+   if (this.props.filterIsClean === "true") {
+      alert("温馨提示", "初效率网建议每30日清洗一次，已经清洗请点击重置按钮", [
         { text: "取消", onPress: () => console.log("cancel") },
-        { text: "我已清洗", onPress: () => {
+        { text: "重置", onPress: () => {
           machine_service.confirm_filter_clean(this.props.qrcode);
           this.changeFilterToNotClean();        
         } },
