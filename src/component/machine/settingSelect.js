@@ -4,7 +4,7 @@ import { operation_service } from "../service/operation.service";
 import { machine_service } from "../service/mahcine.service";
 import "antd/dist/antd.css";
 import { DatePicker, List, LocaleProvider,Modal } from "antd-mobile";
-import zhCN from "antd-mobile/lib/locale-provider/locale-provider";
+import zhCN from "antd-mobile/lib/locale-provider/locale-provider"
 
 class SettingSelect extends Component {
   constructor(props) {

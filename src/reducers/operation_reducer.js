@@ -4,7 +4,6 @@ import {
     END_HOUR_CHANGE, MODAL_VISIBLE_CHANGE, EDIT_USERNAME, INPUT_USERNAME, USERNAME_OK_CLICK, START_TIME_CHANGE,
     END_TIME_CHANGE, QRCODE_STORE, COMPONENT_IN, CLICK_Wind,FILTER_SWITCH_ON,FILTER_SWITCH_OFF,VOLUME_SWITCH_ON,VOLUME_SWITCH_OFF
 } from '../actions/operation.action';
-import {HIDE_VOLUME_IF_OPEN} from "../actions/fresh.action";
 
 const initialState = {
     switch: false,

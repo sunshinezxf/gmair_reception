@@ -18,7 +18,7 @@ export const COMPONENT_IN="COMPONENT_IN";
 export const CLICK_Wind = 'clickWind';
 export const CONTROL_OPTION = 'CONTROL_OPTION';
 export const VOLUME_SWITCH_ON = 'VOLUME_SWITCH_ON';
-export const VOLUME_SWITCH_OFF = 'VOLUME_SWITCH_OFF';
+export const VOLUME_SWITCH_OFF = 'VOLUME_SWITCH_OFF'
 
 export function switchOn() {
     return {

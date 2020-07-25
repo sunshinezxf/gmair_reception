@@ -10,7 +10,7 @@ import {machine_service} from "../service/mahcine.service";
 import "./fresh.css";
 import {locationservice} from "../service/location.service";
 import {airquality_service} from "../service/airquality.service";
-import {Collapse} from 'react-collapse'
+import {Collapse} from 'react-collapse';
 
 
 

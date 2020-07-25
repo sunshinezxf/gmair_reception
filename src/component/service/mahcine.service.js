@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 import createHistory from 'history/createHashHistory';
 //import {createHashHistory} from 'history';

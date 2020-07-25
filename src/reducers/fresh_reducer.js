@@ -111,6 +111,7 @@ const fresh_reducer = (state = initialState, action) => {
                 filterInfo: action.filterInfo,
                 filterIsClean: action.filterIsClean,
             });
+
         case MAIN_FILTER_STATUS:
             return Object.assign({}, state, {
                 mainFilterImgUrl: action.mainFilterImgUrl,
@@ -118,6 +119,7 @@ const fresh_reducer = (state = initialState, action) => {
                 filterIsClean: action.filterIsClean,
                 buyFilter: action.buyFilter,
             });
+
         case HIDE_VOLUME_IF_OPEN:
             return Object.assign({},state,{
                 hideVolumeIfOpen: action.hideVolumeIfOpen

@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import ControlItem from './control_item';
 import './fresh.css';
 import {machine_service} from "../service/mahcine.service";
-import {Button, Modal, Slider} from "antd-mobile";
+import {Button, Modal, Slider} from "antd-mobile"
 
 class OperationPanel extends Component{
     constructor(props) {

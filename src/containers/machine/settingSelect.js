@@ -1,4 +1,4 @@
-import connect from "react-redux/es/connect/connect";
+import connect from "react-redux/es/connect/connect"
 import {switchOff,switchOn,filterSwitchOff,filterSwitchOn,expandTiming,changeStartHour,changeEndHour,changeEndMinute,changeStartMinute,changeModalVisible,
 editUsername,inputUsername,usernameOkClick,startTimeChange,endTimeChange,volumeSwitchOn,volumeSwitchOff} from "../../actions/operation.action";
 import SettingSelect from '../../component/machine/settingSelect';

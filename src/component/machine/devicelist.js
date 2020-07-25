@@ -160,7 +160,7 @@ class DeviceList extends React.Component {
 
    
     let element = machine_list.map(function (item) {
-      // console.log("render" + item.bindName);
+
       return (
         <div key={item.codeValue}>
           <WingBlank size="md">

@@ -37,7 +37,7 @@ export default class filterInfo extends Component {
       borderRadius: "1rem",
       background:"#f2f2f2",
       display:"flex",
-      alignItems:"center"
+      alignItems:"center",
     };
 
     const panel_row = {

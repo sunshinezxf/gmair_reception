@@ -5,7 +5,7 @@ import {
     changeStartHour,
     changeStartMinute, endTimeChange, expandTiming,
     inputUsername,
-    qrcodeStore, startTimeChange, switchOn,componentIn,setFilterSwitch
+    qrcodeStore, startTimeChange, switchOn,componentIn,
 } from "../../actions/operation.action";
 
 //映射Redux state到组件的属性

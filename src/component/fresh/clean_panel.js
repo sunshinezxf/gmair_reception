@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./fresh.css";
 import { machine_service } from "../service/mahcine.service";
-import { Modal} from "antd-mobile";
+import { Modal} from "antd-mobile"
 
 export default class clean_panel extends Component {
   constructor(props) {

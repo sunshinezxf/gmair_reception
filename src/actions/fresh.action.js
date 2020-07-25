@@ -12,7 +12,7 @@ export const FILTER_IS_OPEN = "FILTER_IS_OPEN";
 export const FILTER_IS_CLEAN = "FILTER_IS_CLEAN";
 export const FILTER_STATUS = "FILTER_STATUS";
 export const MAIN_FILTER_STATUS = "MAIN_FILTER_STATUS";
-export const HIDE_VOLUME_IF_OPEN = "HIDE_VOLUME_IF_OPEN"
+export const HIDE_VOLUME_IF_OPEN = "HIDE_VOLUME_IF_OPEN";
 
 export function changeQrcode(qrcode) {
     return {

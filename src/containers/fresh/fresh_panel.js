@@ -3,7 +3,7 @@ import FreshPanel from '../../component/fresh/fresh_panel';
 import {
     changeQrcode, changeMachine, changeMachineStatus, changeHeatList, changeModeList,
     co2IsPresent, lockIsPresent, changeLocation, changeCityAir,
-} from "../../actions/fresh.action";
+} from "../../actions/fresh.action"
 
 //映射Redux state到组件的属性
 function mapStateToProps(state) {
