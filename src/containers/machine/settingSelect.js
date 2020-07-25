@@ -1,6 +1,6 @@
 import connect from "react-redux/es/connect/connect";
 import {switchOff,switchOn,filterSwitchOff,filterSwitchOn,expandTiming,changeStartHour,changeEndHour,changeEndMinute,changeStartMinute,changeModalVisible,
-editUsername,inputUsername,usernameOkClick,startTimeChange,endTimeChange} from "../../actions/operation.action";
+editUsername,inputUsername,usernameOkClick,startTimeChange,endTimeChange,volumeSwitchOn,volumeSwitchOff} from "../../actions/operation.action";
 import SettingSelect from '../../component/machine/settingSelect';
 
 //映射Redux state到组件的属性
@@ -8,6 +8,7 @@ function mapStateToProps(state) {
     return {
         switch: state.operation_reducer.switch,
         filterSwitch: state.operation_reducer.filterSwitch,
+        volumeSwitch: state.operation_reducer.volumeSwitch,
         expanded:state.operation_reducer.expanded,
         start_hour:state.operation_reducer.start_hour,
         start_minute:state.operation_reducer.start_minute,
@@ -29,6 +30,8 @@ function mapDispatchToProps(dispatch){
         switchOff:()=>dispatch(switchOff()),
         filterSwitchOn:()=>dispatch(filterSwitchOn()),
         filterSwitchOff:()=>dispatch(filterSwitchOff()),
+        volumeSwitchOn:()=>dispatch(volumeSwitchOn()),
+        volumeSwitchOff: ()=>dispatch(volumeSwitchOff()),
         expandTiming:()=>dispatch(expandTiming()),
         changeStartHour:(start_hour)=>dispatch(changeStartHour(start_hour)),
         changeStartMinute:(start_minute)=>dispatch(changeStartMinute(start_minute)),

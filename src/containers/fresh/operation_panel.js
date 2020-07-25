@@ -1,7 +1,7 @@
 import connect from "react-redux/es/connect/connect";
 import OperationPanel from '../../component/fresh/operation_panel';
 import { 
-    changeMachineStatus
+    changeMachineStatus,getHideVolumeIfOpen
 } from "../../actions/fresh.action";
 
 //映射Redux state到组件的属性
@@ -18,6 +18,8 @@ function mapStateToProps(state) {
         heat:state.fresh_reducer.heat,
         lock:state.fresh_reducer.lock,
         lock_is_present:state.fresh_reducer.lock_is_present,
+        hideVolumeIfOpen:state.fresh_reducer.hideVolumeIfOpen,
+
     }
 }
 
@@ -25,6 +27,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
     return{
         changeMachineStatus:(machine_status)=>dispatch(changeMachineStatus(machine_status)),
+        getHideVolumeIfOpen:(hideVolumeIfOpen)=>dispatch(getHideVolumeIfOpen(hideVolumeIfOpen)),
     }
 }
 

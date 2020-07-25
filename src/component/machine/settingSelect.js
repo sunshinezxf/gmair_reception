@@ -3,7 +3,7 @@ import { message, Switch, Input } from "antd";
 import { operation_service } from "../service/operation.service";
 import { machine_service } from "../service/mahcine.service";
 import "antd/dist/antd.css";
-import { DatePicker, List, LocaleProvider } from "antd-mobile";
+import { DatePicker, List, LocaleProvider,Modal } from "antd-mobile";
 import zhCN from "antd-mobile/lib/locale-provider/locale-provider";
 
 class SettingSelect extends Component {
@@ -15,15 +15,21 @@ class SettingSelect extends Component {
     this.onStartTimeOk = this.onStartTimeOk.bind(this);
     this.onEndTimeOk = this.onEndTimeOk.bind(this);
     this.obtainFilterIsOpen = this.obtainFilterIsOpen.bind(this);
-    //滤网提醒开关
     this.onfilterSwitch = this.onfilterSwitch.bind(this);
+    this.onVolumeSwitch = this.onVolumeSwitch.bind(this);
+    this.obtainVolumeIsOpen = this.obtainVolumeIsOpen.bind(this);
+
+    this.state={
+      hideVolumeIfObtain:true
+    }
   }
 
   componentDidMount() {
   
     this.props.startTimeChange(new Date("2018/12/14 21:00:00"));
     this.props.endTimeChange(new Date("2018/12/15 09:00:00"));
-    this.obtainFilterIsOpen(this.props.qrcode);      
+    this.obtainFilterIsOpen(this.props.qrcode);
+    this.obtainVolumeIsOpen(this.props.qrcode);
   }
 
 //滤网提醒是否打开
@@ -38,6 +44,27 @@ class SettingSelect extends Component {
         }
       });
   }
+
+  //是否开启隐藏风量
+  obtainVolumeIsOpen(qrcode){
+    console.log(this.state.hideVolumeIfObtain)
+    machine_service.obtain_turboVolume_status(qrcode).then((response)=>{
+      if (response.responseCode === "RESPONSE_OK") {
+        if (response.data.turboVolumeStatus) {
+          this.props.volumeSwitchOn();
+        } else {
+          this.props.volumeSwitchOff();
+        }
+
+      }
+      else if(response.responseCode === "RESPONSE_ERROR"){
+        //没有隐藏风量
+        this.setState({hideVolumeIfObtain:false})
+      }
+    })
+
+  }
+
 
   onSwitchChange(e) {
     if (e === true) {
@@ -101,12 +128,49 @@ class SettingSelect extends Component {
 
   //滤网提醒
   onfilterSwitch(e) {
+    let alert = Modal.alert;
     if (e === true) {
-      this.props.filterSwitchOn();
-      machine_service.change_filter_status(this.props.qrcode, true);
+      alert("温馨提示", "开启初滤网清洁提醒后您将接收到微信的消息通知，确定请点击开启", [
+        { text: "取消", onPress: () => console.log("cancel") },
+        { text: "开启", onPress: () => {
+            this.props.filterSwitchOn();
+            machine_service.change_filter_status(this.props.qrcode, true);
+          } },
+      ]);
+
     } else {
-      this.props.filterSwitchOff();
-      machine_service.change_filter_status(this.props.qrcode, false);
+      alert("温馨提示", "关闭初滤网清洁提醒后您将不会接收到微信的消息通知，确定请点击关闭", [
+        { text: "取消", onPress: () => console.log("cancel") },
+        { text: "关闭", onPress: () => {
+            this.props.filterSwitchOff();
+            machine_service.change_filter_status(this.props.qrcode, false);
+          } },
+      ]);
+
+    }
+  }
+
+  //开启风扇隐藏风量
+  onVolumeSwitch(e){
+    let volumeAlert = Modal.alert;
+    if (e === true) {
+      volumeAlert("温馨提示", "开启隐藏风量后风量可调节范围将扩大，确定请点击开启", [
+        { text: "取消", onPress: () => console.log("cancel") },
+        { text: "开启", onPress: () => {
+            this.props.volumeSwitchOn();
+            machine_service.change_turboVolume_status(this.props.qrcode, true);
+          } },
+      ]);
+
+    } else {
+      volumeAlert("温馨提示", "关闭隐藏风量后风量可调节范围将缩小，确定请点击关闭", [
+        { text: "取消", onPress: () => console.log("cancel") },
+        { text: "关闭", onPress: () => {
+            this.props.volumeSwitchOff();
+            machine_service.change_turboVolume_status(this.props.qrcode, false);
+          } },
+      ]);
+
     }
   }
 
@@ -240,6 +304,28 @@ class SettingSelect extends Component {
               />
             </span>
           </div>
+          {/*隐藏风量开关*/}
+          {
+            this.state.hideVolumeIfObtain
+              &&
+            <div>
+              <div className="setting_gap" style={setting_gap} />
+              <div className="setting_item" style={setting_item}>
+              <span>
+              <i className="fa fa-recycle" aria-hidden="true" />
+                &nbsp;&nbsp;隐藏风量
+              </span>
+                <span style={{ float: `right` }}>
+              <Switch
+                  onChange={this.onVolumeSwitch}
+                  checked={this.props.volumeSwitch}
+              />
+              </span>
+              </div>
+            </div>
+
+          }
+
         </div>
 
         <div className="setting_gap" style={setting_gap} />

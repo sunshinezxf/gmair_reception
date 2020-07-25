@@ -31,6 +31,8 @@ function mapDispatchToProps(dispatch) {
         changeLocation: (location) => dispatch(changeLocation(location)),
         changeCityAir: (city_air) => dispatch(changeCityAir(city_air)),
 
+
+
     }
 }
 

@@ -8,7 +8,7 @@ function mapStateToProps(state) {
         qrcode:state.fresh_reducer.qrcode,
         filterIsClean:state.fresh_reducer.filterIsClean,
         filterInfo:state.fresh_reducer.filterInfo,
-        mainfilterInfo:state.fresh_reducer.mainfilterInfo,
+        mainFilterInfo:state.fresh_reducer.mainFilterInfo,
         filterImgUrl:state.fresh_reducer.filterImgUrl,
         mainFilterImgUrl:state.fresh_reducer.mainFilterImgUrl,
         buyFilter:state.fresh_reducer.buyFilter,

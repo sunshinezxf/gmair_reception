@@ -12,6 +12,7 @@ export const FILTER_IS_OPEN = "FILTER_IS_OPEN";
 export const FILTER_IS_CLEAN = "FILTER_IS_CLEAN";
 export const FILTER_STATUS = "FILTER_STATUS";
 export const MAIN_FILTER_STATUS = "MAIN_FILTER_STATUS";
+export const HIDE_VOLUME_IF_OPEN = "HIDE_VOLUME_IF_OPEN"
 
 export function changeQrcode(qrcode) {
     return {
@@ -82,6 +83,13 @@ export function changeOutdoorData(axis,outdoor) {
         outdoor:outdoor,
     }
 }
+//获取隐藏风量是否开启
+export  function getHideVolumeIfOpen(hideVolumeIfOpen) {
+    return{
+        type:HIDE_VOLUME_IF_OPEN,
+        hideVolumeIfOpen:hideVolumeIfOpen
+    }
+}
 
 //获取滤网是否需要清洗
 export function getFilterIsClean(filterIsClean){
@@ -102,11 +110,11 @@ export function changeFilterStatus(filterImgUrl,filterInfo,filterIsClean){
 }
 
 //改变主滤网清洗状态
-export function changeMainFilterStatus(mainFilterImgUrl,mainfilterInfo,filterIsClean,buyFilter){
+export function changeMainFilterStatus(mainFilterImgUrl,mainFilterInfo,filterIsClean,buyFilter){
     return{
         type:MAIN_FILTER_STATUS,
         mainFilterImgUrl:mainFilterImgUrl,
-        mainfilterInfo:mainfilterInfo,
+        mainFilterInfo:mainFilterInfo,
         filterIsClean:filterIsClean,
         buyFilter:buyFilter,
     }

@@ -57,7 +57,6 @@ export default class clean_panel extends Component {
   //确认点击滤网清洗
   confirmFilterClean = ()=>{
     let alert = Modal.alert;
-    console.log(this.props.filterIsClean);
    if (this.props.filterIsClean === "true") {
       alert("温馨提示", "初效率网建议每30日清洗一次，已经清洗请点击重置按钮", [
         { text: "取消", onPress: () => console.log("cancel") },
@@ -66,20 +65,27 @@ export default class clean_panel extends Component {
           this.changeFilterToNotClean();        
         } },
       ]);
-    }
+    }else{
+     alert("温馨提示", "您的初滤网还未到清洗时间，若您已提前清洗，请点击重置", [
+       { text: "取消", onPress: () => console.log("cancel") },
+       { text: "重置", onPress: () => {
+           machine_service.confirm_filter_clean(this.props.qrcode);
+         } },
+     ]);
+   }
   };
 
   render() {
     const item_style = {
       width: "110px",
-      height: "32px",
+      height: "28px",
       background: "white",
       color: "black",
       alignItems: "center",
       flexDirection: "row",
       borderRadius: "1rem",
       border: "1px dashed #00A2E9",
-      marginLeft: "10px",
+      marginLeft: "15px",
       display: 'flex',
     };
 
@@ -96,23 +102,20 @@ export default class clean_panel extends Component {
     }
 
     const img_style = {
-      display: "flex",
       width: "13px",
       height: "13px",
-      marginLeft: "-3px",
+      marginLeft: "1px",
+      marginBottom:"1px"
+
     };
 
     const text_style = {
       fontSize: "1.3rem",
       color: "black",
-      display: "flex",
-      alignItems: "center",
-      margin: "0.5rem",
+     marginLeft:"5px",
     };
 
     const message_style = {
-      display: "flex",
-      alignItems: "center",
       WebkitTransform: "scale(0.7)",
       color: "orange",
       marginLeft: "-7px",
@@ -126,7 +129,7 @@ export default class clean_panel extends Component {
       flexDirection: "column",
       borderRadius: "1rem",
       border: "1px dashed #00A2E9",
-      marginLeft: "10px",
+      marginLeft: "15px",
       width:"65px",
     };
 
@@ -148,11 +151,11 @@ export default class clean_panel extends Component {
             </div>
           </div>
           {/*<div style={panel_item}>*/}
-            {/*<div style={item_style}>*/}
-              {/*<div style={text_style}>主滤网</div>*/}
-              {/*<img src={this.props.mainFilterImgUrl} style={img_style}></img>*/}
-              {/*<div style={message_style}>{this.props.mainfilterInfo}</div>*/}
-            {/*</div>*/}
+          {/*  <div style={item_style}>*/}
+          {/*    <div style={text_style}>主滤网</div>*/}
+          {/*    <img src={this.props.mainFilterImgUrl} style={img_style}></img>*/}
+          {/*    <div style={message_style}>{this.props.mainfilterInfo}</div>*/}
+          {/*  </div>*/}
           {/*</div>*/}
           
           <div style={panel_item}>

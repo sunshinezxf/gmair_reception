@@ -1,15 +1,14 @@
 import axios from 'axios'
 
-//import createHistory from 'history/createHashHistory';
-import {createHashHistory} from 'history';
-//const history = createHashHistory;
+import createHistory from 'history/createHashHistory';
+//import {createHashHistory} from 'history';
 
 axios.interceptors.response.use((response) => {
     return response
 }, (err) => {
     if (err.response.status === '401') {
-       // const history = createHistory();
-        const history = createHashHistory();
+        const history = createHistory();
+     //  const history = createHashHistory();
         history.push('/login') 
     }
     return Promise.reject(err)
@@ -232,6 +231,7 @@ function obtain_control_option(modelId) {
     });
 }
 
+//获取基本风量范围
 function obtain_volume_range(modelId) {
     let access_token = localStorage.getItem('access_token');
     let obtain_volume_url = machine_service_url + '/probe/volume?access_token=' + access_token + '&modelId=' + modelId;
@@ -240,6 +240,46 @@ function obtain_volume_range(modelId) {
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch volume range for ' + modelId};
     });
+}
+
+//得到设备隐藏风量值
+function obtain_turboVolume_range(qrcode) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_volume_url = machine_service_url + '/turboVolume/getValue?access_token=' + access_token + '&qrcode=' + qrcode;
+
+    return axios.get(obtain_volume_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch turbo volume range for ' + qrcode};
+    });
+
+}
+
+//查询设备隐藏风量开关状态
+function obtain_turboVolume_status(qrcode) {
+    let access_token = localStorage.getItem('access_token');
+   let obtain_url = machine_service_url + '/turboVolume/getStatus?access_token=' + access_token + '&qrcode=' + qrcode;
+
+    return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() =>{
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to fetch turbo volume status for ' + qrcode};
+    })
+}
+
+//改变设备隐藏风量开关状态
+function change_turboVolume_status(qrcode,status) {
+    let access_token = localStorage.getItem('access_token');
+    let turboVolume_change_url = machine_service_url + '/turboVolume/changeStatus';
+    let form = new FormData();
+    form.append('turboVolumeStatus',status);
+    form.append('qrcode', qrcode);
+    form.append('access_token', access_token);
+    return axios.post(turboVolume_change_url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to operate machine turboVolume status'};
+    })
 }
 
 function obtain_light_range(modelId) {
@@ -417,5 +457,8 @@ export const machine_service = {
     timing,
     change_filter_status,
     obtain_filter_isClean,
-    confirm_filter_clean
+    confirm_filter_clean,
+    obtain_turboVolume_range,
+    obtain_turboVolume_status,
+    change_turboVolume_status,
 }

@@ -154,6 +154,10 @@ class DeviceList extends React.Component {
     let machine_list = this.state.machine_list;
     let that = this;
     console.log(machine_list);
+    let item_header_style={
+      flex:"none",
+    }
+
    
     let element = machine_list.map(function (item) {
       // console.log("render" + item.bindName);
@@ -187,7 +191,7 @@ class DeviceList extends React.Component {
                       ]
                 }
               >
-                <Card.Header title={item.bindName} 
+                <Card.Header title={item.bindName}
                 extra={
                  <FilterInfo qrcode = {item.codeValue}></FilterInfo>
                 }/>

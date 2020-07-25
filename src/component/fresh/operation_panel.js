@@ -16,6 +16,7 @@ class OperationPanel extends Component{
         this.mode_operate = this.mode_operate.bind(this);
         this.volume = this.volume.bind(this);
         this.lock_operate = this.lock_operate.bind(this);
+        this.obtain_hideVolumeIfOpen = this.obtain_hideVolumeIfOpen.bind(this);
         this.state={
             min_volume:'',
             max_volume: '',
@@ -34,18 +35,30 @@ class OperationPanel extends Component{
     }
 
     check_qrcode = (qrcode) => {
+
         machine_service.check_exist(qrcode).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 let modelId = response.data[0].modelId;
-                this.init_control_option(modelId)
+                this.obtain_hideVolumeIfOpen();
+                this.init_control_option(modelId);
+            }
+        })
+    }
+    //隐藏风量是否开启
+    obtain_hideVolumeIfOpen = () => {
+        machine_service.obtain_turboVolume_status(this.props.qrcode).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                this.props.getHideVolumeIfOpen(response.data.turboVolumeStatus)
+                console.log(this.props.hideVolumeIfOpen)
             }
         })
     }
 
     //获取基本风量区间和屏显范围
     init_control_option = (modelId) => {
+
         machine_service.obtain_volume_range(modelId).then(response => {
-            // console.log(response)
+
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({min_volume: response.data[0].minVolume, max_volume: response.data[0].maxVolume})
             }
@@ -60,6 +73,7 @@ class OperationPanel extends Component{
             }
         })
     }
+
 
     //电源点击
     power_click(){
@@ -77,7 +91,17 @@ class OperationPanel extends Component{
     //风量点击
     speed_panel = () => {
         if(this.props.online){
+            //是否开启隐藏风量
+            if(this.props.hideVolumeIfOpen){
+                machine_service.obtain_turboVolume_range(this.props.qrcode).then(response =>{
+                    if (response.responseCode === 'RESPONSE_OK') {
+                        this.setState({max_volume: response.data.turboVolume})
+                    }
+                })
+            }
+
             this.setState({show_volume: !this.state.show_volume})
+
         }
     }
     //风量调节
@@ -95,6 +119,7 @@ class OperationPanel extends Component{
 
     //模式点击
     mode_panel = () => {
+
         if(this.props.online){
             this.setState({show_mode: !this.state.show_mode})
         }
@@ -184,6 +209,10 @@ class OperationPanel extends Component{
             width: `85%`,
             margin: `1rem 7.5%`,
             textAlign: `center`
+        }
+
+        const turboVolume_area = {
+            display:"flex",
         }
         // console.log(this.props)
         let heat_mode_list = this.props.heat_mode_list;

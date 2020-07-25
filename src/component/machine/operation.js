@@ -8,8 +8,8 @@ import {util} from "../service/util";
 import {wechatservice} from "../service/wechat.service";
 import createHistory from 'history/createBrowserHistory'
 const history = createHistory();
-// import {createBrowserHistory} from 'history'
-// const history = createBrowserHistory();
+//import {createBrowserHistory} from 'history'
+//const history = createBrowserHistory();
 
 class MachineOperation extends Component {
     constructor(props) {

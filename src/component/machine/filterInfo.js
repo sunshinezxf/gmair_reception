@@ -31,19 +31,17 @@ export default class filterInfo extends Component {
   render() {
   
     const item_style = {
-      width: "96px",
-      height: "26px",
+
+      height: "22px",
       color: "#333",
-      alignItems: "center",
-      flexDirection: "column",
       borderRadius: "1rem",
-      marginLeft:"10px",
-      background:"#f2f2f2"
+      background:"#f2f2f2",
+      display:"flex",
+      alignItems:"center"
     };
 
     const panel_row = {
-      display: "flex",
-      alignItems: "center",
+      display: "inline-block",
     };
 
     const img_style = {
@@ -57,17 +55,15 @@ export default class filterInfo extends Component {
       fontSize: "12px",
       color: "black",
       display: "inline-block",
-      alignItems: "center",
       margin: "5px",
       
     };
 
     const message_style = {
       display: "inline-block",
-      alignItems: "center",
       WebkitTransform: "scale(0.7)",
       color: "orange",
-      marginLeft: "-7px",
+      marginLeft: "-5px",
       fontSize:"10px",
     };
 

@@ -10,6 +10,9 @@ import {machine_service} from "../service/mahcine.service";
 import "./fresh.css";
 import {locationservice} from "../service/location.service";
 import {airquality_service} from "../service/airquality.service";
+import {Collapse} from 'react-collapse'
+
+
 
 class FreshPanel extends Component {
     constructor(props) {
@@ -21,6 +24,10 @@ class FreshPanel extends Component {
         this.check_control_option = this.check_control_option.bind(this);
         let qrcode = this.props.match.params.qrcode;
         this.props.changeQrcode(qrcode);
+        this.state={
+            expanded:false,
+        }
+
 
     }
 
@@ -113,7 +120,7 @@ class FreshPanel extends Component {
         machine_service.obtain_control_option(model_id).then((response) => {
             if (response.responseCode === "RESPONSE_OK") {
                 let control_list = response.data;
-                console.log("control list: " + JSON.stringify(control_list))
+             //   console.log("control list: " + JSON.stringify(control_list))
                 for (let i = 0; i < control_list.length; i++) {
                     let item = control_list[i];
                     if (item.optionComponent === "heat") {
@@ -237,8 +244,18 @@ class FreshPanel extends Component {
         });
     };
 
+    //下滑显示
+    expand = () => {
+        let current = this.state.expanded;
+        this.setState({expanded: !current});
+    }
+
     render() {
-        // console.log(this.props.qrcode)
+
+        const expand_style={
+            paddingLeft:"49%",
+            backgroundColor:"#f2f2f2"
+        }
         return (
             <div className="user_select_disable">
                 <FreshHeader/>
@@ -246,7 +263,13 @@ class FreshPanel extends Component {
                 <MachineData/>
                 <div className="separate_div"></div>
                 <OperationPanel/>
-                <CleanPanel/>
+                <Collapse isOpened={this.state.expanded}>
+                   <CleanPanel/>
+                 </Collapse>
+                <div onClick={this.expand} style={expand_style}><i
+                    className={this.state.expanded === false ? 'fa fa-angle-double-down' : 'fa fa-angle-double-up'}></i>
+                </div>
+
                 <div className="separate_div"></div>
                 <div className="operation_panel_2">
                     <PM2_5Charts qrcode={this.props.match.params.qrcode}/>

@@ -2,12 +2,14 @@
 import { 
     SWITCH_ON, SWITCH_OFF, TIMING_EXPAND, START_MINUTE_CHANGE, START_HOUR_CHANGE, END_MINUTE_CHANGE,
     END_HOUR_CHANGE, MODAL_VISIBLE_CHANGE, EDIT_USERNAME, INPUT_USERNAME, USERNAME_OK_CLICK, START_TIME_CHANGE,
-    END_TIME_CHANGE, QRCODE_STORE, COMPONENT_IN, CLICK_Wind,FILTER_SWITCH_ON,FILTER_SWITCH_OFF
+    END_TIME_CHANGE, QRCODE_STORE, COMPONENT_IN, CLICK_Wind,FILTER_SWITCH_ON,FILTER_SWITCH_OFF,VOLUME_SWITCH_ON,VOLUME_SWITCH_OFF
 } from '../actions/operation.action';
+import {HIDE_VOLUME_IF_OPEN} from "../actions/fresh.action";
 
 const initialState = {
     switch: false,
     filterSwitch: true,
+    volumeSwitch:false,
     expanded: false,
     start_hour: "21",
     end_hour: "9",
@@ -19,7 +21,8 @@ const initialState = {
     start_time: '',
     end_time: '',
     qrcode: '',
-    windTemperature: 'cold'
+    windTemperature: 'cold',
+
 }
 const operation_reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -45,6 +48,19 @@ const operation_reducer = (state = initialState, action) => {
                filterSwitch: false,               
             })
         }
+
+        case VOLUME_SWITCH_ON:{
+            return Object.assign({},state,{
+                volumeSwitch: true,
+            })
+        }
+
+        case VOLUME_SWITCH_OFF:{
+            return Object.assign({},state,{
+                volumeSwitch: false,
+            })
+        }
+
         case TIMING_EXPAND: {
             return Object.assign({}, state, {
                 expanded: !state.expanded,
@@ -120,6 +136,7 @@ const operation_reducer = (state = initialState, action) => {
             newState.windTemperature = action.windTemperature;
             return newState;
         }
+
         default:
             return state;
     }

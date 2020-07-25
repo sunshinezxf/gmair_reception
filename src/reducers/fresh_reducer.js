@@ -12,6 +12,7 @@ import {
     FILTER_IS_CLEAN,
     FILTER_STATUS,
     MAIN_FILTER_STATUS,
+    HIDE_VOLUME_IF_OPEN,
 } from "../actions/fresh.action";
 
 const initialState = {
@@ -41,10 +42,12 @@ const initialState = {
     axis: [],
     filterIsClean: false,
     filterInfo: "",
-    mainfilterInfo: "",
+    mainFilterInfo: "",
     filterImgUrl: require("../material/filter_icon/1.png"),
     mainFilterImgUrl: require("../material/filter_icon/2.png"),
     buyFilter: false,
+    hideVolumeIfOpen:false,
+
 };
 const fresh_reducer = (state = initialState, action) => {
     // console.log(action);
@@ -111,9 +114,13 @@ const fresh_reducer = (state = initialState, action) => {
         case MAIN_FILTER_STATUS:
             return Object.assign({}, state, {
                 mainFilterImgUrl: action.mainFilterImgUrl,
-                mainfilterInfo: action.mainfilterInfo,
+                mainFilterInfo: action.mainfilterInfo,
                 filterIsClean: action.filterIsClean,
                 buyFilter: action.buyFilter,
+            });
+        case HIDE_VOLUME_IF_OPEN:
+            return Object.assign({},state,{
+                hideVolumeIfOpen: action.hideVolumeIfOpen
             });
 
         default:
