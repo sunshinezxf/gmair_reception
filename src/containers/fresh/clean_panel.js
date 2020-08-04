@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch){
     return{
         getFilterIsClean:(filterIsClean)=>dispatch(getFilterIsClean(filterIsClean)),
         changeFilterStatus:(filterImgUrl,filterInfo,filterIsClean)=>dispatch(changeFilterStatus(filterImgUrl,filterInfo,filterIsClean)),
-        changeMainFilterStatus:(mainFilterImgUrl,mainfilterInfo,filterIsClean,buyFilter)=>dispatch(changeMainFilterStatus(mainFilterImgUrl,mainfilterInfo,filterIsClean,buyFilter)),
+        changeMainFilterStatus:(mainFilterImgUrl,mainFilterInfo,status,buyFilter)=>dispatch(changeMainFilterStatus(mainFilterImgUrl,mainFilterInfo,status,buyFilter)),
        
     }
 }

@@ -404,6 +404,65 @@ function confirm_filter_clean (qrcode) {
 
 }
 
+//高效滤网更换提醒是否开启
+function obtain_mainFilter_isOpen(qrcode) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/efficientFilter/replaceRemind/isOpen?access_token=' + access_token + '&qrcode=' + qrcode;
+    return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to fetch efficientFilter isOpen for qrcode: ' + qrcode
+        };
+    })
+}
+
+//改变高效滤网提醒
+function change_mainFilter_isOpen(qrcode,status) {
+    let access_token = localStorage.getItem('access_token');
+    let change_url = machine_service_url + '/efficientFilter/replaceRemind/status/change';
+    let form = new FormData();
+    form.append('replaceRemindStatus',status);
+    form.append('qrcode', qrcode);
+    form.append('access_token', access_token);
+    return axios.post(change_url, form).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to change machine mainFilter status'};
+    })
+}
+
+//获得高效滤网使用状态
+function obtain_mainFilter_status(qrcode){
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/efficientFilter/replaceStatus?access_token=' + access_token + '&qrcode=' + qrcode;
+
+    return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to fetch efficientFilter status for qrcode: ' + qrcode
+        };
+    })
+
+}
+
+//确认更改高效滤网状态
+function confirm_mainFilter_status(qrcode) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/efficientFilter/replace/confirm?access_token=' + access_token + '&qrcode=' + qrcode;
+    return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {
+            responseCode: 'RESPONSE_ERROR',
+            description: 'Fail to confirm efficientFilter status for qrcode: ' + qrcode
+        };
+    })
+}
+
 function probe_component(model_id, component_name) {
     let access_token = localStorage.getItem('access_token');
     let probe_component_url = machine_service_url + '/model/component/probe?access_token=' + access_token + '&modelId=' + model_id + '&componentName=' + component_name;
@@ -424,6 +483,17 @@ function obtain_device_list() {
         return response.data;
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the list'};
+    })
+}
+
+//获取耗材购买链接
+function obtain_materials_link(modelId) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/model/getMaterials?access_token=' + access_token  + '&modelId=' + modelId;
+    return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to obtain the materials link'};
     })
 }
 
@@ -461,4 +531,10 @@ export const machine_service = {
     obtain_turboVolume_range,
     obtain_turboVolume_status,
     change_turboVolume_status,
+    obtain_mainFilter_isOpen,
+    obtain_mainFilter_status,
+    change_mainFilter_isOpen,
+    confirm_mainFilter_status,
+    obtain_materials_link
+
 }

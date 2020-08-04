@@ -18,7 +18,9 @@ export const COMPONENT_IN="COMPONENT_IN";
 export const CLICK_Wind = 'clickWind';
 export const CONTROL_OPTION = 'CONTROL_OPTION';
 export const VOLUME_SWITCH_ON = 'VOLUME_SWITCH_ON';
-export const VOLUME_SWITCH_OFF = 'VOLUME_SWITCH_OFF'
+export const VOLUME_SWITCH_OFF = 'VOLUME_SWITCH_OFF';
+export const MAIN_FILTER_SWITCH_ON = 'MAIN_FILTER_SWITCH_ON';
+export const MAIN_FILTER_SWITCH_OFF = 'MAIN_FILTER_SWITCH_OFF';
 
 export function switchOn() {
     return {
@@ -42,6 +44,17 @@ export function filterSwitchOff(){
     return {
         type:FILTER_SWITCH_OFF,
        
+    }
+}
+export function mainFilterSwitchOn() {
+    return{
+        type:MAIN_FILTER_SWITCH_ON,
+    }
+}
+
+export function mainFilterSwitchOff() {
+    return{
+        type:MAIN_FILTER_SWITCH_OFF,
     }
 }
 

@@ -18,9 +18,12 @@ class SettingSelect extends Component {
     this.onfilterSwitch = this.onfilterSwitch.bind(this);
     this.onVolumeSwitch = this.onVolumeSwitch.bind(this);
     this.obtainVolumeIsOpen = this.obtainVolumeIsOpen.bind(this);
+    this.onMainFilterSwitch = this.onMainFilterSwitch.bind(this);
+    this.obtainMainFilterIsOpen = this.obtainMainFilterIsOpen.bind(this);
 
     this.state={
-      hideVolumeIfObtain:true
+      hideVolumeIfObtain:true,
+      mainFilterIfObtain:true
     }
   }
 
@@ -30,6 +33,7 @@ class SettingSelect extends Component {
     this.props.endTimeChange(new Date("2018/12/15 09:00:00"));
     this.obtainFilterIsOpen(this.props.qrcode);
     this.obtainVolumeIsOpen(this.props.qrcode);
+    this.obtainMainFilterIsOpen(this.props.qrcode);
   }
 
 //滤网提醒是否打开
@@ -44,6 +48,24 @@ class SettingSelect extends Component {
         }
       });
   }
+
+  //高效滤网提醒是否打开
+  obtainMainFilterIsOpen(qrcode){
+    machine_service.obtain_mainFilter_isOpen(qrcode).then((response)=>{
+      if (response.responseCode === "RESPONSE_OK") {
+        if (response.data.isOpen) {
+          this.props.mainFilterSwitchOn();
+        } else {
+          this.props.mainFilterSwitchOff();
+        }
+      }else{
+        this.setState({
+          mainFilterIfObtain:false,
+        })
+      }
+    })
+  }
+
 
   //是否开启隐藏风量
   obtainVolumeIsOpen(qrcode){
@@ -150,11 +172,36 @@ class SettingSelect extends Component {
     }
   }
 
+  //高效滤网更换提醒
+  onMainFilterSwitch(e){
+    let mainFilterAlert = Modal.alert;
+    if (e === true) {
+      mainFilterAlert("温馨提示", "开启高效滤网更换提醒后您将接收到微信的消息通知，确定请点击开启", [
+        { text: "取消", onPress: () => console.log("cancel") },
+        { text: "开启", onPress: () => {
+            this.props.mainFilterSwitchOn();
+            machine_service.change_mainFilter_isOpen(this.props.qrcode, true);
+
+          } },
+      ]);
+
+    } else {
+      mainFilterAlert("温馨提示", "关闭高效滤网更换提醒后您将不会接收到微信的消息通知，确定请点击关闭", [
+        { text: "取消", onPress: () => console.log("cancel") },
+        { text: "关闭", onPress: () => {
+            this.props.mainFilterSwitchOff();
+            machine_service.change_mainFilter_isOpen(this.props.qrcode, false);
+          } },
+      ]);
+
+    }
+  }
+
   //开启风扇隐藏风量
   onVolumeSwitch(e){
     let volumeAlert = Modal.alert;
     if (e === true) {
-      volumeAlert("温馨提示", "开启隐藏风量后风量可调节范围将扩大，确定请点击开启", [
+      volumeAlert("温馨提示", "开启超净风量后风量可调节范围将扩大，确定请点击开启", [
         { text: "取消", onPress: () => console.log("cancel") },
         { text: "开启", onPress: () => {
             this.props.volumeSwitchOn();
@@ -163,7 +210,7 @@ class SettingSelect extends Component {
       ]);
 
     } else {
-      volumeAlert("温馨提示", "关闭隐藏风量后风量可调节范围将缩小，确定请点击关闭", [
+      volumeAlert("温馨提示", "关闭超净风量后风量可调节范围将缩小，确定请点击关闭", [
         { text: "取消", onPress: () => console.log("cancel") },
         { text: "关闭", onPress: () => {
             this.props.volumeSwitchOff();
@@ -304,6 +351,23 @@ class SettingSelect extends Component {
               />
             </span>
           </div>
+          <div className="seperate_div" style={seperate_div} />
+          {
+            this.state.mainFilterIfObtain
+              &&
+            <div className="setting_item" style={setting_item}>
+            <span>
+              高效滤网更换
+            </span>
+              <span style={{ float: `right` }}>
+              <Switch
+                  onChange={this.onMainFilterSwitch}
+                  checked={this.props.mainFilterSwitch}
+              />
+            </span>
+            </div>
+          }
+
           {/*隐藏风量开关*/}
           {
             this.state.hideVolumeIfObtain
@@ -313,7 +377,7 @@ class SettingSelect extends Component {
               <div className="setting_item" style={setting_item}>
               <span>
               <i className="fa fa-recycle" aria-hidden="true" />
-                &nbsp;&nbsp;隐藏风量
+                &nbsp;&nbsp;超净风量
               </span>
                 <span style={{ float: `right` }}>
               <Switch

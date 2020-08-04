@@ -1,13 +1,32 @@
 //operation_reducer
-import { 
-    SWITCH_ON, SWITCH_OFF, TIMING_EXPAND, START_MINUTE_CHANGE, START_HOUR_CHANGE, END_MINUTE_CHANGE,
-    END_HOUR_CHANGE, MODAL_VISIBLE_CHANGE, EDIT_USERNAME, INPUT_USERNAME, USERNAME_OK_CLICK, START_TIME_CHANGE,
-    END_TIME_CHANGE, QRCODE_STORE, COMPONENT_IN, CLICK_Wind,FILTER_SWITCH_ON,FILTER_SWITCH_OFF,VOLUME_SWITCH_ON,VOLUME_SWITCH_OFF
+import {
+    SWITCH_ON,
+    SWITCH_OFF,
+    TIMING_EXPAND,
+    START_MINUTE_CHANGE,
+    START_HOUR_CHANGE,
+    END_MINUTE_CHANGE,
+    END_HOUR_CHANGE,
+    MODAL_VISIBLE_CHANGE,
+    EDIT_USERNAME,
+    INPUT_USERNAME,
+    USERNAME_OK_CLICK,
+    START_TIME_CHANGE,
+    END_TIME_CHANGE,
+    QRCODE_STORE,
+    COMPONENT_IN,
+    CLICK_Wind,
+    FILTER_SWITCH_ON,
+    FILTER_SWITCH_OFF,
+    VOLUME_SWITCH_ON,
+    VOLUME_SWITCH_OFF,
+    MAIN_FILTER_SWITCH_ON, MAIN_FILTER_SWITCH_OFF
 } from '../actions/operation.action';
 
 const initialState = {
     switch: false,
     filterSwitch: true,
+    mainFilterSwitch: true,
     volumeSwitch:false,
     expanded: false,
     start_hour: "21",
@@ -45,6 +64,18 @@ const operation_reducer = (state = initialState, action) => {
         case FILTER_SWITCH_OFF:{
             return Object.assign({},state,{
                filterSwitch: false,               
+            })
+        }
+
+        case MAIN_FILTER_SWITCH_ON:{
+            return Object.assign({},state,{
+                mainFilterSwitch:true,
+            })
+        }
+
+        case MAIN_FILTER_SWITCH_OFF:{
+            return Object.assign({},state,{
+                mainFilterSwitch:false,
             })
         }
 

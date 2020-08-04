@@ -45,6 +45,7 @@ const initialState = {
     mainFilterInfo: "",
     filterImgUrl: require("../material/filter_icon/1.png"),
     mainFilterImgUrl: require("../material/filter_icon/2.png"),
+    mainFilterStatus:"NOT_NEED",
     buyFilter: false,
     hideVolumeIfOpen:false,
 
@@ -115,8 +116,8 @@ const fresh_reducer = (state = initialState, action) => {
         case MAIN_FILTER_STATUS:
             return Object.assign({}, state, {
                 mainFilterImgUrl: action.mainFilterImgUrl,
-                mainFilterInfo: action.mainfilterInfo,
-                filterIsClean: action.filterIsClean,
+                mainFilterInfo: action.mainFilterInfo,
+                mainFilterStatus: action.status,
                 buyFilter: action.buyFilter,
             });
 

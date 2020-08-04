@@ -21,3 +21,7 @@
     -ms-user-select:none; /*IE10*/
     user-select:none;
 }
+
+.am-card-header-content{
+    flex: 0;
+}

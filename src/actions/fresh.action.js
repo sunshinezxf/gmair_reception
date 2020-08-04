@@ -8,7 +8,6 @@ export const LOCK_IS_PRESENT = "LOCK_IS_PRESENT";
 export const LOCATION_CHANGE = "LOCATION_CHANGE";
 export const CITY_AIR_CHANGE = "CITY_AIR_CHANGE";
 export const OUTDOOR_DATA_CHANGE = "OUTDOOR_DATA_CHANGE";
-export const FILTER_IS_OPEN = "FILTER_IS_OPEN";
 export const FILTER_IS_CLEAN = "FILTER_IS_CLEAN";
 export const FILTER_STATUS = "FILTER_STATUS";
 export const MAIN_FILTER_STATUS = "MAIN_FILTER_STATUS";
@@ -109,13 +108,13 @@ export function changeFilterStatus(filterImgUrl,filterInfo,filterIsClean){
     }
 }
 
-//改变主滤网清洗状态
-export function changeMainFilterStatus(mainFilterImgUrl,mainFilterInfo,filterIsClean,buyFilter){
+//改变主滤网状态
+export function changeMainFilterStatus(mainFilterImgUrl,mainFilterInfo,status,buyFilter){
     return{
         type:MAIN_FILTER_STATUS,
         mainFilterImgUrl:mainFilterImgUrl,
         mainFilterInfo:mainFilterInfo,
-        filterIsClean:filterIsClean,
+        mainFilterStatus:status,
         buyFilter:buyFilter,
     }
 }
