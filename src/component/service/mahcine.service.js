@@ -486,7 +486,7 @@ function obtain_device_list() {
     })
 }
 
-//获取耗材购买链接
+//获取耗材的购买链接
 function obtain_materials_link(modelId) {
     let access_token = localStorage.getItem('access_token');
     let obtain_url = machine_service_url + '/model/getMaterials?access_token=' + access_token  + '&modelId=' + modelId;
