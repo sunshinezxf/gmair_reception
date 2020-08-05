@@ -94,17 +94,17 @@ export default class clean_panel extends Component {
   confirmFilterClean (){
     let alert = Modal.alert;
    if (this.props.filterIsClean === "true") {
-      alert("温馨提示", "初效率网建议每30日清洗一次，已经清洗请点击重置按钮", [
+      alert("温馨提示", "初效率网建议每30日清洗一次，已经清洗请点击确认", [
         { text: "取消", onPress: () => console.log("cancel") },
-        { text: "重置", onPress: () => {
+        { text: "确认", onPress: () => {
           machine_service.confirm_filter_clean(this.props.qrcode);
           this.changeFilterToNotClean();        
         } },
       ]);
     }else{
-     alert("温馨提示", "您的初滤网还未到清洗时间，若您已提前清洗，请点击重置", [
+     alert("温馨提示", "您的初滤网还未到清洗时间，若您已提前清洗，请点击确认", [
        { text: "取消", onPress: () => console.log("cancel") },
-       { text: "重置", onPress: () => {
+       { text: "确认", onPress: () => {
            machine_service.confirm_filter_clean(this.props.qrcode);
          } },
      ]);
@@ -119,7 +119,7 @@ export default class clean_panel extends Component {
       main_text_style_color:"black",
       main_message_style_color:"#orange",
     })
-    this.props.changeMainFilterStatus(filterImgUrl,filterInfo,"NOT_NEED",false);
+    this.props.changeMainFilterStatus(filterImgUrl,filterInfo,"NO_NEED",false);
 
   }
   //高效滤网即将到期
@@ -142,19 +142,20 @@ export default class clean_panel extends Component {
   //高效滤网确认更换
   confirmMainFilterStatus(){
     let mainAlert = Modal.alert;
-    if (this.props.mainFilterStatus === "NOT_NEED") {
-      mainAlert("温馨提示", "高效率网建议每3-4月更换一次，如果您已经更换，请点击确定", [
-        { text: "取消", onPress: () => console.log("cancel") },
-        { text: "确认", onPress: () => {
-            machine_service.confirm_mainFilter_status(this.props.qrcode);
-            this.changeFilterToNotClean();
-          } },
-      ]);
-    }else{
+    if (this.props.mainFilterStatus === "NO_NEED") {
       mainAlert("温馨提示", "您的高效滤网还未到更换时间，若您已提前更换，请点击确认", [
         { text: "取消", onPress: () => console.log("cancel") },
         { text: "确认", onPress: () => {
             machine_service.confirm_mainFilter_status(this.props.qrcode);
+
+          } },
+      ]);
+    }else{
+      mainAlert("温馨提示", "高效率网建议每3-4月更换一次，如果您已经更换，请点击确认", [
+        { text: "取消", onPress: () => console.log("cancel") },
+        { text: "确认", onPress: () => {
+            machine_service.confirm_mainFilter_status(this.props.qrcode);
+            this.mainFilterNotNeed();
           } },
       ]);
     }

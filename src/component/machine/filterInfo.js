@@ -12,16 +12,33 @@ export default class filterInfo extends Component {
        mainFilterImg:"",
        main_text_style_color:"black",
        main_message_style_color:"orange",
+       online:false
      }
 
      this.obtain_filterIsClean = this.obtain_filterIsClean.bind(this);
      this.obtain_mainFilterStatus = this.obtain_mainFilterStatus.bind(this);
-
+     this.obtain_deviceIsOnline = this.obtain_deviceIsOnline.bind(this);
   }
 
   componentDidMount(){
+    this.obtain_deviceIsOnline(this.props.qrcode);
     this.obtain_filterIsClean(this.props.qrcode);
     this.obtain_mainFilterStatus(this.props.qrcode);
+  }
+
+  //获取设备是否在线
+  obtain_deviceIsOnline(qrcode){
+    machine_service.obtain_machine_new_status(qrcode).then(response => {
+      if (response.responseCode === 'RESPONSE_OK'){
+        this.setState({
+          online:true
+        })
+      }else{
+        this.setState({
+          online:false
+        })
+      }
+    })
   }
 
   //获取滤网是否需要清洗
@@ -123,8 +140,10 @@ export default class filterInfo extends Component {
     return (
       <div style={panel_row}>
         {
+          this.state.online
+            &&
           this.state.filterIsClean
-          &&
+            &&
           <div style={item_style}>
             <div style={text_style}>初滤网</div>
             <img src={require("../../material/filter_icon/3.png")} style={img_style}></img>
@@ -132,6 +151,8 @@ export default class filterInfo extends Component {
           </div>
         }
         {
+          this.state.online
+          &&
           this.state.mainFilterIsReplace
           &&
           <div style={item_style}>
