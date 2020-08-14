@@ -17,6 +17,8 @@ class OperationPanel extends Component{
         this.volume = this.volume.bind(this);
         this.lock_operate = this.lock_operate.bind(this);
         this.obtain_hideVolumeIfOpen = this.obtain_hideVolumeIfOpen.bind(this);
+        this.obtain_lightPanelOnOff = this.obtain_lightPanelOnOff.bind(this);
+        this.light_panel_onOff = this.light_panel_onOff.bind(this);
         this.state={
             min_volume:'',
             max_volume: '',
@@ -27,6 +29,8 @@ class OperationPanel extends Component{
             show_mode:false,
             show_light:false,
             show_heat:false,
+            show_lightPanel:false, //该设备的屏显是否拥有开关属性
+            lightPanelOnOff:true  //该设备的屏显开关
         }
     }
 
@@ -40,10 +44,12 @@ class OperationPanel extends Component{
             if (response.responseCode === 'RESPONSE_OK') {
                 let modelId = response.data[0].modelId;
                 this.obtain_hideVolumeIfOpen();
+                this.obtain_lightPanelOnOff();
                 this.init_control_option(modelId);
             }
         })
     }
+
     //隐藏风量是否开启
     obtain_hideVolumeIfOpen = () => {
         machine_service.obtain_turboVolume_status(this.props.qrcode).then(response => {
@@ -63,6 +69,7 @@ class OperationPanel extends Component{
                 this.setState({min_volume: response.data[0].minVolume, max_volume: response.data[0].maxVolume})
             }
         })
+
         machine_service.obtain_light_range(modelId).then(response => {
             if (response.responseCode === 'RESPONSE_OK') {
                 this.setState({
@@ -134,9 +141,50 @@ class OperationPanel extends Component{
 
     //屏显点击
     light_panel = () => {
+
         if(this.props.online){
             this.setState({show_light: !this.state.show_light})
         }
+    }
+
+    //屏显开关
+    light_panel_onOff = () => {
+        if(this.props.online){
+            let machine_status = this.props.machine_status;
+
+            if(machine_status.panel == 1){
+                machine_service.operate(this.props.qrcode, 'panel', 'off');
+                machine_status.panel = 0
+                this.setState({
+                    lightPanelOnOff:false
+                })
+            }else{
+                machine_service.operate(this.props.qrcode, 'panel', 'on');
+                machine_status.panel = 1
+                this.setState({
+                    lightPanelOnOff:true
+                })
+            }
+            this.props.changeMachineStatus(machine_status);
+
+        }
+
+
+    }
+
+    //是否拥有屏显开关属性
+    obtain_lightPanelOnOff(){
+
+        machine_service.obtain_machine_status(this.props.qrcode).then(response =>{
+            if (response.responseCode === 'RESPONSE_OK') {
+                if(response.data.panel != undefined){
+                    this.setState({
+                        show_lightPanel:true,
+                        lightPanelOnOff:response.data.panel === 1?true:false
+                    })
+                }
+            }
+        })
     }
 
     local_light = (e) => {
@@ -312,8 +360,9 @@ class OperationPanel extends Component{
                 </div>
                 <div className="separate_div_2"></div>
                 <div className="operation_panel_row">
-                    <div className="operation_panel_item" onClick={this.light_panel}>
-                        <ControlItem src="fa fa-desktop" text="屏显" open={this.props.online&&this.props.light!==0}/>
+                    <div className="operation_panel_item" onClick={this.state.show_lightPanel?this.light_panel_onOff:this.light_panel}>
+                        <ControlItem src="fa fa-desktop" text="屏显"
+                                     open={this.props.online && this.state.lightPanelOnOff}/>
                         <Modal popup visible={this.state.show_light} animationType="slide-up">
                             <div className="modal_panel">
                                 <div className="slider_panel">

@@ -15,6 +15,25 @@ class FreshHeader extends Component{
         this.drop_out_window = this.drop_out_window.bind(this);
         this.picture_on_click = this.picture_on_click.bind(this);
         this.power_click = this.power_click.bind(this);
+        this.obtainHeaderImg = this.obtainHeaderImg.bind(this);
+        this.check_qrcode = this.check_qrcode.bind(this);
+
+        this.state={
+            headerImg:fresh_header_image
+        }
+    }
+
+    componentDidMount() {
+        this.check_qrcode(this.props.qrcode)
+    }
+
+    check_qrcode(qrcode){
+        machine_service.check_exist(qrcode).then(response => {
+            if (response.responseCode === 'RESPONSE_OK') {
+                let modelId = response.data[0].modelId;
+               this.obtainHeaderImg(modelId);
+            }
+        })
     }
 
     drop_out_window() {
@@ -55,11 +74,24 @@ class FreshHeader extends Component{
         this.props.changeMachineStatus(machine_status);
     }
 
+    //获取图片链接
+    obtainHeaderImg(modelId){
+        machine_service.obtain_model(modelId).then(response=>{
+            if (response.responseCode === "RESPONSE_OK"){
+                if(response.data[0].modelBg != null){
+                    this.setState({
+                        headerImg:response.data[0].modelBg
+                    })
+                }
+            }
+        })
+    }
+
     render() {
         // console.log(this.props)
         return (
                 <div className="fresh_header_bg">
-                    <img src={fresh_header_image} width="100%"/>
+                    <img src={this.state.headerImg} width="100%"/>
                     <div className="header_container">
                         <span onClick={this.picture_on_click}>
                             <i className="fa fa-picture-o header_icon_size"   aria-hidden="true"></i></span>
