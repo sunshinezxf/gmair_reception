@@ -25,6 +25,20 @@ function request_register_code(mobile) {
     });
 }
 
+//获取验证码是否正确
+function request_codeJudge(phone,code) {
+    let request_url = consumer_url + '/auth/consumer/login';
+    let form = new FormData();
+    form.append('phone',phone);
+    form.append('code',code);
+    return axios.post(request_url, form).then(function (response) {
+        console.log(response.data)
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to process the request'}
+    });
+}
+
 function login(username, code) {
     let login_url = consumer_url + '/oauth/consumer/token';
     let form = new FormData();
@@ -173,5 +187,5 @@ function update_address(province, city, district, detail) {
 
 export const consumerservice = {
     bind_wechat, can_operate, request_login_code, request_register_code, login,
-    loginbyopenid, exist, register, profile, unbind_wechat, update_user, update_address
+    loginbyopenid, exist, register, profile, unbind_wechat, update_user, update_address,request_codeJudge
 }

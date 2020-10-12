@@ -54,6 +54,11 @@ const login_btn = {
     textAlign: `center`,
 }
 
+const login_tip ={
+    color:'red',
+    textAlign: `center`,
+}
+
 
 class LoginPage extends React.Component {
     constructor(props, context) {
@@ -74,7 +79,7 @@ class LoginPage extends React.Component {
             password: '',
             expected_password: '',
             ready2send: false,
-            ready2login: false,
+            passwordJudge:true,
             entry: '',
             status: ''
         };
@@ -163,7 +168,6 @@ class LoginPage extends React.Component {
             password: '',
             expected_password: '',
             ready2send: false,
-            ready2login: false
         });
     }
 
@@ -201,10 +205,10 @@ class LoginPage extends React.Component {
                                                       style={password_btn}>{this.state.verification_text}</Button></InputGroup.Addon>
                         </InputGroup>
                     </FormGroup>
+                    <div style={login_tip}> {this.state.passwordJudge?"":"验证码输入错误!"}</div>
                 </div>
                 <div className="gmair_login_btn">
-                    <Button block style={login_btn} onClick={this.login}
-                            disabled={!this.state.ready2login}>{btn_message}</Button>
+                    <Button block style={login_btn} onClick={this.validate_code}>{btn_message}</Button>
                 </div>
                 <Footer name="尚无账号，请点击注册" link="/register"/>
             </div>
@@ -216,7 +220,7 @@ class LoginPage extends React.Component {
     }
 
     read_code = (e) => {
-        this.setState({password: e.target.value}, this.validate_code);
+        this.setState({password: e.target.value});
     }
 
     validate_mobile = () => {
@@ -229,14 +233,17 @@ class LoginPage extends React.Component {
     }
 
     validate_code = () => {
-        let expected_code = this.state.expected_password;
-        let code = this.state.password;
-        if (code === expected_code) {
-            this.setState({ready2login: true});
-        } else {
-            this.setState({ready2login: false});
-        }
+
+        consumerservice.request_codeJudge(this.state.mobile,this.state.password).then(response =>{
+            if(response.responseCode === 'RESPONSE_OK'){
+               this.setState({passwordJudge:true})
+                this.login()
+            }else if(response.responseCode === 'RESPONSE_ERROR'){
+                this.setState({passwordJudge:false})
+            }
+        });
     }
+
 
     send_code = () => {
         consumerservice.request_login_code(this.state.mobile).then(response => {
@@ -257,34 +264,36 @@ class LoginPage extends React.Component {
     }
 
     login = () => {
-        this.setState({ready2send: false, ready2login: false});
-        if (this.state.entry == "xiaoai") {
-            consumerservice.login(this.state.mobile, this.state.password).then(response => {
-                if (response.responseCode == 'RESPONSE_OK') {
-                    let url = "https://microservice.gmair.net/oauth/consumer/authorize?" +
-                        "response_type=code&client_id=client_3&redirect_uri=https://oauth-redirect.api.home.mi.com/r/4453" +
-                        "&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
-                    window.location.href = url;
-                }
-            });
-        } else if (this.state.entry == "aligenie") {
-            consumerservice.login(this.state.mobile, this.state.password).then(response => {
-                if (response.responseCode == 'RESPONSE_OK') {
-                    let redirect_uri = new URLSearchParams(window.location.search).get("redirect_uri");
-                    let url = "https://microservice.gmair.net/oauth/consumer/authorize?" +
-                        "response_type=code&client_id=client_4&redirect_uri=" + encodeURIComponent(redirect_uri) +
-                        "&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
-                    console.log(url)
-                    window.location.href = url;
-                }
-            });
-        } else {
-            consumerservice.login(this.state.mobile, this.state.password).then(response => {
-                if (response.responseCode == 'RESPONSE_OK') {
-                    window.location.href = '/machine/list';
-                }
-            });
-        }
+            this.setState({passwordJudge:true})
+            if (this.state.entry == "xiaoai") {
+                consumerservice.login(this.state.mobile, this.state.password).then(response => {
+                    if (response.responseCode == 'RESPONSE_OK') {
+                        let url = "https://microservice.gmair.net/oauth/consumer/authorize?" +
+                            "response_type=code&client_id=client_3&redirect_uri=https://oauth-redirect.api.home.mi.com/r/4453" +
+                            "&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
+                        window.location.href = url;
+                    }
+                });
+            } else if (this.state.entry == "aligenie") {
+                consumerservice.login(this.state.mobile, this.state.password).then(response => {
+                    if (response.responseCode == 'RESPONSE_OK') {
+                        let redirect_uri = new URLSearchParams(window.location.search).get("redirect_uri");
+                        let url = "https://microservice.gmair.net/oauth/consumer/authorize?" +
+                            "response_type=code&client_id=client_4&redirect_uri=" + encodeURIComponent(redirect_uri) +
+                            "&access_token=" + localStorage.getItem("access_token") + "&state=" + new URLSearchParams(window.location.search).get("state");
+                        console.log(url)
+                        window.location.href = url;
+                    }
+                });
+            } else {
+                consumerservice.login(this.state.mobile, this.state.password).then(response => {
+                    if (response.responseCode == 'RESPONSE_OK') {
+                        window.location.href = '/machine/list';
+                    }
+                });
+            }
+
+
 
     }
 }
