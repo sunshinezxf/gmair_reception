@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Button, FormGroup, FormControl, InputGroup} from 'react-bootstrap'
+import {Button, FormGroup, FormControl, InputGroup,HelpBlock} from 'react-bootstrap'
 
 import Slogan from '../slogan/slogan'
 
@@ -55,8 +55,7 @@ const login_btn = {
 }
 
 const login_tip ={
-    color:'red',
-    textAlign: `center`,
+    color:'#FFFFFF',
 }
 
 
@@ -204,8 +203,8 @@ class LoginPage extends React.Component {
                             <InputGroup.Addon><Button disabled={!this.state.ready2send} onClick={this.send_code}
                                                       style={password_btn}>{this.state.verification_text}</Button></InputGroup.Addon>
                         </InputGroup>
+                        <HelpBlock style={login_tip}>{this.state.passwordJudge?"":"验证码输入错误"}</HelpBlock>
                     </FormGroup>
-                    <div style={login_tip}> {this.state.passwordJudge?"":"验证码输入错误!"}</div>
                 </div>
                 <div className="gmair_login_btn">
                     <Button block style={login_btn} onClick={this.validate_code}>{btn_message}</Button>
@@ -235,7 +234,7 @@ class LoginPage extends React.Component {
     validate_code = () => {
 
         consumerservice.request_codeJudge(this.state.mobile,this.state.password).then(response =>{
-            if(response.responseCode === 'RESPONSE_OK'){
+            if(response.responseCode === 'RESPONSE_OK' && this.state.password != ""){
                this.setState({passwordJudge:true})
                 this.login()
             }else if(response.responseCode === 'RESPONSE_ERROR'){
