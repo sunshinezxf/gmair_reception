@@ -376,7 +376,7 @@ function change_filter_status(qrcode,status){
 }
 
 //滤网是否需要清洗
-function obtain_filter_isClean(qrcode) {  
+function obtain_filter_isClean(qrcode) {
     let access_token = localStorage.getItem('access_token');
     let obtain_url = machine_service_url + '/filter/clean?access_token=' + access_token + '&qrcode=' + qrcode;
   return axios.get(obtain_url).then(function (response) {
@@ -390,7 +390,7 @@ function obtain_filter_isClean(qrcode) {
 }
 
 //滤网确认清洗
-function confirm_filter_clean (qrcode) {  
+function confirm_filter_clean (qrcode) {
     let access_token = localStorage.getItem('access_token');
     let obtain_url = machine_service_url + '/filter/clean/confirm?access_token=' + access_token + '&qrcode=' + qrcode;
   return axios.get(obtain_url).then(function (response) {
@@ -497,6 +497,17 @@ function obtain_materials_link(modelId) {
     })
 }
 
+//获取滤网提示消息
+function obtain_alert_msg(textType) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/text?access_token=' + access_token  + '&textType=' + textType;
+    return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to obtain the alert'};
+    })
+}
+
 export const machine_service = {
     check_exist,
     check_exist_bind,
@@ -535,6 +546,7 @@ export const machine_service = {
     obtain_mainFilter_status,
     change_mainFilter_isOpen,
     confirm_mainFilter_status,
-    obtain_materials_link
+    obtain_materials_link,
+    obtain_alert_msg,
 
 }

@@ -156,6 +156,7 @@ class FreshPanel extends Component {
     componentWillMount(){
         let qrcode = this.props.match.params.qrcode;
         this.check_qrcode(qrcode);
+        this.obtain_filter_state(qrcode)
     }
 
     componentDidMount() {
@@ -248,6 +249,33 @@ class FreshPanel extends Component {
     expand = () => {
         let current = this.state.expanded;
         this.setState({expanded: !current});
+    }
+
+    //获取滤网是否到清洗时间
+    obtain_filter_state = (qrcode) =>{
+        let filterState=false,mainFilterState=""
+       machine_service.obtain_filter_isClean(qrcode).then((response)=>{
+           if (response.responseCode === "RESPONSE_OK"){
+               filterState = response.data.isNeedClean
+           }
+           if(filterState){
+               this.setState({
+                   expanded:true
+               })
+           }else{
+               machine_service.obtain_mainFilter_status(qrcode).then((response)=>{
+                   mainFilterState = response.data.replaceStatus
+                   if(mainFilterState!="" && mainFilterState!="NO_NEED"){
+                       this.setState({
+                           expanded:true
+                       })
+                   }
+               })
+           }
+
+       })
+
+
     }
 
     render() {

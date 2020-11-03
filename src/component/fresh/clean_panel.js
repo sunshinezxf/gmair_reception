@@ -14,13 +14,16 @@ export default class clean_panel extends Component {
     this.obtain_mainFilterStatus = this.obtain_mainFilterStatus.bind(this);
     this.confirmMainFilterStatus = this.confirmMainFilterStatus.bind(this);
     this.obtainMaterialsUrl = this.obtainMaterialsUrl.bind(this);
+    this.obtain_alert_msg = this.obtain_alert_msg.bind(this)
 
 
     this.state = {
       main_text_style_color:"black",
       main_message_style_color:"orange",
       materialsUrl:"javascript:void(0)",
-      mainFilterIfObtain:true
+      mainFilterIfObtain:true,
+      filterMsg:"",
+      mainFilterMsg:"",
     }
   }
   componentDidMount(){
@@ -34,10 +37,33 @@ export default class clean_panel extends Component {
         this.obtain_filterIsClean(qrcode);
         this.obtain_mainFilterStatus(qrcode);
         this.obtainMaterialsUrl(modelId);
+
       }
     });
   };
 
+  //获取滤网提示信息
+  obtain_alert_msg(textType){
+
+    if(textType.startsWith("filter")){
+      machine_service.obtain_alert_msg(textType).then((response)=>{
+        if(response.responseCode == "RESPONSE_OK"){
+          this.setState({
+            filterMsg:response.data.textContent
+          })
+        }
+      })
+    }else if(textType.startsWith("efficient")){
+      machine_service.obtain_alert_msg(textType).then((response)=>{
+        if(response.responseCode == "RESPONSE_OK"){
+          this.setState({
+            mainFilterMsg:response.data.textContent
+          })
+        }
+      })
+    }
+
+  }
   //获取滤网是否需要清洗
   obtain_filterIsClean(qrcode){
     machine_service.obtain_filter_isClean(qrcode).then((response) => {
@@ -45,8 +71,10 @@ export default class clean_panel extends Component {
         this.props.getFilterIsClean(response.data.isNeedClean);
         if (this.props.filterIsClean) {
           this.changeFilterToClean();
+          this.obtain_alert_msg("filter_confirm_need")
         } else {
           this.changeFilterToNotClean();
+          this.obtain_alert_msg("filter_confirm_no")
         }
       }
     });
@@ -58,12 +86,14 @@ export default class clean_panel extends Component {
       if (response.responseCode === "RESPONSE_OK") {
         if(response.data.replaceStatus === "NO_NEED"){
             this.mainFilterNotNeed()
+          this.obtain_alert_msg("efficient_confirm_no")
 
         }else if(response.data.replaceStatus === "NEED"){
             this.mainFilterNeed()
-
+          this.obtain_alert_msg("efficient_confirm_need")
         }else if(response.data.replaceStatus === "URGENT_NEED"){
             this.mainFilterUrgentNeed()
+          this.obtain_alert_msg("efficient_confirm_need")
         }
       }else{
         this.setState({
@@ -83,26 +113,28 @@ export default class clean_panel extends Component {
 
   //初滤网不需要清洗
   changeFilterToNotClean = () => {
-  
+
     let filterImgUrl = require("../../material/filter_icon/1.png");
     let filterInfo = "";
     this.props.changeFilterStatus(filterImgUrl, filterInfo,"false");
-    
+
   };
 
   //确认点击滤网清洗
   confirmFilterClean (){
     let alert = Modal.alert;
+    this.obtain_alert_msg("filter_confirm_need")
    if (this.props.filterIsClean === "true") {
-      alert("温馨提示", "初效率网建议每30日清洗一次，已经清洗请点击确认", [
+     alert("温馨提示",this.state.filterMsg, [
         { text: "取消", onPress: () => console.log("cancel") },
         { text: "确认", onPress: () => {
           machine_service.confirm_filter_clean(this.props.qrcode);
-          this.changeFilterToNotClean();        
+          this.changeFilterToNotClean();
         } },
       ]);
     }else{
-     alert("温馨提示", "您的初滤网还未到清洗时间，若您已提前清洗，请点击确认", [
+     let message = this.obtain_alert_msg("filter_confirm_no")
+     alert("温馨提示",this.state.filterMsg, [
        { text: "取消", onPress: () => console.log("cancel") },
        { text: "确认", onPress: () => {
            machine_service.confirm_filter_clean(this.props.qrcode);
@@ -143,7 +175,7 @@ export default class clean_panel extends Component {
   confirmMainFilterStatus(){
     let mainAlert = Modal.alert;
     if (this.props.mainFilterStatus === "NO_NEED") {
-      mainAlert("温馨提示", "您的高效滤网还未到更换时间，若您已提前更换，请点击确认", [
+      mainAlert("温馨提示", this.state.mainFilterMsg, [
         { text: "取消", onPress: () => console.log("cancel") },
         { text: "确认", onPress: () => {
             machine_service.confirm_mainFilter_status(this.props.qrcode);
@@ -151,7 +183,7 @@ export default class clean_panel extends Component {
           } },
       ]);
     }else{
-      mainAlert("温馨提示", "高效率网建议每3-4月更换一次，如果您已经更换，请点击确认", [
+      mainAlert("温馨提示",this.state.mainFilterMsg, [
         { text: "取消", onPress: () => console.log("cancel") },
         { text: "确认", onPress: () => {
             machine_service.confirm_mainFilter_status(this.props.qrcode);
@@ -186,7 +218,7 @@ export default class clean_panel extends Component {
       display: 'flex',
     };
 
-    const panel_row = { 
+    const panel_row = {
       display: "flex",
       alignItems: "center",
     };
@@ -273,7 +305,7 @@ export default class clean_panel extends Component {
               </div>
             }
           </div>
-          
+
           <div style={panel_item}>
             {
               this.state.mainFilterIfObtain
