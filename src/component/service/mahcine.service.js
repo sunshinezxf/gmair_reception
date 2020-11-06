@@ -508,6 +508,32 @@ function obtain_alert_msg(textType) {
     })
 }
 
+//根据设备码获取用户列表
+function obtain_userList(qrcode) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/consumer/profile?access_token=' + access_token+ '&qrcode=' + qrcode;
+    return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to obtain the userList'};
+    })
+
+}
+
+
+//根据绑定的Id删除设备用户权限
+function delete_user(bindId) {
+    let access_token = localStorage.getItem('access_token');
+    let obtain_url = machine_service_url + '/consumer/withdrawshare?access_token=' + access_token+ '&bindId=' + bindId;
+    return axios.get(obtain_url).then(function (response) {
+        return response.data;
+    }).catch(() => {
+        return {responseCode: 'RESPONSE_ERROR', description: 'Fail to delete the user'};
+    })
+
+
+}
+
 export const machine_service = {
     check_exist,
     check_exist_bind,
@@ -548,5 +574,7 @@ export const machine_service = {
     confirm_mainFilter_status,
     obtain_materials_link,
     obtain_alert_msg,
+    obtain_userList,
+    delete_user
 
 }

@@ -20,20 +20,23 @@ class SettingSelect extends Component {
     this.obtainVolumeIsOpen = this.obtainVolumeIsOpen.bind(this);
     this.onMainFilterSwitch = this.onMainFilterSwitch.bind(this);
     this.obtainMainFilterIsOpen = this.obtainMainFilterIsOpen.bind(this);
+    this.obtainUserAuthority = this.obtainUserAuthority.bind(this)
 
     this.state={
       hideVolumeIfObtain:true,
-      mainFilterIfObtain:true
+      mainFilterIfObtain:true,
+      userAuthority:false
     }
   }
 
   componentDidMount() {
-  
+
     this.props.startTimeChange(new Date("2018/12/14 21:00:00"));
     this.props.endTimeChange(new Date("2018/12/15 09:00:00"));
     this.obtainFilterIsOpen(this.props.qrcode);
     this.obtainVolumeIsOpen(this.props.qrcode);
     this.obtainMainFilterIsOpen(this.props.qrcode);
+    this.obtainUserAuthority(this.props.qrcode)
   }
 
 //滤网提醒是否打开
@@ -69,7 +72,6 @@ class SettingSelect extends Component {
 
   //是否开启隐藏风量
   obtainVolumeIsOpen(qrcode){
-    console.log(this.state.hideVolumeIfObtain)
     machine_service.obtain_turboVolume_status(qrcode).then((response)=>{
       if (response.responseCode === "RESPONSE_OK") {
         if (response.data.turboVolumeStatus) {
@@ -221,6 +223,17 @@ class SettingSelect extends Component {
     }
   }
 
+  //用户是否拥有设备管理权限
+  obtainUserAuthority(qrcode){
+      machine_service.obtain_bind_info(qrcode).then((response)=>{
+        if (response.responseCode === "RESPONSE_OK"){
+          this.setState({
+            userAuthority:response.data[0].ownership
+          })
+        }
+      })
+  }
+
   render() {
     const setting_content = {
       backgroundColor: `white`,
@@ -367,6 +380,22 @@ class SettingSelect extends Component {
             </span>
             </div>
           }
+
+          {/*用户权限列表，如果用户权限为OWNER则显示*/}
+          {
+            this.state.userAuthority == 'OWNER'
+              &&
+            <div>
+              <div className="setting_gap" style={setting_gap} />
+              <div className="setting_item" style={setting_item}>
+                用户权限管理
+                <span style={{ float: `right` }} onClick={()=>{window.location.href="/machine/userList/"+this.props.qrcode}}>
+                  详情
+                </span>
+              </div>
+            </div>
+          }
+
 
           {/*隐藏风量开关*/}
           {
