@@ -16,12 +16,16 @@ class UserList extends Component{
 
         this.state={
             userList:"",
+            qrcode:""
         }
 
     }
 
     componentDidMount(){
         this.obtain_userList(this.props.match.params.qrcode)
+        this.setState({
+            qrcode:this.props.match.params.qrcode
+        })
     }
 
     //获取用户列表
@@ -42,7 +46,7 @@ class UserList extends Component{
     //删除用户
     deleteUser(bindId){
 
-        machine_service.delete_user(bindId).then(response => {
+        machine_service.delete_user(bindId,this.state.qrcode).then(response => {
             if (response.responseCode === "RESPONSE_OK"){
                 message.success('删除成功')
             }
@@ -77,24 +81,7 @@ class UserList extends Component{
                 render: (item) => <a onClick={()=>this.deleteUser(item.bindId)}>删除</a>,
             },
         ];
-        const data = [
-            {
-                key: '1',
-                userName: 'John Brown',
-                createAt: '2019-6-20',
-            },
-            {
-                key: '2',
-                userName: 'Jim Green',
-                createAt: '2020-9-8',
-            },
-            {
-                key: '3',
-                userName: 'Joe Black',
-                createAt: '2020-10-9',
-            },
 
-        ];
         return(
             <div>
                 <div style={setting_container}>

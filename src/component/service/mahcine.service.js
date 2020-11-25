@@ -511,7 +511,7 @@ function obtain_alert_msg(textType) {
 //根据设备码获取用户列表
 function obtain_userList(qrcode) {
     let access_token = localStorage.getItem('access_token');
-    let obtain_url = machine_service_url + '/consumer/profile?access_token=' + access_token+ '&qrcode=' + qrcode;
+    let obtain_url = machine_service_url + '/consumer/share/list?access_token=' + access_token+ '&qrcode=' + qrcode;
     return axios.get(obtain_url).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -522,10 +522,14 @@ function obtain_userList(qrcode) {
 
 
 //根据绑定的Id删除设备用户权限
-function delete_user(bindId) {
+function delete_user(bindId,qrcode) {
     let access_token = localStorage.getItem('access_token');
-    let obtain_url = machine_service_url + '/consumer/withdrawshare?access_token=' + access_token+ '&bindId=' + bindId;
-    return axios.get(obtain_url).then(function (response) {
+    let obtain_url = machine_service_url + '/consumer/share/withdraw?access_token=' + access_token;
+    let form = new FormData();
+    form.append('bindId',bindId);
+    form.append('qrcode', qrcode);
+    form.append('access_token', access_token);
+    return axios.post(obtain_url,form).then(function (response) {
         return response.data;
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to delete the user'};
