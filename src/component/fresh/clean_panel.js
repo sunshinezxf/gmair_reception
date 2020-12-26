@@ -196,9 +196,10 @@ export default class clean_panel extends Component {
   //购买高效滤网
   obtainMaterialsUrl(modelId){
     machine_service.obtain_materials_link(modelId).then((response) =>{
+      console.log(response.data)
       if (response.responseCode === "RESPONSE_OK"){
         this.setState({
-          materialsUrl:response.data.materialsLink,
+          materialsUrl:response.data[0],
         })
       }
     })

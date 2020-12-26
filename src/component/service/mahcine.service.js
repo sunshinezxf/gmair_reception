@@ -489,7 +489,7 @@ function obtain_device_list() {
 //获取耗材购买链接
 function obtain_materials_link(modelId) {
     let access_token = localStorage.getItem('access_token');
-    let obtain_url = machine_service_url + '/model/getMaterials?access_token=' + access_token  + '&modelId=' + modelId;
+    let obtain_url = machine_service_url + '/model/filterLinks?access_token=' + access_token  + '&modelId=' + modelId;
     return axios.get(obtain_url).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -501,6 +501,7 @@ function obtain_materials_link(modelId) {
 function obtain_alert_msg(textType) {
     let access_token = localStorage.getItem('access_token');
     let obtain_url = machine_service_url + '/text?access_token=' + access_token  + '&textType=' + textType;
+ //   let obtain_url = 'https://microservice.gmair.net/machine/text?access_token=' + access_token  + '&textType=' + textType;
     return axios.get(obtain_url).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -528,7 +529,6 @@ function delete_user(bindId,qrcode) {
     let form = new FormData();
     form.append('bindId',bindId);
     form.append('qrcode', qrcode);
-    form.append('access_token', access_token);
     return axios.post(obtain_url,form).then(function (response) {
         return response.data;
     }).catch(() => {
