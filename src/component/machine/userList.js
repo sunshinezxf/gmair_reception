@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import {Icon, NavBar} from "antd-mobile";
 import {Table,message} from  "antd";
+import "./userList.css"
 import { machine_service } from "../service/mahcine.service";
 import {createBrowserHistory} from 'history'
 import {datetimeService} from "../service/dateTime.service";
 const history = createBrowserHistory();
+
 
 
 class UserList extends Component{
@@ -32,7 +34,7 @@ class UserList extends Component{
     obtain_userList(qrcode){
         machine_service.obtain_userList(qrcode).then(response => {
             if (response.responseCode === "RESPONSE_OK"){
-                let dataSource = response.data.userlist;
+                let dataSource = response.data.userList;
                 for (let i = 0; i < response.data.size; i++) { //时间格式转换
                     dataSource[i]['createAt'] = datetimeService.formatTimeStampToDate(dataSource[i].createAt);
                 }
@@ -54,21 +56,29 @@ class UserList extends Component{
     }
 
     render() {
-        const setting_container = {
+        const container = {
             height: window.innerHeight,
             width: window.innerWidth,
-         //   backgroundColor: `#dbdbdb`
+            backgroundColor: `#dbdbdb`
         }
-        const setting_gap = {
+        const gap = {
             width: `100%`,
             height: `1.4rem`,
             backgroundColor: `#dbdbdb`,
-        };
+        }
+        const table_bg = {
+            width: `100%`,
+            backgroundColor:'#fff'
+        }
+        const name_style = {
+            marginLeft:'10px',
+        }
         const columns = [
             {
                 title: '姓名',
                 dataIndex: 'name',
                 key: 'name',
+                render:(text)=><div style={name_style}><i className="fa fa-user-o" aria-hidden="true"/>&nbsp;&nbsp;{text}</div>
             },
             {
                 title: '加入时间',
@@ -84,7 +94,7 @@ class UserList extends Component{
 
         return(
             <div>
-                <div style={setting_container}>
+                <div style={container}>
                     <NavBar
                         mode="light"
                         leftContent={[<Icon key="return" type="left"/>]}
@@ -92,13 +102,16 @@ class UserList extends Component{
                             history.back();
                         }}
                     >用户列表</NavBar>
-                    <div style={setting_gap} />
-                    <Table
-                        columns={columns}
-                        dataSource={this.state.userList}
-                        pagination={false}
-                        size="middle"
-                    />,
+                    <div style={gap} />
+                    <div style={table_bg}>
+                        <Table
+                            columns={columns}
+                            dataSource={this.state.userList}
+                            pagination={false}
+                            size="middle"
+                            showHeader={false}
+                        />
+                    </div>
                 </div>
             </div>
         )
