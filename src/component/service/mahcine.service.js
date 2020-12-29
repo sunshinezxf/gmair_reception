@@ -501,7 +501,6 @@ function obtain_materials_link(modelId) {
 function obtain_alert_msg(textType) {
     let access_token = localStorage.getItem('access_token');
     let obtain_url = machine_service_url + '/text?access_token=' + access_token  + '&textType=' + textType;
- //   let obtain_url = 'https://microservice.gmair.net/machine/text?access_token=' + access_token  + '&textType=' + textType;
     return axios.get(obtain_url).then(function (response) {
         return response.data;
     }).catch(() => {
@@ -525,11 +524,8 @@ function obtain_userList(qrcode) {
 //根据绑定的Id删除设备用户权限
 function delete_user(bindId,qrcode) {
     let access_token = localStorage.getItem('access_token');
-    let obtain_url = machine_service_url + '/consumer/share/withdraw?access_token=' + access_token;
-    let form = new FormData();
-    form.append('bindId',bindId);
-    form.append('qrcode', qrcode);
-    return axios.post(obtain_url,form).then(function (response) {
+    let obtain_url = machine_service_url + '/consumer/share/withdraw?access_token=' + access_token + '&bindId=' + bindId  + '&qrcode=' + qrcode;
+    return axios.post(obtain_url).then(function (response) {
         return response.data;
     }).catch(() => {
         return {responseCode: 'RESPONSE_ERROR', description: 'Fail to delete the user'};

@@ -47,10 +47,12 @@ class UserList extends Component{
 
     //删除用户
     deleteUser(bindId){
-
         machine_service.delete_user(bindId,this.state.qrcode).then(response => {
             if (response.responseCode === "RESPONSE_OK"){
-                message.success('删除成功')
+                message.success('撤销成功')
+                this.obtain_userList(this.state.qrcode)
+            }else{
+                message.error('撤销失败')
             }
         })
     }
@@ -88,7 +90,7 @@ class UserList extends Component{
             {
                 title: '操作',
                 key: 'x',
-                render: (item) => <a onClick={()=>this.deleteUser(item.bindId)}>删除</a>,
+                render: (item) => <a onClick={()=>this.deleteUser(item.bindId)}>撤销</a>,
             },
         ];
 
